@@ -7,13 +7,41 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
+	"time"
 
 	"github.com/captain-corgi/go-graphql-example/internal/hackernews/graph/model"
 )
 
 // CreateLink is the resolver for the createLink field.
 func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) (*model.Link, error) {
-	panic(fmt.Errorf("not implemented: CreateLink - createLink"))
+	// Greeting
+	timer := time.Now()
+	log.Printf("CreateLink START")
+
+	// Input models
+	var (
+		address = input.Address
+		title   = input.Title
+	)
+
+	// Output model
+	var (
+		rs model.Link
+	)
+
+	// Do some business logic for fetch data here
+	rs.Address = address
+	rs.Title = title
+	rs.User = &model.User{
+		Name: "Sample user",
+	}
+
+	time.Sleep(1 * time.Second)
+
+	// Return data
+	defer log.Printf("CreateLink END within %dms", time.Duration(time.Since(timer).Milliseconds()))
+	return &rs, nil
 }
 
 // CreateUser is the resolver for the createUser field.
