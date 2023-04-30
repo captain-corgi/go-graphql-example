@@ -8,9 +8,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/captain-corgi/go-graphql-example/internal/hackernews/graph/model"
+	"github.com/captain-corgi/go-graphql-example/internal/hackernews/links"
 )
 
 // CreateLink is the resolver for the createLink field.
@@ -30,14 +32,19 @@ func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) 
 		rs model.Link
 	)
 
-	// Do some business logic for fetch data here
+	// Do some business logic
+	// Persist data
+	var link links.Link
+	link.Title = title
+	link.Address = address
+	linkId := link.Save(ctx)
+
 	rs.Address = address
 	rs.Title = title
+	rs.ID = strconv.FormatInt(linkId, 10)
 	rs.User = &model.User{
 		Name: "Sample user",
 	}
-
-	time.Sleep(1 * time.Second)
 
 	// Return data
 	defer log.Printf("CreateLink END within %dms", time.Duration(time.Since(timer).Milliseconds()))
@@ -61,20 +68,29 @@ func (r *mutationResolver) RefreshToken(ctx context.Context, input model.Refresh
 
 // Links is the resolver for the links field.
 func (r *queryResolver) Links(ctx context.Context) ([]*model.Link, error) {
-	// Init sample data:
-	links := make([]*model.Link, 0)
-	links = append(links, &model.Link{
-		ID:      "LNK001",
-		Title:   "Google",
-		Address: "https://www.google.com",
-		User: &model.User{
-			ID:   "USR001",
-			Name: "Super User 001",
-		},
-	})
+	// Greeting
+	timer := time.Now()
+	log.Printf("Links START")
 
-	// Results
-	return links, nil
+	// Output models
+	var (
+		rsLinks = make([]*model.Link, 0)
+	)
+
+	// Do some business logic
+	// Fetch data
+	dbLinks := links.GetAll(ctx)
+	for _, dbLink := range dbLinks {
+		rsLinks = append(rsLinks, &model.Link{
+			ID:      dbLink.ID,
+			Title:   dbLink.Title,
+			Address: dbLink.Address,
+		})
+	}
+
+	// Return data
+	defer log.Printf("Links END within %dms", time.Duration(time.Since(timer).Milliseconds()))
+	return rsLinks, nil
 }
 
 // Mutation returns MutationResolver implementation.
