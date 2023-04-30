@@ -1,3 +1,3 @@
 @echo off
 
-scripts/%1
+scripts/%1 %2
