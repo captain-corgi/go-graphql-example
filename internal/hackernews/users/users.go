@@ -16,22 +16,21 @@ type User struct {
 	Password string `json:"password"`
 }
 
-func (user *User) Create(ctx context.Context) {
+func (user *User) Create(ctx context.Context) (int64, error) {
 	statement, err := database.Db.Prepare("INSERT INTO Users(Username,Password) VALUES(?,?)")
-	print(statement)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	hashedPassword, err := HashPassword(user.Password)
 	if err != nil {
-		// WARNING: Hashed password should not be failed!!!
-		log.Printf("create hash failed: %s", err)
-		hashedPassword = user.Password
+		return 0, err
 	}
-	_, err = statement.ExecContext(ctx, user.Username, hashedPassword)
+	sqlResult, err := statement.ExecContext(ctx, user.Username, hashedPassword)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
+	affected, _ := sqlResult.RowsAffected()
+	return affected, nil
 }
 
 // GetUserIdByUsername check if a user exists in database by given username
@@ -64,4 +63,24 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func (user *User) Authenticate() bool {
+	statement, err := database.Db.Prepare("select Password from Users WHERE Username = ?")
+	if err != nil {
+		log.Fatal(err)
+	}
+	row := statement.QueryRow(user.Username)
+
+	var hashedPassword string
+	err = row.Scan(&hashedPassword)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false
+		} else {
+			log.Fatal(err)
+		}
+	}
+
+	return CheckPasswordHash(user.Password, hashedPassword)
 }

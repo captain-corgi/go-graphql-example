@@ -24,7 +24,7 @@ func Run() {
 
 	database.InitDB()
 	defer database.CloseDB()
-	database.Migrate()
+	// database.Migrate()
 
 	router := chi.NewRouter()
 	router.Use(auth.Middleware())

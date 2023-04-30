@@ -9,6 +9,7 @@ require (
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/vektah/gqlparser/v2 v2.5.1
+	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 )
 
 require (
