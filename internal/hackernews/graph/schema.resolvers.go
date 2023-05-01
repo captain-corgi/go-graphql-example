@@ -13,6 +13,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
+	"github.com/captain-corgi/go-graphql-example/internal/hackernews/auth"
 	"github.com/captain-corgi/go-graphql-example/internal/hackernews/graph/model"
 	"github.com/captain-corgi/go-graphql-example/internal/hackernews/links"
 	"github.com/captain-corgi/go-graphql-example/internal/hackernews/users"
@@ -36,18 +37,26 @@ func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) 
 		rs model.Link
 	)
 
+	// Auth
+	user := auth.ForContext(ctx)
+	if user == nil {
+		return &model.Link{}, fmt.Errorf("access denied")
+	}
+
 	// Do some business logic
 	// Persist data
 	var link links.Link
 	link.Title = title
 	link.Address = address
+	link.User = user
 	linkId := link.Save(ctx)
 
 	rs.Address = address
 	rs.Title = title
 	rs.ID = strconv.FormatInt(linkId, 10)
 	rs.User = &model.User{
-		Name: "Sample user",
+		ID:   user.ID,
+		Name: user.Username,
 	}
 
 	// Return data
