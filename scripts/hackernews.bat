@@ -1,0 +1,1 @@
+go run cmd/hackernews/main.go
