@@ -1,0 +1,26 @@
+# Development overrides for docker-compose
+# This file is automatically loaded by docker-compose for local development
+
+version: '3.8'
+
+services:
+  graphql-service:
+    # Mount source code for development
+    volumes:
+      - .:/app/src:ro
+      - ./configs/config.development.yaml:/app/configs/config.docker.yaml:ro
+    environment:
+      - CONFIG_FILE=/app/configs/config.docker.yaml
+      - GIN_MODE=debug
+    # Enable hot reload in development (if using air or similar)
+    # command: ["air", "-c", ".air.toml"]
+
+  postgres:
+    # Expose postgres port for local development tools
+    ports:
+      - "5432:5432"
+    # Mount development seed data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+      - ./scripts/seed-dev-data.sql:/docker-entrypoint-initdb.d/seed-dev-data.sql:ro

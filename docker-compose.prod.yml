@@ -1,0 +1,56 @@
+# Production configuration for docker-compose
+# Use with: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+
+version: '3.8'
+
+services:
+  graphql-service:
+    environment:
+      - CONFIG_FILE=/app/configs/config.production.yaml
+      - GIN_MODE=release
+    volumes:
+      - ./configs/config.production.yaml:/app/configs/config.docker.yaml:ro
+    # Production resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    # Production logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  postgres:
+    # Production database configuration
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-graphql_service}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # Don't expose postgres port in production
+    ports: []
+    # Production resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '1.0'
+          memory: 512M
+    # Production logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Remove migrate service in production (handle separately)
+  migrate:
+    profiles:
+      - migration
