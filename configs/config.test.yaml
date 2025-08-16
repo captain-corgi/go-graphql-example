@@ -1,0 +1,16 @@
+server:
+  port: "8081"
+  read_timeout: "10s"
+  write_timeout: "10s"
+  idle_timeout: "30s"
+
+database:
+  url: "postgres://user:password@localhost:5432/graphql_service_test?sslmode=disable"
+  max_open_conns: 5
+  max_idle_conns: 2
+  conn_max_lifetime: "1m"
+  conn_max_idle_time: "1m"
+
+logging:
+  level: "debug"
+  format: "text"

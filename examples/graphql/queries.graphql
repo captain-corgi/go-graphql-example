@@ -1,0 +1,126 @@
+# Example GraphQL Queries
+# These examples demonstrate how to use the GraphQL API
+
+# Query a single user by ID
+query GetUser {
+  user(id: "550e8400-e29b-41d4-a716-446655440001") {
+    id
+    email
+    name
+    createdAt
+    updatedAt
+  }
+}
+
+# Query a single user with variables
+query GetUserWithVariables($userId: ID!) {
+  user(id: $userId) {
+    id
+    email
+    name
+    createdAt
+    updatedAt
+  }
+}
+
+# Variables for GetUserWithVariables:
+# {
+#   "userId": "550e8400-e29b-41d4-a716-446655440001"
+# }
+
+# Query all users with pagination
+query GetAllUsers {
+  users(first: 10) {
+    edges {
+      node {
+        id
+        email
+        name
+        createdAt
+        updatedAt
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+
+# Query users with pagination using variables
+query GetUsersWithPagination($first: Int!, $after: String) {
+  users(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        email
+        name
+        createdAt
+        updatedAt
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+
+# Variables for GetUsersWithPagination:
+# {
+#   "first": 5,
+#   "after": null
+# }
+
+# Query first page of users (limit 5)
+query GetFirstPageUsers {
+  users(first: 5) {
+    edges {
+      node {
+        id
+        email
+        name
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
+# Query next page using cursor from previous query
+query GetNextPageUsers {
+  users(first: 5, after: "cursor_from_previous_query") {
+    edges {
+      node {
+        id
+        email
+        name
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+
+# Minimal user query (only required fields)
+query GetUserMinimal {
+  user(id: "550e8400-e29b-41d4-a716-446655440001") {
+    id
+    email
+    name
+  }
+}

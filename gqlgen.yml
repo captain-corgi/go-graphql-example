@@ -1,0 +1,66 @@
+# Where are all the schema files located? globs are supported eg  src/**/*.graphqls
+schema:
+  - api/graphql/*.graphqls
+
+# Where should the generated server code go?
+exec:
+  filename: internal/interfaces/graphql/generated/generated.go
+  package: generated
+
+# Where should any generated models go?
+model:
+  filename: internal/interfaces/graphql/model/models_gen.go
+  package: model
+
+# Where should the resolver implementations go?
+resolver:
+  layout: follow-schema
+  dir: internal/interfaces/graphql/resolver
+  package: resolver
+  filename_template: "{name}.resolvers.go"
+
+# Optional: turn on automatic resolution of pointers
+# autobind:
+#   - "github.com/captain-corgi/go-graphql-example/internal/domain"
+
+# Optional: set any options on the generated structs
+struct_tag: json
+
+# Optional: enable federation
+# federation:
+#   filename: graph/federation.go
+#   package: graph
+
+# Let gqlgen know about any embedded interfaces
+# autobind:
+#   - github.com/captain-corgi/go-graphql-example/graph/model
+
+# This section declares type mapping between GraphQL and Go types
+models:
+  # Scalars
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.ID
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+  Int:
+    model:
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+  # TODO: Add Time scalar configuration when custom marshaling is implemented
+  # Time:
+  #   model:
+  #     - time.Time
+# Optional: skip running `go mod tidy` when generating code
+# skip_mod_tidy: true
+
+# Optional: skip validation of the schema
+# skip_validation: true
+
+# Optional: omit the complexity analysis
+# omit_complexity: false
+
+# Optional: omit the gqlgen version in the generated code
+# omit_gqlgen_version_in_generated: false

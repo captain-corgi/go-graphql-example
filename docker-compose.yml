@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: graphql-postgres
+    environment:
+      POSTGRES_DB: graphql_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d graphql_service"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - graphql-network
+
+  # GraphQL Service
+  graphql-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: graphql-service
+    environment:
+      - CONFIG_FILE=/app/configs/config.docker.yaml
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./configs/config.docker.yaml:/app/configs/config.docker.yaml:ro
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - graphql-network
+    restart: unless-stopped
+
+  # Migration service (runs once)
+  migrate:
+    image: migrate/migrate:v4.17.0
+    container_name: graphql-migrate
+    volumes:
+      - ./migrations:/migrations:ro
+    command: [
+      "-path", "/migrations",
+      "-database", "postgres://postgres:postgres@postgres:5432/graphql_service?sslmode=disable",
+      "up"
+    ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - graphql-network
+    restart: "no"
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  graphql-network:
+    driver: bridge

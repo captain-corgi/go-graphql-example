@@ -1,0 +1,229 @@
+# Example GraphQL Mutations
+# These examples demonstrate how to create, update, and delete users
+
+# Create a new user
+mutation CreateUser {
+  createUser(input: {
+    email: "new.user@example.com"
+    name: "New User"
+  }) {
+    user {
+      id
+      email
+      name
+      createdAt
+      updatedAt
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Create a user with variables
+mutation CreateUserWithVariables($input: CreateUserInput!) {
+  createUser(input: $input) {
+    user {
+      id
+      email
+      name
+      createdAt
+      updatedAt
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Variables for CreateUserWithVariables:
+# {
+#   "input": {
+#     "email": "variable.user@example.com",
+#     "name": "Variable User"
+#   }
+# }
+
+# Update an existing user
+mutation UpdateUser {
+  updateUser(
+    id: "550e8400-e29b-41d4-a716-446655440001"
+    input: {
+      email: "updated.email@example.com"
+      name: "Updated Name"
+    }
+  ) {
+    user {
+      id
+      email
+      name
+      createdAt
+      updatedAt
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Update user with variables
+mutation UpdateUserWithVariables($id: ID!, $input: UpdateUserInput!) {
+  updateUser(id: $id, input: $input) {
+    user {
+      id
+      email
+      name
+      createdAt
+      updatedAt
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Variables for UpdateUserWithVariables:
+# {
+#   "id": "550e8400-e29b-41d4-a716-446655440001",
+#   "input": {
+#     "email": "new.email@example.com",
+#     "name": "New Name"
+#   }
+# }
+
+# Update only user name
+mutation UpdateUserName {
+  updateUser(
+    id: "550e8400-e29b-41d4-a716-446655440002"
+    input: {
+      name: "Updated Name Only"
+    }
+  ) {
+    user {
+      id
+      email
+      name
+      updatedAt
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Update only user email
+mutation UpdateUserEmail {
+  updateUser(
+    id: "550e8400-e29b-41d4-a716-446655440003"
+    input: {
+      email: "updated.email.only@example.com"
+    }
+  ) {
+    user {
+      id
+      email
+      name
+      updatedAt
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Delete a user
+mutation DeleteUser {
+  deleteUser(id: "550e8400-e29b-41d4-a716-446655440010") {
+    success
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Delete user with variables
+mutation DeleteUserWithVariables($id: ID!) {
+  deleteUser(id: $id) {
+    success
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Variables for DeleteUserWithVariables:
+# {
+#   "id": "550e8400-e29b-41d4-a716-446655440009"
+# }
+
+# Example of handling validation errors
+mutation CreateUserWithInvalidData {
+  createUser(input: {
+    email: "invalid-email"
+    name: ""
+  }) {
+    user {
+      id
+      email
+      name
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+# Example of creating multiple users (separate mutations)
+mutation CreateFirstUser {
+  createUser(input: {
+    email: "first@example.com"
+    name: "First User"
+  }) {
+    user {
+      id
+      email
+      name
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+
+mutation CreateSecondUser {
+  createUser(input: {
+    email: "second@example.com"
+    name: "Second User"
+  }) {
+    user {
+      id
+      email
+      name
+    }
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
