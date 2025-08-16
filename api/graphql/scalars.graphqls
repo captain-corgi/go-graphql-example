@@ -1,0 +1,4 @@
+# Custom scalar definitions
+
+# TODO: Implement Time scalar with proper marshaling/unmarshaling
+# scalar Time
