@@ -39,6 +39,37 @@ var (
 	ErrEmployeeAlreadyExists = DomainError{Code: "EMPLOYEE_ALREADY_EXISTS", Message: "Employee already exists"}
 )
 
+// Department domain errors
+var (
+	ErrDepartmentNotFound        = DomainError{Code: "DEPARTMENT_NOT_FOUND", Message: "Department not found"}
+	ErrInvalidDepartmentID       = DomainError{Code: "INVALID_DEPARTMENT_ID", Message: "Invalid department ID format", Field: "id"}
+	ErrInvalidDepartmentName     = DomainError{Code: "INVALID_DEPARTMENT_NAME", Message: "Department name cannot be empty", Field: "name"}
+	ErrDuplicateDepartmentName   = DomainError{Code: "DUPLICATE_DEPARTMENT_NAME", Message: "Department name already exists", Field: "name"}
+	ErrInvalidDepartmentDescription = DomainError{Code: "INVALID_DEPARTMENT_DESCRIPTION", Message: "Department description cannot be empty", Field: "description"}
+	ErrDepartmentAlreadyExists   = DomainError{Code: "DEPARTMENT_ALREADY_EXISTS", Message: "Department already exists"}
+)
+
+// Position domain errors
+var (
+	ErrPositionNotFound        = DomainError{Code: "POSITION_NOT_FOUND", Message: "Position not found"}
+	ErrInvalidPositionID       = DomainError{Code: "INVALID_POSITION_ID", Message: "Invalid position ID format", Field: "id"}
+	ErrInvalidPositionTitle    = DomainError{Code: "INVALID_POSITION_TITLE", Message: "Position title cannot be empty", Field: "title"}
+	ErrDuplicatePositionTitle  = DomainError{Code: "DUPLICATE_POSITION_TITLE", Message: "Position title already exists", Field: "title"}
+	ErrInvalidPositionDescription = DomainError{Code: "INVALID_POSITION_DESCRIPTION", Message: "Position description cannot be empty", Field: "description"}
+	ErrInvalidPositionRequirements = DomainError{Code: "INVALID_POSITION_REQUIREMENTS", Message: "Position requirements cannot be empty", Field: "requirements"}
+	ErrPositionAlreadyExists   = DomainError{Code: "POSITION_ALREADY_EXISTS", Message: "Position already exists"}
+)
+
+// Leave domain errors
+var (
+	ErrLeaveNotFound        = DomainError{Code: "LEAVE_NOT_FOUND", Message: "Leave request not found"}
+	ErrInvalidLeaveID       = DomainError{Code: "INVALID_LEAVE_ID", Message: "Invalid leave ID format", Field: "id"}
+	ErrInvalidLeaveType     = DomainError{Code: "INVALID_LEAVE_TYPE", Message: "Invalid leave type", Field: "leaveType"}
+	ErrInvalidLeaveStatus   = DomainError{Code: "INVALID_LEAVE_STATUS", Message: "Invalid leave status", Field: "status"}
+	ErrInvalidLeaveReason   = DomainError{Code: "INVALID_LEAVE_REASON", Message: "Leave reason cannot be empty", Field: "reason"}
+	ErrLeaveAlreadyExists   = DomainError{Code: "LEAVE_ALREADY_EXISTS", Message: "Leave request already exists"}
+)
+
 // Repository errors
 var (
 	ErrRepositoryConnection = DomainError{Code: "REPOSITORY_CONNECTION", Message: "Repository connection failed"}

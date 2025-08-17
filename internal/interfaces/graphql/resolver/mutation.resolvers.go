@@ -6,185 +6,104 @@ package resolver
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/captain-corgi/go-graphql-example/internal/application/user"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/generated"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/model"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.CreateUserPayload, error) {
-	// Log operation start
-	r.logOperation(ctx, "CreateUser", map[string]interface{}{
-		"email": input.Email,
-		"name":  input.Name,
-	})
-
-	// Validate and sanitize input
-	sanitizedInput := model.CreateUserInput{
-		Email: sanitizeString(input.Email),
-		Name:  sanitizeString(input.Name),
-	}
-
-	if err := r.validateInput(ctx, "CreateUser", func() error {
-		return validateCreateUserInput(sanitizedInput)
-	}); err != nil {
-		return &model.CreateUserPayload{
-			Errors: []*model.Error{mapErrorDTOToGraphQL(user.ErrorDTO{
-				Message: err.Error(),
-				Code:    "VALIDATION_ERROR",
-			})},
-		}, nil
-	}
-
-	// Call application service
-	req := mapCreateUserInputToRequest(sanitizedInput)
-	resp, err := r.userService.CreateUser(ctx, req)
-	if err != nil {
-		return &model.CreateUserPayload{
-			Errors: []*model.Error{mapErrorDTOToGraphQL(user.ErrorDTO{
-				Message: "Failed to create user",
-				Code:    "INTERNAL_ERROR",
-			})},
-		}, nil
-	}
-
-	// Handle application-level errors
-	if len(resp.Errors) > 0 {
-		return &model.CreateUserPayload{
-			Errors: mapErrorDTOsToGraphQL(resp.Errors),
-		}, nil
-	}
-
-	// Map successful result
-	result := &model.CreateUserPayload{
-		User: mapUserDTOToGraphQL(resp.User),
-	}
-
-	r.logOperationSuccess(ctx, "CreateUser", result)
-	return result, nil
+	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 }
 
 // UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input model.UpdateUserInput) (*model.UpdateUserPayload, error) {
-	// Log operation start
-	r.logOperation(ctx, "UpdateUser", map[string]interface{}{
-		"id":    id,
-		"email": input.Email,
-		"name":  input.Name,
-	})
-
-	// Validate and sanitize input
-	sanitizedID := sanitizeString(id)
-	sanitizedInput := model.UpdateUserInput{
-		Email: sanitizeStringPointer(input.Email),
-		Name:  sanitizeStringPointer(input.Name),
-	}
-
-	// Validate user ID
-	if err := r.validateInput(ctx, "UpdateUser", func() error {
-		return validateUserID(sanitizedID)
-	}); err != nil {
-		return &model.UpdateUserPayload{
-			Errors: []*model.Error{mapErrorDTOToGraphQL(user.ErrorDTO{
-				Message: err.Error(),
-				Code:    "VALIDATION_ERROR",
-			})},
-		}, nil
-	}
-
-	// Validate update input
-	if err := r.validateInput(ctx, "UpdateUser", func() error {
-		return validateUpdateUserInput(sanitizedInput)
-	}); err != nil {
-		return &model.UpdateUserPayload{
-			Errors: []*model.Error{mapErrorDTOToGraphQL(user.ErrorDTO{
-				Message: err.Error(),
-				Code:    "VALIDATION_ERROR",
-			})},
-		}, nil
-	}
-
-	// Call application service
-	req := mapUpdateUserInputToRequest(sanitizedID, sanitizedInput)
-	resp, err := r.userService.UpdateUser(ctx, req)
-	if err != nil {
-		return &model.UpdateUserPayload{
-			Errors: []*model.Error{mapErrorDTOToGraphQL(user.ErrorDTO{
-				Message: "Failed to update user",
-				Code:    "INTERNAL_ERROR",
-			})},
-		}, nil
-	}
-
-	// Handle application-level errors
-	if len(resp.Errors) > 0 {
-		return &model.UpdateUserPayload{
-			Errors: mapErrorDTOsToGraphQL(resp.Errors),
-		}, nil
-	}
-
-	// Map successful result
-	result := &model.UpdateUserPayload{
-		User: mapUserDTOToGraphQL(resp.User),
-	}
-
-	r.logOperationSuccess(ctx, "UpdateUser", result)
-	return result, nil
+	panic(fmt.Errorf("not implemented: UpdateUser - updateUser"))
 }
 
 // DeleteUser is the resolver for the deleteUser field.
 func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.DeleteUserPayload, error) {
-	// Log operation start
-	r.logOperation(ctx, "DeleteUser", map[string]interface{}{
-		"id": id,
-	})
-
-	// Validate and sanitize input
-	sanitizedID := sanitizeString(id)
-	if err := r.validateInput(ctx, "DeleteUser", func() error {
-		return validateUserID(sanitizedID)
-	}); err != nil {
-		return &model.DeleteUserPayload{
-			Success: false,
-			Errors: []*model.Error{mapErrorDTOToGraphQL(user.ErrorDTO{
-				Message: err.Error(),
-				Code:    "VALIDATION_ERROR",
-			})},
-		}, nil
-	}
-
-	// Call application service
-	req := user.DeleteUserRequest{ID: sanitizedID}
-	resp, err := r.userService.DeleteUser(ctx, req)
-	if err != nil {
-		return &model.DeleteUserPayload{
-			Success: false,
-			Errors: []*model.Error{mapErrorDTOToGraphQL(user.ErrorDTO{
-				Message: "Failed to delete user",
-				Code:    "INTERNAL_ERROR",
-			})},
-		}, nil
-	}
-
-	// Handle application-level errors
-	if len(resp.Errors) > 0 {
-		return &model.DeleteUserPayload{
-			Success: false,
-			Errors:  mapErrorDTOsToGraphQL(resp.Errors),
-		}, nil
-	}
-
-	// Map successful result
-	result := &model.DeleteUserPayload{
-		Success: resp.Success,
-	}
-
-	r.logOperationSuccess(ctx, "DeleteUser", result)
-	return result, nil
+	panic(fmt.Errorf("not implemented: DeleteUser - deleteUser"))
 }
 
+// CreateEmployee is the resolver for the createEmployee field.
+func (r *mutationResolver) CreateEmployee(ctx context.Context, input model.CreateEmployeeInput) (*model.CreateEmployeePayload, error) {
+	panic(fmt.Errorf("not implemented: CreateEmployee - createEmployee"))
+}
 
+// UpdateEmployee is the resolver for the updateEmployee field.
+func (r *mutationResolver) UpdateEmployee(ctx context.Context, id string, input model.UpdateEmployeeInput) (*model.UpdateEmployeePayload, error) {
+	panic(fmt.Errorf("not implemented: UpdateEmployee - updateEmployee"))
+}
+
+// DeleteEmployee is the resolver for the deleteEmployee field.
+func (r *mutationResolver) DeleteEmployee(ctx context.Context, id string) (*model.DeleteEmployeePayload, error) {
+	panic(fmt.Errorf("not implemented: DeleteEmployee - deleteEmployee"))
+}
+
+// CreateDepartment is the resolver for the createDepartment field.
+func (r *mutationResolver) CreateDepartment(ctx context.Context, input model.CreateDepartmentInput) (*model.CreateDepartmentPayload, error) {
+	// TODO: Implement create department resolver
+	panic(fmt.Errorf("not implemented: CreateDepartment - createDepartment"))
+}
+
+// UpdateDepartment is the resolver for the updateDepartment field.
+func (r *mutationResolver) UpdateDepartment(ctx context.Context, id string, input model.UpdateDepartmentInput) (*model.UpdateDepartmentPayload, error) {
+	// TODO: Implement update department resolver
+	panic(fmt.Errorf("not implemented: UpdateDepartment - updateDepartment"))
+}
+
+// DeleteDepartment is the resolver for the deleteDepartment field.
+func (r *mutationResolver) DeleteDepartment(ctx context.Context, id string) (*model.DeleteDepartmentPayload, error) {
+	// TODO: Implement delete department resolver
+	panic(fmt.Errorf("not implemented: DeleteDepartment - deleteDepartment"))
+}
+
+// CreatePosition is the resolver for the createPosition field.
+func (r *mutationResolver) CreatePosition(ctx context.Context, input model.CreatePositionInput) (*model.CreatePositionPayload, error) {
+	panic(fmt.Errorf("not implemented: CreatePosition - createPosition"))
+}
+
+// UpdatePosition is the resolver for the updatePosition field.
+func (r *mutationResolver) UpdatePosition(ctx context.Context, id string, input model.UpdatePositionInput) (*model.UpdatePositionPayload, error) {
+	panic(fmt.Errorf("not implemented: UpdatePosition - updatePosition"))
+}
+
+// DeletePosition is the resolver for the deletePosition field.
+func (r *mutationResolver) DeletePosition(ctx context.Context, id string) (*model.DeletePositionPayload, error) {
+	panic(fmt.Errorf("not implemented: DeletePosition - deletePosition"))
+}
+
+// CreateLeave is the resolver for the createLeave field.
+func (r *mutationResolver) CreateLeave(ctx context.Context, input model.CreateLeaveInput) (*model.CreateLeavePayload, error) {
+	panic(fmt.Errorf("not implemented: CreateLeave - createLeave"))
+}
+
+// UpdateLeave is the resolver for the updateLeave field.
+func (r *mutationResolver) UpdateLeave(ctx context.Context, id string, input model.UpdateLeaveInput) (*model.UpdateLeavePayload, error) {
+	panic(fmt.Errorf("not implemented: UpdateLeave - updateLeave"))
+}
+
+// ApproveLeave is the resolver for the approveLeave field.
+func (r *mutationResolver) ApproveLeave(ctx context.Context, id string, input model.ApproveLeaveInput) (*model.ApproveLeavePayload, error) {
+	panic(fmt.Errorf("not implemented: ApproveLeave - approveLeave"))
+}
+
+// RejectLeave is the resolver for the rejectLeave field.
+func (r *mutationResolver) RejectLeave(ctx context.Context, id string, input model.ApproveLeaveInput) (*model.RejectLeavePayload, error) {
+	panic(fmt.Errorf("not implemented: RejectLeave - rejectLeave"))
+}
+
+// CancelLeave is the resolver for the cancelLeave field.
+func (r *mutationResolver) CancelLeave(ctx context.Context, id string) (*model.CancelLeavePayload, error) {
+	panic(fmt.Errorf("not implemented: CancelLeave - cancelLeave"))
+}
+
+// DeleteLeave is the resolver for the deleteLeave field.
+func (r *mutationResolver) DeleteLeave(ctx context.Context, id string) (*model.DeleteLeavePayload, error) {
+	panic(fmt.Errorf("not implemented: DeleteLeave - deleteLeave"))
+}
 
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }

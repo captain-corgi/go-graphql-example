@@ -46,9 +46,34 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	ApproveLeavePayload struct {
+		Errors func(childComplexity int) int
+		Leave  func(childComplexity int) int
+	}
+
+	CancelLeavePayload struct {
+		Errors func(childComplexity int) int
+		Leave  func(childComplexity int) int
+	}
+
+	CreateDepartmentPayload struct {
+		Department func(childComplexity int) int
+		Errors     func(childComplexity int) int
+	}
+
 	CreateEmployeePayload struct {
 		Employee func(childComplexity int) int
 		Errors   func(childComplexity int) int
+	}
+
+	CreateLeavePayload struct {
+		Errors func(childComplexity int) int
+		Leave  func(childComplexity int) int
+	}
+
+	CreatePositionPayload struct {
+		Errors   func(childComplexity int) int
+		Position func(childComplexity int) int
 	}
 
 	CreateUserPayload struct {
@@ -56,7 +81,22 @@ type ComplexityRoot struct {
 		User   func(childComplexity int) int
 	}
 
+	DeleteDepartmentPayload struct {
+		Errors  func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
 	DeleteEmployeePayload struct {
+		Errors  func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	DeleteLeavePayload struct {
+		Errors  func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	DeletePositionPayload struct {
 		Errors  func(childComplexity int) int
 		Success func(childComplexity int) int
 	}
@@ -64,6 +104,25 @@ type ComplexityRoot struct {
 	DeleteUserPayload struct {
 		Errors  func(childComplexity int) int
 		Success func(childComplexity int) int
+	}
+
+	Department struct {
+		CreatedAt   func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		ManagerID   func(childComplexity int) int
+		Name        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+	}
+
+	DepartmentConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	DepartmentEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	Employee struct {
@@ -95,13 +154,49 @@ type ComplexityRoot struct {
 		Message func(childComplexity int) int
 	}
 
+	Leave struct {
+		ApprovedAt func(childComplexity int) int
+		ApprovedBy func(childComplexity int) int
+		CreatedAt  func(childComplexity int) int
+		EmployeeID func(childComplexity int) int
+		EndDate    func(childComplexity int) int
+		ID         func(childComplexity int) int
+		LeaveType  func(childComplexity int) int
+		Reason     func(childComplexity int) int
+		StartDate  func(childComplexity int) int
+		Status     func(childComplexity int) int
+		UpdatedAt  func(childComplexity int) int
+	}
+
+	LeaveConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	LeaveEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	Mutation struct {
-		CreateEmployee func(childComplexity int, input model.CreateEmployeeInput) int
-		CreateUser     func(childComplexity int, input model.CreateUserInput) int
-		DeleteEmployee func(childComplexity int, id string) int
-		DeleteUser     func(childComplexity int, id string) int
-		UpdateEmployee func(childComplexity int, id string, input model.UpdateEmployeeInput) int
-		UpdateUser     func(childComplexity int, id string, input model.UpdateUserInput) int
+		ApproveLeave     func(childComplexity int, id string, input model.ApproveLeaveInput) int
+		CancelLeave      func(childComplexity int, id string) int
+		CreateDepartment func(childComplexity int, input model.CreateDepartmentInput) int
+		CreateEmployee   func(childComplexity int, input model.CreateEmployeeInput) int
+		CreateLeave      func(childComplexity int, input model.CreateLeaveInput) int
+		CreatePosition   func(childComplexity int, input model.CreatePositionInput) int
+		CreateUser       func(childComplexity int, input model.CreateUserInput) int
+		DeleteDepartment func(childComplexity int, id string) int
+		DeleteEmployee   func(childComplexity int, id string) int
+		DeleteLeave      func(childComplexity int, id string) int
+		DeletePosition   func(childComplexity int, id string) int
+		DeleteUser       func(childComplexity int, id string) int
+		RejectLeave      func(childComplexity int, id string, input model.ApproveLeaveInput) int
+		UpdateDepartment func(childComplexity int, id string, input model.UpdateDepartmentInput) int
+		UpdateEmployee   func(childComplexity int, id string, input model.UpdateEmployeeInput) int
+		UpdateLeave      func(childComplexity int, id string, input model.UpdateLeaveInput) int
+		UpdatePosition   func(childComplexity int, id string, input model.UpdatePositionInput) int
+		UpdateUser       func(childComplexity int, id string, input model.UpdateUserInput) int
 	}
 
 	PageInfo struct {
@@ -111,18 +206,70 @@ type ComplexityRoot struct {
 		StartCursor     func(childComplexity int) int
 	}
 
+	Position struct {
+		CreatedAt    func(childComplexity int) int
+		DepartmentID func(childComplexity int) int
+		Description  func(childComplexity int) int
+		ID           func(childComplexity int) int
+		MaxSalary    func(childComplexity int) int
+		MinSalary    func(childComplexity int) int
+		Requirements func(childComplexity int) int
+		Title        func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+	}
+
+	PositionConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	PositionEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	Query struct {
+		Department            func(childComplexity int, id string) int
+		Departments           func(childComplexity int, first *int, after *string) int
+		DepartmentsByManager  func(childComplexity int, managerID string, first *int, after *string) int
 		Employee              func(childComplexity int, id string) int
 		Employees             func(childComplexity int, first *int, after *string) int
 		EmployeesByDepartment func(childComplexity int, department string, first *int, after *string) int
 		EmployeesByStatus     func(childComplexity int, status string, first *int, after *string) int
+		Leave                 func(childComplexity int, id string) int
+		Leaves                func(childComplexity int, first *int, after *string) int
+		LeavesByEmployee      func(childComplexity int, employeeID string, first *int, after *string) int
+		LeavesByStatus        func(childComplexity int, status string, first *int, after *string) int
+		Position              func(childComplexity int, id string) int
+		Positions             func(childComplexity int, first *int, after *string) int
+		PositionsByDepartment func(childComplexity int, departmentID string, first *int, after *string) int
 		User                  func(childComplexity int, id string) int
 		Users                 func(childComplexity int, first *int, after *string) int
+	}
+
+	RejectLeavePayload struct {
+		Errors func(childComplexity int) int
+		Leave  func(childComplexity int) int
+	}
+
+	UpdateDepartmentPayload struct {
+		Department func(childComplexity int) int
+		Errors     func(childComplexity int) int
 	}
 
 	UpdateEmployeePayload struct {
 		Employee func(childComplexity int) int
 		Errors   func(childComplexity int) int
+	}
+
+	UpdateLeavePayload struct {
+		Errors func(childComplexity int) int
+		Leave  func(childComplexity int) int
+	}
+
+	UpdatePositionPayload struct {
+		Errors   func(childComplexity int) int
+		Position func(childComplexity int) int
 	}
 
 	UpdateUserPayload struct {
@@ -156,6 +303,18 @@ type MutationResolver interface {
 	CreateEmployee(ctx context.Context, input model.CreateEmployeeInput) (*model.CreateEmployeePayload, error)
 	UpdateEmployee(ctx context.Context, id string, input model.UpdateEmployeeInput) (*model.UpdateEmployeePayload, error)
 	DeleteEmployee(ctx context.Context, id string) (*model.DeleteEmployeePayload, error)
+	CreateDepartment(ctx context.Context, input model.CreateDepartmentInput) (*model.CreateDepartmentPayload, error)
+	UpdateDepartment(ctx context.Context, id string, input model.UpdateDepartmentInput) (*model.UpdateDepartmentPayload, error)
+	DeleteDepartment(ctx context.Context, id string) (*model.DeleteDepartmentPayload, error)
+	CreatePosition(ctx context.Context, input model.CreatePositionInput) (*model.CreatePositionPayload, error)
+	UpdatePosition(ctx context.Context, id string, input model.UpdatePositionInput) (*model.UpdatePositionPayload, error)
+	DeletePosition(ctx context.Context, id string) (*model.DeletePositionPayload, error)
+	CreateLeave(ctx context.Context, input model.CreateLeaveInput) (*model.CreateLeavePayload, error)
+	UpdateLeave(ctx context.Context, id string, input model.UpdateLeaveInput) (*model.UpdateLeavePayload, error)
+	ApproveLeave(ctx context.Context, id string, input model.ApproveLeaveInput) (*model.ApproveLeavePayload, error)
+	RejectLeave(ctx context.Context, id string, input model.ApproveLeaveInput) (*model.RejectLeavePayload, error)
+	CancelLeave(ctx context.Context, id string) (*model.CancelLeavePayload, error)
+	DeleteLeave(ctx context.Context, id string) (*model.DeleteLeavePayload, error)
 }
 type QueryResolver interface {
 	User(ctx context.Context, id string) (*model.User, error)
@@ -164,6 +323,16 @@ type QueryResolver interface {
 	Employees(ctx context.Context, first *int, after *string) (*model.EmployeeConnection, error)
 	EmployeesByDepartment(ctx context.Context, department string, first *int, after *string) (*model.EmployeeConnection, error)
 	EmployeesByStatus(ctx context.Context, status string, first *int, after *string) (*model.EmployeeConnection, error)
+	Department(ctx context.Context, id string) (*model.Department, error)
+	Departments(ctx context.Context, first *int, after *string) (*model.DepartmentConnection, error)
+	DepartmentsByManager(ctx context.Context, managerID string, first *int, after *string) (*model.DepartmentConnection, error)
+	Position(ctx context.Context, id string) (*model.Position, error)
+	Positions(ctx context.Context, first *int, after *string) (*model.PositionConnection, error)
+	PositionsByDepartment(ctx context.Context, departmentID string, first *int, after *string) (*model.PositionConnection, error)
+	Leave(ctx context.Context, id string) (*model.Leave, error)
+	Leaves(ctx context.Context, first *int, after *string) (*model.LeaveConnection, error)
+	LeavesByEmployee(ctx context.Context, employeeID string, first *int, after *string) (*model.LeaveConnection, error)
+	LeavesByStatus(ctx context.Context, status string, first *int, after *string) (*model.LeaveConnection, error)
 }
 
 type executableSchema struct {
@@ -185,6 +354,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
+	case "ApproveLeavePayload.errors":
+		if e.complexity.ApproveLeavePayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.ApproveLeavePayload.Errors(childComplexity), true
+
+	case "ApproveLeavePayload.leave":
+		if e.complexity.ApproveLeavePayload.Leave == nil {
+			break
+		}
+
+		return e.complexity.ApproveLeavePayload.Leave(childComplexity), true
+
+	case "CancelLeavePayload.errors":
+		if e.complexity.CancelLeavePayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.CancelLeavePayload.Errors(childComplexity), true
+
+	case "CancelLeavePayload.leave":
+		if e.complexity.CancelLeavePayload.Leave == nil {
+			break
+		}
+
+		return e.complexity.CancelLeavePayload.Leave(childComplexity), true
+
+	case "CreateDepartmentPayload.department":
+		if e.complexity.CreateDepartmentPayload.Department == nil {
+			break
+		}
+
+		return e.complexity.CreateDepartmentPayload.Department(childComplexity), true
+
+	case "CreateDepartmentPayload.errors":
+		if e.complexity.CreateDepartmentPayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.CreateDepartmentPayload.Errors(childComplexity), true
+
 	case "CreateEmployeePayload.employee":
 		if e.complexity.CreateEmployeePayload.Employee == nil {
 			break
@@ -198,6 +409,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CreateEmployeePayload.Errors(childComplexity), true
+
+	case "CreateLeavePayload.errors":
+		if e.complexity.CreateLeavePayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.CreateLeavePayload.Errors(childComplexity), true
+
+	case "CreateLeavePayload.leave":
+		if e.complexity.CreateLeavePayload.Leave == nil {
+			break
+		}
+
+		return e.complexity.CreateLeavePayload.Leave(childComplexity), true
+
+	case "CreatePositionPayload.errors":
+		if e.complexity.CreatePositionPayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.CreatePositionPayload.Errors(childComplexity), true
+
+	case "CreatePositionPayload.position":
+		if e.complexity.CreatePositionPayload.Position == nil {
+			break
+		}
+
+		return e.complexity.CreatePositionPayload.Position(childComplexity), true
 
 	case "CreateUserPayload.errors":
 		if e.complexity.CreateUserPayload.Errors == nil {
@@ -213,6 +452,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CreateUserPayload.User(childComplexity), true
 
+	case "DeleteDepartmentPayload.errors":
+		if e.complexity.DeleteDepartmentPayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.DeleteDepartmentPayload.Errors(childComplexity), true
+
+	case "DeleteDepartmentPayload.success":
+		if e.complexity.DeleteDepartmentPayload.Success == nil {
+			break
+		}
+
+		return e.complexity.DeleteDepartmentPayload.Success(childComplexity), true
+
 	case "DeleteEmployeePayload.errors":
 		if e.complexity.DeleteEmployeePayload.Errors == nil {
 			break
@@ -227,6 +480,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DeleteEmployeePayload.Success(childComplexity), true
 
+	case "DeleteLeavePayload.errors":
+		if e.complexity.DeleteLeavePayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.DeleteLeavePayload.Errors(childComplexity), true
+
+	case "DeleteLeavePayload.success":
+		if e.complexity.DeleteLeavePayload.Success == nil {
+			break
+		}
+
+		return e.complexity.DeleteLeavePayload.Success(childComplexity), true
+
+	case "DeletePositionPayload.errors":
+		if e.complexity.DeletePositionPayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.DeletePositionPayload.Errors(childComplexity), true
+
+	case "DeletePositionPayload.success":
+		if e.complexity.DeletePositionPayload.Success == nil {
+			break
+		}
+
+		return e.complexity.DeletePositionPayload.Success(childComplexity), true
+
 	case "DeleteUserPayload.errors":
 		if e.complexity.DeleteUserPayload.Errors == nil {
 			break
@@ -240,6 +521,76 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DeleteUserPayload.Success(childComplexity), true
+
+	case "Department.createdAt":
+		if e.complexity.Department.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Department.CreatedAt(childComplexity), true
+
+	case "Department.description":
+		if e.complexity.Department.Description == nil {
+			break
+		}
+
+		return e.complexity.Department.Description(childComplexity), true
+
+	case "Department.id":
+		if e.complexity.Department.ID == nil {
+			break
+		}
+
+		return e.complexity.Department.ID(childComplexity), true
+
+	case "Department.managerId":
+		if e.complexity.Department.ManagerID == nil {
+			break
+		}
+
+		return e.complexity.Department.ManagerID(childComplexity), true
+
+	case "Department.name":
+		if e.complexity.Department.Name == nil {
+			break
+		}
+
+		return e.complexity.Department.Name(childComplexity), true
+
+	case "Department.updatedAt":
+		if e.complexity.Department.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Department.UpdatedAt(childComplexity), true
+
+	case "DepartmentConnection.edges":
+		if e.complexity.DepartmentConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DepartmentConnection.Edges(childComplexity), true
+
+	case "DepartmentConnection.pageInfo":
+		if e.complexity.DepartmentConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DepartmentConnection.PageInfo(childComplexity), true
+
+	case "DepartmentEdge.cursor":
+		if e.complexity.DepartmentEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DepartmentEdge.Cursor(childComplexity), true
+
+	case "DepartmentEdge.node":
+		if e.complexity.DepartmentEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DepartmentEdge.Node(childComplexity), true
 
 	case "Employee.createdAt":
 		if e.complexity.Employee.CreatedAt == nil {
@@ -360,6 +711,147 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Error.Message(childComplexity), true
 
+	case "Leave.approvedAt":
+		if e.complexity.Leave.ApprovedAt == nil {
+			break
+		}
+
+		return e.complexity.Leave.ApprovedAt(childComplexity), true
+
+	case "Leave.approvedBy":
+		if e.complexity.Leave.ApprovedBy == nil {
+			break
+		}
+
+		return e.complexity.Leave.ApprovedBy(childComplexity), true
+
+	case "Leave.createdAt":
+		if e.complexity.Leave.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Leave.CreatedAt(childComplexity), true
+
+	case "Leave.employeeId":
+		if e.complexity.Leave.EmployeeID == nil {
+			break
+		}
+
+		return e.complexity.Leave.EmployeeID(childComplexity), true
+
+	case "Leave.endDate":
+		if e.complexity.Leave.EndDate == nil {
+			break
+		}
+
+		return e.complexity.Leave.EndDate(childComplexity), true
+
+	case "Leave.id":
+		if e.complexity.Leave.ID == nil {
+			break
+		}
+
+		return e.complexity.Leave.ID(childComplexity), true
+
+	case "Leave.leaveType":
+		if e.complexity.Leave.LeaveType == nil {
+			break
+		}
+
+		return e.complexity.Leave.LeaveType(childComplexity), true
+
+	case "Leave.reason":
+		if e.complexity.Leave.Reason == nil {
+			break
+		}
+
+		return e.complexity.Leave.Reason(childComplexity), true
+
+	case "Leave.startDate":
+		if e.complexity.Leave.StartDate == nil {
+			break
+		}
+
+		return e.complexity.Leave.StartDate(childComplexity), true
+
+	case "Leave.status":
+		if e.complexity.Leave.Status == nil {
+			break
+		}
+
+		return e.complexity.Leave.Status(childComplexity), true
+
+	case "Leave.updatedAt":
+		if e.complexity.Leave.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Leave.UpdatedAt(childComplexity), true
+
+	case "LeaveConnection.edges":
+		if e.complexity.LeaveConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.LeaveConnection.Edges(childComplexity), true
+
+	case "LeaveConnection.pageInfo":
+		if e.complexity.LeaveConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.LeaveConnection.PageInfo(childComplexity), true
+
+	case "LeaveEdge.cursor":
+		if e.complexity.LeaveEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.LeaveEdge.Cursor(childComplexity), true
+
+	case "LeaveEdge.node":
+		if e.complexity.LeaveEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.LeaveEdge.Node(childComplexity), true
+
+	case "Mutation.approveLeave":
+		if e.complexity.Mutation.ApproveLeave == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_approveLeave_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ApproveLeave(childComplexity, args["id"].(string), args["input"].(model.ApproveLeaveInput)), true
+
+	case "Mutation.cancelLeave":
+		if e.complexity.Mutation.CancelLeave == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_cancelLeave_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CancelLeave(childComplexity, args["id"].(string)), true
+
+	case "Mutation.createDepartment":
+		if e.complexity.Mutation.CreateDepartment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDepartment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDepartment(childComplexity, args["input"].(model.CreateDepartmentInput)), true
+
 	case "Mutation.createEmployee":
 		if e.complexity.Mutation.CreateEmployee == nil {
 			break
@@ -371,6 +863,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateEmployee(childComplexity, args["input"].(model.CreateEmployeeInput)), true
+
+	case "Mutation.createLeave":
+		if e.complexity.Mutation.CreateLeave == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createLeave_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateLeave(childComplexity, args["input"].(model.CreateLeaveInput)), true
+
+	case "Mutation.createPosition":
+		if e.complexity.Mutation.CreatePosition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPosition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePosition(childComplexity, args["input"].(model.CreatePositionInput)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -384,6 +900,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.CreateUserInput)), true
 
+	case "Mutation.deleteDepartment":
+		if e.complexity.Mutation.DeleteDepartment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDepartment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDepartment(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteEmployee":
 		if e.complexity.Mutation.DeleteEmployee == nil {
 			break
@@ -395,6 +923,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteEmployee(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteLeave":
+		if e.complexity.Mutation.DeleteLeave == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteLeave_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteLeave(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deletePosition":
+		if e.complexity.Mutation.DeletePosition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deletePosition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeletePosition(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteUser":
 		if e.complexity.Mutation.DeleteUser == nil {
@@ -408,6 +960,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteUser(childComplexity, args["id"].(string)), true
 
+	case "Mutation.rejectLeave":
+		if e.complexity.Mutation.RejectLeave == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_rejectLeave_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RejectLeave(childComplexity, args["id"].(string), args["input"].(model.ApproveLeaveInput)), true
+
+	case "Mutation.updateDepartment":
+		if e.complexity.Mutation.UpdateDepartment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDepartment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDepartment(childComplexity, args["id"].(string), args["input"].(model.UpdateDepartmentInput)), true
+
 	case "Mutation.updateEmployee":
 		if e.complexity.Mutation.UpdateEmployee == nil {
 			break
@@ -419,6 +995,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateEmployee(childComplexity, args["id"].(string), args["input"].(model.UpdateEmployeeInput)), true
+
+	case "Mutation.updateLeave":
+		if e.complexity.Mutation.UpdateLeave == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateLeave_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateLeave(childComplexity, args["id"].(string), args["input"].(model.UpdateLeaveInput)), true
+
+	case "Mutation.updatePosition":
+		if e.complexity.Mutation.UpdatePosition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePosition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePosition(childComplexity, args["id"].(string), args["input"].(model.UpdatePositionInput)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
@@ -459,6 +1059,133 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.PageInfo.StartCursor(childComplexity), true
+
+	case "Position.createdAt":
+		if e.complexity.Position.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Position.CreatedAt(childComplexity), true
+
+	case "Position.departmentId":
+		if e.complexity.Position.DepartmentID == nil {
+			break
+		}
+
+		return e.complexity.Position.DepartmentID(childComplexity), true
+
+	case "Position.description":
+		if e.complexity.Position.Description == nil {
+			break
+		}
+
+		return e.complexity.Position.Description(childComplexity), true
+
+	case "Position.id":
+		if e.complexity.Position.ID == nil {
+			break
+		}
+
+		return e.complexity.Position.ID(childComplexity), true
+
+	case "Position.maxSalary":
+		if e.complexity.Position.MaxSalary == nil {
+			break
+		}
+
+		return e.complexity.Position.MaxSalary(childComplexity), true
+
+	case "Position.minSalary":
+		if e.complexity.Position.MinSalary == nil {
+			break
+		}
+
+		return e.complexity.Position.MinSalary(childComplexity), true
+
+	case "Position.requirements":
+		if e.complexity.Position.Requirements == nil {
+			break
+		}
+
+		return e.complexity.Position.Requirements(childComplexity), true
+
+	case "Position.title":
+		if e.complexity.Position.Title == nil {
+			break
+		}
+
+		return e.complexity.Position.Title(childComplexity), true
+
+	case "Position.updatedAt":
+		if e.complexity.Position.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Position.UpdatedAt(childComplexity), true
+
+	case "PositionConnection.edges":
+		if e.complexity.PositionConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.PositionConnection.Edges(childComplexity), true
+
+	case "PositionConnection.pageInfo":
+		if e.complexity.PositionConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.PositionConnection.PageInfo(childComplexity), true
+
+	case "PositionEdge.cursor":
+		if e.complexity.PositionEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PositionEdge.Cursor(childComplexity), true
+
+	case "PositionEdge.node":
+		if e.complexity.PositionEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PositionEdge.Node(childComplexity), true
+
+	case "Query.department":
+		if e.complexity.Query.Department == nil {
+			break
+		}
+
+		args, err := ec.field_Query_department_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Department(childComplexity, args["id"].(string)), true
+
+	case "Query.departments":
+		if e.complexity.Query.Departments == nil {
+			break
+		}
+
+		args, err := ec.field_Query_departments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Departments(childComplexity, args["first"].(*int), args["after"].(*string)), true
+
+	case "Query.departmentsByManager":
+		if e.complexity.Query.DepartmentsByManager == nil {
+			break
+		}
+
+		args, err := ec.field_Query_departmentsByManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DepartmentsByManager(childComplexity, args["managerId"].(string), args["first"].(*int), args["after"].(*string)), true
 
 	case "Query.employee":
 		if e.complexity.Query.Employee == nil {
@@ -508,6 +1235,90 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.EmployeesByStatus(childComplexity, args["status"].(string), args["first"].(*int), args["after"].(*string)), true
 
+	case "Query.leave":
+		if e.complexity.Query.Leave == nil {
+			break
+		}
+
+		args, err := ec.field_Query_leave_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Leave(childComplexity, args["id"].(string)), true
+
+	case "Query.leaves":
+		if e.complexity.Query.Leaves == nil {
+			break
+		}
+
+		args, err := ec.field_Query_leaves_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Leaves(childComplexity, args["first"].(*int), args["after"].(*string)), true
+
+	case "Query.leavesByEmployee":
+		if e.complexity.Query.LeavesByEmployee == nil {
+			break
+		}
+
+		args, err := ec.field_Query_leavesByEmployee_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.LeavesByEmployee(childComplexity, args["employeeId"].(string), args["first"].(*int), args["after"].(*string)), true
+
+	case "Query.leavesByStatus":
+		if e.complexity.Query.LeavesByStatus == nil {
+			break
+		}
+
+		args, err := ec.field_Query_leavesByStatus_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.LeavesByStatus(childComplexity, args["status"].(string), args["first"].(*int), args["after"].(*string)), true
+
+	case "Query.position":
+		if e.complexity.Query.Position == nil {
+			break
+		}
+
+		args, err := ec.field_Query_position_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Position(childComplexity, args["id"].(string)), true
+
+	case "Query.positions":
+		if e.complexity.Query.Positions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_positions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Positions(childComplexity, args["first"].(*int), args["after"].(*string)), true
+
+	case "Query.positionsByDepartment":
+		if e.complexity.Query.PositionsByDepartment == nil {
+			break
+		}
+
+		args, err := ec.field_Query_positionsByDepartment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.PositionsByDepartment(childComplexity, args["departmentId"].(string), args["first"].(*int), args["after"].(*string)), true
+
 	case "Query.user":
 		if e.complexity.Query.User == nil {
 			break
@@ -532,6 +1343,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Users(childComplexity, args["first"].(*int), args["after"].(*string)), true
 
+	case "RejectLeavePayload.errors":
+		if e.complexity.RejectLeavePayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.RejectLeavePayload.Errors(childComplexity), true
+
+	case "RejectLeavePayload.leave":
+		if e.complexity.RejectLeavePayload.Leave == nil {
+			break
+		}
+
+		return e.complexity.RejectLeavePayload.Leave(childComplexity), true
+
+	case "UpdateDepartmentPayload.department":
+		if e.complexity.UpdateDepartmentPayload.Department == nil {
+			break
+		}
+
+		return e.complexity.UpdateDepartmentPayload.Department(childComplexity), true
+
+	case "UpdateDepartmentPayload.errors":
+		if e.complexity.UpdateDepartmentPayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.UpdateDepartmentPayload.Errors(childComplexity), true
+
 	case "UpdateEmployeePayload.employee":
 		if e.complexity.UpdateEmployeePayload.Employee == nil {
 			break
@@ -545,6 +1384,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.UpdateEmployeePayload.Errors(childComplexity), true
+
+	case "UpdateLeavePayload.errors":
+		if e.complexity.UpdateLeavePayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.UpdateLeavePayload.Errors(childComplexity), true
+
+	case "UpdateLeavePayload.leave":
+		if e.complexity.UpdateLeavePayload.Leave == nil {
+			break
+		}
+
+		return e.complexity.UpdateLeavePayload.Leave(childComplexity), true
+
+	case "UpdatePositionPayload.errors":
+		if e.complexity.UpdatePositionPayload.Errors == nil {
+			break
+		}
+
+		return e.complexity.UpdatePositionPayload.Errors(childComplexity), true
+
+	case "UpdatePositionPayload.position":
+		if e.complexity.UpdatePositionPayload.Position == nil {
+			break
+		}
+
+		return e.complexity.UpdatePositionPayload.Position(childComplexity), true
 
 	case "UpdateUserPayload.errors":
 		if e.complexity.UpdateUserPayload.Errors == nil {
@@ -631,9 +1498,16 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
 	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputApproveLeaveInput,
+		ec.unmarshalInputCreateDepartmentInput,
 		ec.unmarshalInputCreateEmployeeInput,
+		ec.unmarshalInputCreateLeaveInput,
+		ec.unmarshalInputCreatePositionInput,
 		ec.unmarshalInputCreateUserInput,
+		ec.unmarshalInputUpdateDepartmentInput,
 		ec.unmarshalInputUpdateEmployeeInput,
+		ec.unmarshalInputUpdateLeaveInput,
+		ec.unmarshalInputUpdatePositionInput,
 		ec.unmarshalInputUpdateUserInput,
 	)
 	first := true
@@ -732,6 +1606,53 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
+	{Name: "../../../../api/graphql/department.graphqls", Input: `# Department types and inputs
+
+type Department {
+  id: ID!
+  name: String!
+  description: String!
+  managerId: ID
+  createdAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  updatedAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+}
+
+type DepartmentConnection {
+  edges: [DepartmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DepartmentEdge {
+  node: Department!
+  cursor: String!
+}
+
+input CreateDepartmentInput {
+  name: String!
+  description: String!
+  managerId: ID
+}
+
+input UpdateDepartmentInput {
+  name: String
+  description: String
+  managerId: ID
+}
+
+type CreateDepartmentPayload {
+  department: Department!
+  errors: [Error!]
+}
+
+type UpdateDepartmentPayload {
+  department: Department!
+  errors: [Error!]
+}
+
+type DeleteDepartmentPayload {
+  success: Boolean!
+  errors: [Error!]
+}`, BuiltIn: false},
 	{Name: "../../../../api/graphql/employee.graphqls", Input: `# Employee types and inputs
 
 type Employee {
@@ -790,7 +1711,81 @@ type DeleteEmployeePayload {
   success: Boolean!
   errors: [Error!]
 }`, BuiltIn: false},
-	{Name: "../../../../api/graphql/mutation.graphqls", Input: `# User and Employee mutations
+	{Name: "../../../../api/graphql/leave.graphqls", Input: `# Leave types and inputs
+
+type Leave {
+  id: ID!
+  employeeId: ID!
+  leaveType: String!
+  startDate: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  endDate: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  reason: String!
+  status: String!
+  approvedBy: ID
+  approvedAt: String # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  createdAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  updatedAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+}
+
+type LeaveConnection {
+  edges: [LeaveEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LeaveEdge {
+  node: Leave!
+  cursor: String!
+}
+
+input CreateLeaveInput {
+  employeeId: ID!
+  leaveType: String!
+  startDate: String!
+  endDate: String!
+  reason: String!
+}
+
+input UpdateLeaveInput {
+  leaveType: String
+  startDate: String
+  endDate: String
+  reason: String
+}
+
+input ApproveLeaveInput {
+  approvedBy: ID!
+}
+
+type CreateLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type UpdateLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type ApproveLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type RejectLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type CancelLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type DeleteLeavePayload {
+  success: Boolean!
+  errors: [Error!]
+}`, BuiltIn: false},
+	{Name: "../../../../api/graphql/mutation.graphqls", Input: `# User, Employee, Department, Position, and Leave mutations
 
 type Mutation {
   createUser(input: CreateUserInput!): CreateUserPayload!
@@ -799,9 +1794,77 @@ type Mutation {
   createEmployee(input: CreateEmployeeInput!): CreateEmployeePayload!
   updateEmployee(id: ID!, input: UpdateEmployeeInput!): UpdateEmployeePayload!
   deleteEmployee(id: ID!): DeleteEmployeePayload!
+  createDepartment(input: CreateDepartmentInput!): CreateDepartmentPayload!
+  updateDepartment(id: ID!, input: UpdateDepartmentInput!): UpdateDepartmentPayload!
+  deleteDepartment(id: ID!): DeleteDepartmentPayload!
+  createPosition(input: CreatePositionInput!): CreatePositionPayload!
+  updatePosition(id: ID!, input: UpdatePositionInput!): UpdatePositionPayload!
+  deletePosition(id: ID!): DeletePositionPayload!
+  createLeave(input: CreateLeaveInput!): CreateLeavePayload!
+  updateLeave(id: ID!, input: UpdateLeaveInput!): UpdateLeavePayload!
+  approveLeave(id: ID!, input: ApproveLeaveInput!): ApproveLeavePayload!
+  rejectLeave(id: ID!, input: ApproveLeaveInput!): RejectLeavePayload!
+  cancelLeave(id: ID!): CancelLeavePayload!
+  deleteLeave(id: ID!): DeleteLeavePayload!
 }
 `, BuiltIn: false},
-	{Name: "../../../../api/graphql/query.graphqls", Input: `# User and Employee queries
+	{Name: "../../../../api/graphql/position.graphqls", Input: `# Position types and inputs
+
+type Position {
+  id: ID!
+  title: String!
+  description: String!
+  departmentId: ID
+  requirements: String!
+  minSalary: Float!
+  maxSalary: Float!
+  createdAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  updatedAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+}
+
+type PositionConnection {
+  edges: [PositionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PositionEdge {
+  node: Position!
+  cursor: String!
+}
+
+input CreatePositionInput {
+  title: String!
+  description: String!
+  departmentId: ID
+  requirements: String!
+  minSalary: Float!
+  maxSalary: Float!
+}
+
+input UpdatePositionInput {
+  title: String
+  description: String
+  departmentId: ID
+  requirements: String
+  minSalary: Float
+  maxSalary: Float
+}
+
+type CreatePositionPayload {
+  position: Position!
+  errors: [Error!]
+}
+
+type UpdatePositionPayload {
+  position: Position!
+  errors: [Error!]
+}
+
+type DeletePositionPayload {
+  success: Boolean!
+  errors: [Error!]
+}`, BuiltIn: false},
+	{Name: "../../../../api/graphql/query.graphqls", Input: `# User, Employee, Department, Position, and Leave queries
 
 type Query {
   user(id: ID!): User
@@ -810,6 +1873,16 @@ type Query {
   employees(first: Int, after: String): EmployeeConnection!
   employeesByDepartment(department: String!, first: Int, after: String): EmployeeConnection!
   employeesByStatus(status: String!, first: Int, after: String): EmployeeConnection!
+  department(id: ID!): Department
+  departments(first: Int, after: String): DepartmentConnection!
+  departmentsByManager(managerId: ID!, first: Int, after: String): DepartmentConnection!
+  position(id: ID!): Position
+  positions(first: Int, after: String): PositionConnection!
+  positionsByDepartment(departmentId: ID!, first: Int, after: String): PositionConnection!
+  leave(id: ID!): Leave
+  leaves(first: Int, after: String): LeaveConnection!
+  leavesByEmployee(employeeId: ID!, first: Int, after: String): LeaveConnection!
+  leavesByStatus(status: String!, first: Int, after: String): LeaveConnection!
 }
 `, BuiltIn: false},
 	{Name: "../../../../api/graphql/scalars.graphqls", Input: `# Custom scalar definitions
@@ -882,10 +1955,70 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_approveLeave_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNApproveLeaveInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐApproveLeaveInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_cancelLeave_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createDepartment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDepartmentInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateDepartmentInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createEmployee_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEmployeeInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateEmployeeInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createLeave_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateLeaveInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateLeaveInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createPosition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreatePositionInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreatePositionInput)
 	if err != nil {
 		return nil, err
 	}
@@ -904,7 +2037,40 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteDepartment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteEmployee_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteLeave_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deletePosition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
@@ -926,6 +2092,38 @@ func (ec *executionContext) field_Mutation_deleteUser_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_rejectLeave_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNApproveLeaveInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐApproveLeaveInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateDepartment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDepartmentInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateDepartmentInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateEmployee_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -935,6 +2133,38 @@ func (ec *executionContext) field_Mutation_updateEmployee_args(ctx context.Conte
 	}
 	args["id"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEmployeeInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateEmployeeInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateLeave_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateLeaveInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateLeaveInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePosition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdatePositionInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdatePositionInput)
 	if err != nil {
 		return nil, err
 	}
@@ -966,6 +2196,54 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_department_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_departmentsByManager_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "managerId", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["managerId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_departments_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg1
 	return args, nil
 }
 
@@ -1023,6 +2301,123 @@ func (ec *executionContext) field_Query_employeesByStatus_args(ctx context.Conte
 }
 
 func (ec *executionContext) field_Query_employees_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_leave_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_leavesByEmployee_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "employeeId", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["employeeId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_leavesByStatus_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "status", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["status"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_leaves_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_position_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_positionsByDepartment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "departmentId", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["departmentId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_positions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
@@ -1116,6 +2511,347 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _ApproveLeavePayload_leave(ctx context.Context, field graphql.CollectedField, obj *model.ApproveLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApproveLeavePayload_leave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Leave, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Leave)
+	fc.Result = res
+	return ec.marshalNLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApproveLeavePayload_leave(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApproveLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Leave_id(ctx, field)
+			case "employeeId":
+				return ec.fieldContext_Leave_employeeId(ctx, field)
+			case "leaveType":
+				return ec.fieldContext_Leave_leaveType(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Leave_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Leave_endDate(ctx, field)
+			case "reason":
+				return ec.fieldContext_Leave_reason(ctx, field)
+			case "status":
+				return ec.fieldContext_Leave_status(ctx, field)
+			case "approvedBy":
+				return ec.fieldContext_Leave_approvedBy(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Leave_approvedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Leave_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Leave_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Leave", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApproveLeavePayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.ApproveLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApproveLeavePayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApproveLeavePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApproveLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CancelLeavePayload_leave(ctx context.Context, field graphql.CollectedField, obj *model.CancelLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CancelLeavePayload_leave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Leave, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Leave)
+	fc.Result = res
+	return ec.marshalNLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CancelLeavePayload_leave(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CancelLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Leave_id(ctx, field)
+			case "employeeId":
+				return ec.fieldContext_Leave_employeeId(ctx, field)
+			case "leaveType":
+				return ec.fieldContext_Leave_leaveType(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Leave_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Leave_endDate(ctx, field)
+			case "reason":
+				return ec.fieldContext_Leave_reason(ctx, field)
+			case "status":
+				return ec.fieldContext_Leave_status(ctx, field)
+			case "approvedBy":
+				return ec.fieldContext_Leave_approvedBy(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Leave_approvedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Leave_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Leave_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Leave", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CancelLeavePayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.CancelLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CancelLeavePayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CancelLeavePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CancelLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CreateDepartmentPayload_department(ctx context.Context, field graphql.CollectedField, obj *model.CreateDepartmentPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CreateDepartmentPayload_department(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Department, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Department)
+	fc.Result = res
+	return ec.marshalNDepartment2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartment(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CreateDepartmentPayload_department(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreateDepartmentPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Department_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Department_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Department_description(ctx, field)
+			case "managerId":
+				return ec.fieldContext_Department_managerId(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Department_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Department_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Department", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CreateDepartmentPayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.CreateDepartmentPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CreateDepartmentPayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CreateDepartmentPayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreateDepartmentPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _CreateEmployeePayload_employee(ctx context.Context, field graphql.CollectedField, obj *model.CreateEmployeePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CreateEmployeePayload_employee(ctx, field)
@@ -1214,6 +2950,236 @@ func (ec *executionContext) _CreateEmployeePayload_errors(ctx context.Context, f
 func (ec *executionContext) fieldContext_CreateEmployeePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CreateEmployeePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CreateLeavePayload_leave(ctx context.Context, field graphql.CollectedField, obj *model.CreateLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CreateLeavePayload_leave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Leave, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Leave)
+	fc.Result = res
+	return ec.marshalNLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CreateLeavePayload_leave(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreateLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Leave_id(ctx, field)
+			case "employeeId":
+				return ec.fieldContext_Leave_employeeId(ctx, field)
+			case "leaveType":
+				return ec.fieldContext_Leave_leaveType(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Leave_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Leave_endDate(ctx, field)
+			case "reason":
+				return ec.fieldContext_Leave_reason(ctx, field)
+			case "status":
+				return ec.fieldContext_Leave_status(ctx, field)
+			case "approvedBy":
+				return ec.fieldContext_Leave_approvedBy(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Leave_approvedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Leave_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Leave_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Leave", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CreateLeavePayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.CreateLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CreateLeavePayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CreateLeavePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreateLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CreatePositionPayload_position(ctx context.Context, field graphql.CollectedField, obj *model.CreatePositionPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CreatePositionPayload_position(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Position, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Position)
+	fc.Result = res
+	return ec.marshalNPosition2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPosition(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CreatePositionPayload_position(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreatePositionPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Position_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Position_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Position_description(ctx, field)
+			case "departmentId":
+				return ec.fieldContext_Position_departmentId(ctx, field)
+			case "requirements":
+				return ec.fieldContext_Position_requirements(ctx, field)
+			case "minSalary":
+				return ec.fieldContext_Position_minSalary(ctx, field)
+			case "maxSalary":
+				return ec.fieldContext_Position_maxSalary(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Position_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Position_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Position", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CreatePositionPayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.CreatePositionPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CreatePositionPayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CreatePositionPayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreatePositionPayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1337,6 +3303,99 @@ func (ec *executionContext) fieldContext_CreateUserPayload_errors(_ context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _DeleteDepartmentPayload_success(ctx context.Context, field graphql.CollectedField, obj *model.DeleteDepartmentPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeleteDepartmentPayload_success(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Success, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeleteDepartmentPayload_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteDepartmentPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteDepartmentPayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.DeleteDepartmentPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeleteDepartmentPayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeleteDepartmentPayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteDepartmentPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _DeleteEmployeePayload_success(ctx context.Context, field graphql.CollectedField, obj *model.DeleteEmployeePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_DeleteEmployeePayload_success(ctx, field)
 	if err != nil {
@@ -1412,6 +3471,192 @@ func (ec *executionContext) _DeleteEmployeePayload_errors(ctx context.Context, f
 func (ec *executionContext) fieldContext_DeleteEmployeePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DeleteEmployeePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteLeavePayload_success(ctx context.Context, field graphql.CollectedField, obj *model.DeleteLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeleteLeavePayload_success(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Success, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeleteLeavePayload_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteLeavePayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.DeleteLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeleteLeavePayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeleteLeavePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeletePositionPayload_success(ctx context.Context, field graphql.CollectedField, obj *model.DeletePositionPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeletePositionPayload_success(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Success, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeletePositionPayload_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeletePositionPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeletePositionPayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.DeletePositionPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeletePositionPayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeletePositionPayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeletePositionPayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1518,6 +3763,473 @@ func (ec *executionContext) fieldContext_DeleteUserPayload_errors(_ context.Cont
 				return ec.fieldContext_Error_code(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Department_id(ctx context.Context, field graphql.CollectedField, obj *model.Department) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Department_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Department_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Department",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Department_name(ctx context.Context, field graphql.CollectedField, obj *model.Department) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Department_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Department_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Department",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Department_description(ctx context.Context, field graphql.CollectedField, obj *model.Department) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Department_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Department_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Department",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Department_managerId(ctx context.Context, field graphql.CollectedField, obj *model.Department) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Department_managerId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ManagerID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Department_managerId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Department",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Department_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Department) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Department_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Department_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Department",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Department_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Department) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Department_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Department_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Department",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DepartmentConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.DepartmentConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DepartmentConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.DepartmentEdge)
+	fc.Result = res
+	return ec.marshalNDepartmentEdge2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentEdgeᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DepartmentConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DepartmentConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_DepartmentEdge_node(ctx, field)
+			case "cursor":
+				return ec.fieldContext_DepartmentEdge_cursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DepartmentEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DepartmentConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.DepartmentConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DepartmentConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DepartmentConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DepartmentConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DepartmentEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.DepartmentEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DepartmentEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Department)
+	fc.Result = res
+	return ec.marshalNDepartment2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartment(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DepartmentEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DepartmentEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Department_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Department_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Department_description(ctx, field)
+			case "managerId":
+				return ec.fieldContext_Department_managerId(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Department_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Department_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Department", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DepartmentEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.DepartmentEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DepartmentEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DepartmentEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DepartmentEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2315,6 +5027,700 @@ func (ec *executionContext) fieldContext_Error_code(_ context.Context, field gra
 	return fc, nil
 }
 
+func (ec *executionContext) _Leave_id(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_employeeId(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_employeeId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EmployeeID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_employeeId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_leaveType(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_leaveType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LeaveType, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_leaveType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_startDate(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_startDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StartDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_startDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_endDate(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_endDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EndDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_endDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_reason(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_reason(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Reason, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_reason(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_status(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_status(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_approvedBy(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_approvedBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ApprovedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_approvedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_approvedAt(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_approvedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ApprovedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_approvedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Leave_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Leave) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Leave_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Leave_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Leave",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LeaveConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.LeaveConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LeaveConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.LeaveEdge)
+	fc.Result = res
+	return ec.marshalNLeaveEdge2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveEdgeᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LeaveConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LeaveConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_LeaveEdge_node(ctx, field)
+			case "cursor":
+				return ec.fieldContext_LeaveEdge_cursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LeaveEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LeaveConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.LeaveConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LeaveConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LeaveConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LeaveConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LeaveEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.LeaveEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LeaveEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Leave)
+	fc.Result = res
+	return ec.marshalNLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LeaveEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LeaveEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Leave_id(ctx, field)
+			case "employeeId":
+				return ec.fieldContext_Leave_employeeId(ctx, field)
+			case "leaveType":
+				return ec.fieldContext_Leave_leaveType(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Leave_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Leave_endDate(ctx, field)
+			case "reason":
+				return ec.fieldContext_Leave_reason(ctx, field)
+			case "status":
+				return ec.fieldContext_Leave_status(ctx, field)
+			case "approvedBy":
+				return ec.fieldContext_Leave_approvedBy(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Leave_approvedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Leave_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Leave_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Leave", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LeaveEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.LeaveEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LeaveEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LeaveEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LeaveEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createUser(ctx, field)
 	if err != nil {
@@ -2681,6 +6087,738 @@ func (ec *executionContext) fieldContext_Mutation_deleteEmployee(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createDepartment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createDepartment(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateDepartment(rctx, fc.Args["input"].(model.CreateDepartmentInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.CreateDepartmentPayload)
+	fc.Result = res
+	return ec.marshalNCreateDepartmentPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateDepartmentPayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createDepartment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "department":
+				return ec.fieldContext_CreateDepartmentPayload_department(ctx, field)
+			case "errors":
+				return ec.fieldContext_CreateDepartmentPayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CreateDepartmentPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createDepartment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateDepartment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateDepartment(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateDepartment(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDepartmentInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.UpdateDepartmentPayload)
+	fc.Result = res
+	return ec.marshalNUpdateDepartmentPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateDepartmentPayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateDepartment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "department":
+				return ec.fieldContext_UpdateDepartmentPayload_department(ctx, field)
+			case "errors":
+				return ec.fieldContext_UpdateDepartmentPayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UpdateDepartmentPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateDepartment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteDepartment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteDepartment(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteDepartment(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.DeleteDepartmentPayload)
+	fc.Result = res
+	return ec.marshalNDeleteDepartmentPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteDepartmentPayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteDepartment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DeleteDepartmentPayload_success(ctx, field)
+			case "errors":
+				return ec.fieldContext_DeleteDepartmentPayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeleteDepartmentPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteDepartment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createPosition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createPosition(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePosition(rctx, fc.Args["input"].(model.CreatePositionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.CreatePositionPayload)
+	fc.Result = res
+	return ec.marshalNCreatePositionPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreatePositionPayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createPosition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "position":
+				return ec.fieldContext_CreatePositionPayload_position(ctx, field)
+			case "errors":
+				return ec.fieldContext_CreatePositionPayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CreatePositionPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createPosition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePosition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePosition(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePosition(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdatePositionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.UpdatePositionPayload)
+	fc.Result = res
+	return ec.marshalNUpdatePositionPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdatePositionPayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePosition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "position":
+				return ec.fieldContext_UpdatePositionPayload_position(ctx, field)
+			case "errors":
+				return ec.fieldContext_UpdatePositionPayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UpdatePositionPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePosition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deletePosition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deletePosition(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeletePosition(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.DeletePositionPayload)
+	fc.Result = res
+	return ec.marshalNDeletePositionPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeletePositionPayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deletePosition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DeletePositionPayload_success(ctx, field)
+			case "errors":
+				return ec.fieldContext_DeletePositionPayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeletePositionPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deletePosition_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createLeave(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createLeave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateLeave(rctx, fc.Args["input"].(model.CreateLeaveInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.CreateLeavePayload)
+	fc.Result = res
+	return ec.marshalNCreateLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateLeavePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createLeave(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "leave":
+				return ec.fieldContext_CreateLeavePayload_leave(ctx, field)
+			case "errors":
+				return ec.fieldContext_CreateLeavePayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CreateLeavePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createLeave_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateLeave(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateLeave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateLeave(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateLeaveInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.UpdateLeavePayload)
+	fc.Result = res
+	return ec.marshalNUpdateLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateLeavePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateLeave(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "leave":
+				return ec.fieldContext_UpdateLeavePayload_leave(ctx, field)
+			case "errors":
+				return ec.fieldContext_UpdateLeavePayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UpdateLeavePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateLeave_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_approveLeave(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_approveLeave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ApproveLeave(rctx, fc.Args["id"].(string), fc.Args["input"].(model.ApproveLeaveInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ApproveLeavePayload)
+	fc.Result = res
+	return ec.marshalNApproveLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐApproveLeavePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_approveLeave(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "leave":
+				return ec.fieldContext_ApproveLeavePayload_leave(ctx, field)
+			case "errors":
+				return ec.fieldContext_ApproveLeavePayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ApproveLeavePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_approveLeave_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_rejectLeave(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_rejectLeave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RejectLeave(rctx, fc.Args["id"].(string), fc.Args["input"].(model.ApproveLeaveInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.RejectLeavePayload)
+	fc.Result = res
+	return ec.marshalNRejectLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐRejectLeavePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_rejectLeave(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "leave":
+				return ec.fieldContext_RejectLeavePayload_leave(ctx, field)
+			case "errors":
+				return ec.fieldContext_RejectLeavePayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type RejectLeavePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_rejectLeave_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_cancelLeave(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_cancelLeave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CancelLeave(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.CancelLeavePayload)
+	fc.Result = res
+	return ec.marshalNCancelLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCancelLeavePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_cancelLeave(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "leave":
+				return ec.fieldContext_CancelLeavePayload_leave(ctx, field)
+			case "errors":
+				return ec.fieldContext_CancelLeavePayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CancelLeavePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_cancelLeave_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteLeave(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteLeave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteLeave(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.DeleteLeavePayload)
+	fc.Result = res
+	return ec.marshalNDeleteLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteLeavePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteLeave(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DeleteLeavePayload_success(ctx, field)
+			case "errors":
+				return ec.fieldContext_DeleteLeavePayload_errors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeleteLeavePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteLeave_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *model.PageInfo) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageInfo_hasNextPage(ctx, field)
 	if err != nil {
@@ -2841,6 +6979,611 @@ func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graph
 func (ec *executionContext) fieldContext_PageInfo_endCursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_id(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_title(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_title(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Title, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_description(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_departmentId(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_departmentId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DepartmentID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_departmentId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_requirements(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_requirements(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Requirements, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_requirements(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_minSalary(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_minSalary(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MinSalary, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_minSalary(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_maxSalary(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_maxSalary(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxSalary, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_maxSalary(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Position_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Position) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Position_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Position_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Position",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PositionConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.PositionConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PositionConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.PositionEdge)
+	fc.Result = res
+	return ec.marshalNPositionEdge2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionEdgeᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PositionConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PositionConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_PositionEdge_node(ctx, field)
+			case "cursor":
+				return ec.fieldContext_PositionEdge_cursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PositionEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PositionConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.PositionConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PositionConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PositionConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PositionConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PositionEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.PositionEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PositionEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Position)
+	fc.Result = res
+	return ec.marshalNPosition2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPosition(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PositionEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PositionEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Position_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Position_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Position_description(ctx, field)
+			case "departmentId":
+				return ec.fieldContext_Position_departmentId(ctx, field)
+			case "requirements":
+				return ec.fieldContext_Position_requirements(ctx, field)
+			case "minSalary":
+				return ec.fieldContext_Position_minSalary(ctx, field)
+			case "maxSalary":
+				return ec.fieldContext_Position_maxSalary(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Position_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Position_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Position", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PositionEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.PositionEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PositionEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PositionEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PositionEdge",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3233,6 +7976,647 @@ func (ec *executionContext) fieldContext_Query_employeesByStatus(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_department(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_department(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Department(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Department)
+	fc.Result = res
+	return ec.marshalODepartment2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartment(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_department(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Department_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Department_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Department_description(ctx, field)
+			case "managerId":
+				return ec.fieldContext_Department_managerId(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Department_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Department_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Department", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_department_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_departments(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_departments(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Departments(rctx, fc.Args["first"].(*int), fc.Args["after"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.DepartmentConnection)
+	fc.Result = res
+	return ec.marshalNDepartmentConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_departments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_DepartmentConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_DepartmentConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DepartmentConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_departments_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_departmentsByManager(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_departmentsByManager(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().DepartmentsByManager(rctx, fc.Args["managerId"].(string), fc.Args["first"].(*int), fc.Args["after"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.DepartmentConnection)
+	fc.Result = res
+	return ec.marshalNDepartmentConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_departmentsByManager(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_DepartmentConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_DepartmentConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DepartmentConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_departmentsByManager_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_position(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_position(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Position(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Position)
+	fc.Result = res
+	return ec.marshalOPosition2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPosition(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_position(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Position_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Position_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Position_description(ctx, field)
+			case "departmentId":
+				return ec.fieldContext_Position_departmentId(ctx, field)
+			case "requirements":
+				return ec.fieldContext_Position_requirements(ctx, field)
+			case "minSalary":
+				return ec.fieldContext_Position_minSalary(ctx, field)
+			case "maxSalary":
+				return ec.fieldContext_Position_maxSalary(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Position_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Position_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Position", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_position_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_positions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_positions(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Positions(rctx, fc.Args["first"].(*int), fc.Args["after"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PositionConnection)
+	fc.Result = res
+	return ec.marshalNPositionConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_positions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_PositionConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_PositionConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PositionConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_positions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_positionsByDepartment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_positionsByDepartment(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().PositionsByDepartment(rctx, fc.Args["departmentId"].(string), fc.Args["first"].(*int), fc.Args["after"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PositionConnection)
+	fc.Result = res
+	return ec.marshalNPositionConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_positionsByDepartment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_PositionConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_PositionConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PositionConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_positionsByDepartment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_leave(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_leave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Leave(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Leave)
+	fc.Result = res
+	return ec.marshalOLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_leave(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Leave_id(ctx, field)
+			case "employeeId":
+				return ec.fieldContext_Leave_employeeId(ctx, field)
+			case "leaveType":
+				return ec.fieldContext_Leave_leaveType(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Leave_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Leave_endDate(ctx, field)
+			case "reason":
+				return ec.fieldContext_Leave_reason(ctx, field)
+			case "status":
+				return ec.fieldContext_Leave_status(ctx, field)
+			case "approvedBy":
+				return ec.fieldContext_Leave_approvedBy(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Leave_approvedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Leave_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Leave_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Leave", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_leave_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_leaves(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_leaves(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Leaves(rctx, fc.Args["first"].(*int), fc.Args["after"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.LeaveConnection)
+	fc.Result = res
+	return ec.marshalNLeaveConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_leaves(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_LeaveConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_LeaveConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LeaveConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_leaves_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_leavesByEmployee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_leavesByEmployee(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().LeavesByEmployee(rctx, fc.Args["employeeId"].(string), fc.Args["first"].(*int), fc.Args["after"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.LeaveConnection)
+	fc.Result = res
+	return ec.marshalNLeaveConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_leavesByEmployee(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_LeaveConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_LeaveConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LeaveConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_leavesByEmployee_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_leavesByStatus(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_leavesByStatus(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().LeavesByStatus(rctx, fc.Args["status"].(string), fc.Args["first"].(*int), fc.Args["after"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.LeaveConnection)
+	fc.Result = res
+	return ec.marshalNLeaveConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_leavesByStatus(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_LeaveConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_LeaveConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LeaveConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_leavesByStatus_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query___type(ctx, field)
 	if err != nil {
@@ -3364,6 +8748,230 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 	return fc, nil
 }
 
+func (ec *executionContext) _RejectLeavePayload_leave(ctx context.Context, field graphql.CollectedField, obj *model.RejectLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_RejectLeavePayload_leave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Leave, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Leave)
+	fc.Result = res
+	return ec.marshalNLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_RejectLeavePayload_leave(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RejectLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Leave_id(ctx, field)
+			case "employeeId":
+				return ec.fieldContext_Leave_employeeId(ctx, field)
+			case "leaveType":
+				return ec.fieldContext_Leave_leaveType(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Leave_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Leave_endDate(ctx, field)
+			case "reason":
+				return ec.fieldContext_Leave_reason(ctx, field)
+			case "status":
+				return ec.fieldContext_Leave_status(ctx, field)
+			case "approvedBy":
+				return ec.fieldContext_Leave_approvedBy(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Leave_approvedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Leave_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Leave_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Leave", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _RejectLeavePayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.RejectLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_RejectLeavePayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_RejectLeavePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RejectLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdateDepartmentPayload_department(ctx context.Context, field graphql.CollectedField, obj *model.UpdateDepartmentPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateDepartmentPayload_department(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Department, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Department)
+	fc.Result = res
+	return ec.marshalNDepartment2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartment(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateDepartmentPayload_department(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateDepartmentPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Department_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Department_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Department_description(ctx, field)
+			case "managerId":
+				return ec.fieldContext_Department_managerId(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Department_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Department_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Department", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdateDepartmentPayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.UpdateDepartmentPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateDepartmentPayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateDepartmentPayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateDepartmentPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _UpdateEmployeePayload_employee(ctx context.Context, field graphql.CollectedField, obj *model.UpdateEmployeePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_UpdateEmployeePayload_employee(ctx, field)
 	if err != nil {
@@ -3461,6 +9069,236 @@ func (ec *executionContext) _UpdateEmployeePayload_errors(ctx context.Context, f
 func (ec *executionContext) fieldContext_UpdateEmployeePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UpdateEmployeePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdateLeavePayload_leave(ctx context.Context, field graphql.CollectedField, obj *model.UpdateLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateLeavePayload_leave(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Leave, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Leave)
+	fc.Result = res
+	return ec.marshalNLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateLeavePayload_leave(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Leave_id(ctx, field)
+			case "employeeId":
+				return ec.fieldContext_Leave_employeeId(ctx, field)
+			case "leaveType":
+				return ec.fieldContext_Leave_leaveType(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Leave_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Leave_endDate(ctx, field)
+			case "reason":
+				return ec.fieldContext_Leave_reason(ctx, field)
+			case "status":
+				return ec.fieldContext_Leave_status(ctx, field)
+			case "approvedBy":
+				return ec.fieldContext_Leave_approvedBy(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Leave_approvedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Leave_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Leave_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Leave", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdateLeavePayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.UpdateLeavePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdateLeavePayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdateLeavePayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdateLeavePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Error_message(ctx, field)
+			case "field":
+				return ec.fieldContext_Error_field(ctx, field)
+			case "code":
+				return ec.fieldContext_Error_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdatePositionPayload_position(ctx context.Context, field graphql.CollectedField, obj *model.UpdatePositionPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdatePositionPayload_position(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Position, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Position)
+	fc.Result = res
+	return ec.marshalNPosition2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPosition(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdatePositionPayload_position(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdatePositionPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Position_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Position_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Position_description(ctx, field)
+			case "departmentId":
+				return ec.fieldContext_Position_departmentId(ctx, field)
+			case "requirements":
+				return ec.fieldContext_Position_requirements(ctx, field)
+			case "minSalary":
+				return ec.fieldContext_Position_minSalary(ctx, field)
+			case "maxSalary":
+				return ec.fieldContext_Position_maxSalary(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Position_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Position_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Position", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UpdatePositionPayload_errors(ctx context.Context, field graphql.CollectedField, obj *model.UpdatePositionPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UpdatePositionPayload_errors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Errors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Error)
+	fc.Result = res
+	return ec.marshalOError2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐErrorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UpdatePositionPayload_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UpdatePositionPayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -5959,6 +11797,74 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputApproveLeaveInput(ctx context.Context, obj any) (model.ApproveLeaveInput, error) {
+	var it model.ApproveLeaveInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"approvedBy"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "approvedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedBy"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovedBy = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateDepartmentInput(ctx context.Context, obj any) (model.CreateDepartmentInput, error) {
+	var it model.CreateDepartmentInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "description", "managerId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "managerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managerId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagerID = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateEmployeeInput(ctx context.Context, obj any) (model.CreateEmployeeInput, error) {
 	var it model.CreateEmployeeInput
 	asMap := map[string]any{}
@@ -6028,6 +11934,123 @@ func (ec *executionContext) unmarshalInputCreateEmployeeInput(ctx context.Contex
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCreateLeaveInput(ctx context.Context, obj any) (model.CreateLeaveInput, error) {
+	var it model.CreateLeaveInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"employeeId", "leaveType", "startDate", "endDate", "reason"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "employeeId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("employeeId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EmployeeID = data
+		case "leaveType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("leaveType"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LeaveType = data
+		case "startDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startDate"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "endDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
+		case "reason":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reason"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Reason = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreatePositionInput(ctx context.Context, obj any) (model.CreatePositionInput, error) {
+	var it model.CreatePositionInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "description", "departmentId", "requirements", "minSalary", "maxSalary"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "departmentId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("departmentId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DepartmentID = data
+		case "requirements":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requirements"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Requirements = data
+		case "minSalary":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minSalary"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MinSalary = data
+		case "maxSalary":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxSalary"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxSalary = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, obj any) (model.CreateUserInput, error) {
 	var it model.CreateUserInput
 	asMap := map[string]any{}
@@ -6056,6 +12079,47 @@ func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, o
 				return it, err
 			}
 			it.Name = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDepartmentInput(ctx context.Context, obj any) (model.UpdateDepartmentInput, error) {
+	var it model.UpdateDepartmentInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "description", "managerId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "managerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managerId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagerID = data
 		}
 	}
 
@@ -6124,6 +12188,116 @@ func (ec *executionContext) unmarshalInputUpdateEmployeeInput(ctx context.Contex
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateLeaveInput(ctx context.Context, obj any) (model.UpdateLeaveInput, error) {
+	var it model.UpdateLeaveInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"leaveType", "startDate", "endDate", "reason"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "leaveType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("leaveType"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LeaveType = data
+		case "startDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startDate"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "endDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
+		case "reason":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reason"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Reason = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdatePositionInput(ctx context.Context, obj any) (model.UpdatePositionInput, error) {
+	var it model.UpdatePositionInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "description", "departmentId", "requirements", "minSalary", "maxSalary"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "departmentId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("departmentId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DepartmentID = data
+		case "requirements":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requirements"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Requirements = data
+		case "minSalary":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minSalary"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MinSalary = data
+		case "maxSalary":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxSalary"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxSalary = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, obj any) (model.UpdateUserInput, error) {
 	var it model.UpdateUserInput
 	asMap := map[string]any{}
@@ -6166,6 +12340,129 @@ func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, o
 
 // region    **************************** object.gotpl ****************************
 
+var approveLeavePayloadImplementors = []string{"ApproveLeavePayload"}
+
+func (ec *executionContext) _ApproveLeavePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ApproveLeavePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, approveLeavePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ApproveLeavePayload")
+		case "leave":
+			out.Values[i] = ec._ApproveLeavePayload_leave(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._ApproveLeavePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var cancelLeavePayloadImplementors = []string{"CancelLeavePayload"}
+
+func (ec *executionContext) _CancelLeavePayload(ctx context.Context, sel ast.SelectionSet, obj *model.CancelLeavePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, cancelLeavePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CancelLeavePayload")
+		case "leave":
+			out.Values[i] = ec._CancelLeavePayload_leave(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._CancelLeavePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var createDepartmentPayloadImplementors = []string{"CreateDepartmentPayload"}
+
+func (ec *executionContext) _CreateDepartmentPayload(ctx context.Context, sel ast.SelectionSet, obj *model.CreateDepartmentPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, createDepartmentPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CreateDepartmentPayload")
+		case "department":
+			out.Values[i] = ec._CreateDepartmentPayload_department(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._CreateDepartmentPayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var createEmployeePayloadImplementors = []string{"CreateEmployeePayload"}
 
 func (ec *executionContext) _CreateEmployeePayload(ctx context.Context, sel ast.SelectionSet, obj *model.CreateEmployeePayload) graphql.Marshaler {
@@ -6184,6 +12481,88 @@ func (ec *executionContext) _CreateEmployeePayload(ctx context.Context, sel ast.
 			}
 		case "errors":
 			out.Values[i] = ec._CreateEmployeePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var createLeavePayloadImplementors = []string{"CreateLeavePayload"}
+
+func (ec *executionContext) _CreateLeavePayload(ctx context.Context, sel ast.SelectionSet, obj *model.CreateLeavePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, createLeavePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CreateLeavePayload")
+		case "leave":
+			out.Values[i] = ec._CreateLeavePayload_leave(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._CreateLeavePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var createPositionPayloadImplementors = []string{"CreatePositionPayload"}
+
+func (ec *executionContext) _CreatePositionPayload(ctx context.Context, sel ast.SelectionSet, obj *model.CreatePositionPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, createPositionPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CreatePositionPayload")
+		case "position":
+			out.Values[i] = ec._CreatePositionPayload_position(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._CreatePositionPayload_errors(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6248,6 +12627,47 @@ func (ec *executionContext) _CreateUserPayload(ctx context.Context, sel ast.Sele
 	return out
 }
 
+var deleteDepartmentPayloadImplementors = []string{"DeleteDepartmentPayload"}
+
+func (ec *executionContext) _DeleteDepartmentPayload(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteDepartmentPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deleteDepartmentPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeleteDepartmentPayload")
+		case "success":
+			out.Values[i] = ec._DeleteDepartmentPayload_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._DeleteDepartmentPayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var deleteEmployeePayloadImplementors = []string{"DeleteEmployeePayload"}
 
 func (ec *executionContext) _DeleteEmployeePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteEmployeePayload) graphql.Marshaler {
@@ -6289,6 +12709,88 @@ func (ec *executionContext) _DeleteEmployeePayload(ctx context.Context, sel ast.
 	return out
 }
 
+var deleteLeavePayloadImplementors = []string{"DeleteLeavePayload"}
+
+func (ec *executionContext) _DeleteLeavePayload(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteLeavePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deleteLeavePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeleteLeavePayload")
+		case "success":
+			out.Values[i] = ec._DeleteLeavePayload_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._DeleteLeavePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var deletePositionPayloadImplementors = []string{"DeletePositionPayload"}
+
+func (ec *executionContext) _DeletePositionPayload(ctx context.Context, sel ast.SelectionSet, obj *model.DeletePositionPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deletePositionPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeletePositionPayload")
+		case "success":
+			out.Values[i] = ec._DeletePositionPayload_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._DeletePositionPayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var deleteUserPayloadImplementors = []string{"DeleteUserPayload"}
 
 func (ec *executionContext) _DeleteUserPayload(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteUserPayload) graphql.Marshaler {
@@ -6307,6 +12809,155 @@ func (ec *executionContext) _DeleteUserPayload(ctx context.Context, sel ast.Sele
 			}
 		case "errors":
 			out.Values[i] = ec._DeleteUserPayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var departmentImplementors = []string{"Department"}
+
+func (ec *executionContext) _Department(ctx context.Context, sel ast.SelectionSet, obj *model.Department) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, departmentImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Department")
+		case "id":
+			out.Values[i] = ec._Department_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._Department_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._Department_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "managerId":
+			out.Values[i] = ec._Department_managerId(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Department_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Department_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var departmentConnectionImplementors = []string{"DepartmentConnection"}
+
+func (ec *executionContext) _DepartmentConnection(ctx context.Context, sel ast.SelectionSet, obj *model.DepartmentConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, departmentConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DepartmentConnection")
+		case "edges":
+			out.Values[i] = ec._DepartmentConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._DepartmentConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var departmentEdgeImplementors = []string{"DepartmentEdge"}
+
+func (ec *executionContext) _DepartmentEdge(ctx context.Context, sel ast.SelectionSet, obj *model.DepartmentEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, departmentEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DepartmentEdge")
+		case "node":
+			out.Values[i] = ec._DepartmentEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._DepartmentEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6545,6 +13196,177 @@ func (ec *executionContext) _Error(ctx context.Context, sel ast.SelectionSet, ob
 	return out
 }
 
+var leaveImplementors = []string{"Leave"}
+
+func (ec *executionContext) _Leave(ctx context.Context, sel ast.SelectionSet, obj *model.Leave) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, leaveImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Leave")
+		case "id":
+			out.Values[i] = ec._Leave_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "employeeId":
+			out.Values[i] = ec._Leave_employeeId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "leaveType":
+			out.Values[i] = ec._Leave_leaveType(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "startDate":
+			out.Values[i] = ec._Leave_startDate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "endDate":
+			out.Values[i] = ec._Leave_endDate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "reason":
+			out.Values[i] = ec._Leave_reason(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "status":
+			out.Values[i] = ec._Leave_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "approvedBy":
+			out.Values[i] = ec._Leave_approvedBy(ctx, field, obj)
+		case "approvedAt":
+			out.Values[i] = ec._Leave_approvedAt(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Leave_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Leave_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var leaveConnectionImplementors = []string{"LeaveConnection"}
+
+func (ec *executionContext) _LeaveConnection(ctx context.Context, sel ast.SelectionSet, obj *model.LeaveConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, leaveConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LeaveConnection")
+		case "edges":
+			out.Values[i] = ec._LeaveConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._LeaveConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var leaveEdgeImplementors = []string{"LeaveEdge"}
+
+func (ec *executionContext) _LeaveEdge(ctx context.Context, sel ast.SelectionSet, obj *model.LeaveEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, leaveEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LeaveEdge")
+		case "node":
+			out.Values[i] = ec._LeaveEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._LeaveEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var mutationImplementors = []string{"Mutation"}
 
 func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -6606,6 +13428,90 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createDepartment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createDepartment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateDepartment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateDepartment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteDepartment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteDepartment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createPosition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createPosition(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePosition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePosition(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deletePosition":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deletePosition(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createLeave":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createLeave(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateLeave":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateLeave(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "approveLeave":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_approveLeave(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "rejectLeave":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_rejectLeave(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cancelLeave":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_cancelLeave(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteLeave":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteLeave(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6654,6 +13560,170 @@ func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._PageInfo_startCursor(ctx, field, obj)
 		case "endCursor":
 			out.Values[i] = ec._PageInfo_endCursor(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var positionImplementors = []string{"Position"}
+
+func (ec *executionContext) _Position(ctx context.Context, sel ast.SelectionSet, obj *model.Position) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, positionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Position")
+		case "id":
+			out.Values[i] = ec._Position_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "title":
+			out.Values[i] = ec._Position_title(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._Position_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "departmentId":
+			out.Values[i] = ec._Position_departmentId(ctx, field, obj)
+		case "requirements":
+			out.Values[i] = ec._Position_requirements(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "minSalary":
+			out.Values[i] = ec._Position_minSalary(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "maxSalary":
+			out.Values[i] = ec._Position_maxSalary(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Position_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Position_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var positionConnectionImplementors = []string{"PositionConnection"}
+
+func (ec *executionContext) _PositionConnection(ctx context.Context, sel ast.SelectionSet, obj *model.PositionConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, positionConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PositionConnection")
+		case "edges":
+			out.Values[i] = ec._PositionConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._PositionConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var positionEdgeImplementors = []string{"PositionEdge"}
+
+func (ec *executionContext) _PositionEdge(ctx context.Context, sel ast.SelectionSet, obj *model.PositionEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, positionEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PositionEdge")
+		case "node":
+			out.Values[i] = ec._PositionEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._PositionEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6822,6 +13892,217 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "department":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_department(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "departments":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_departments(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "departmentsByManager":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_departmentsByManager(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "position":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_position(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "positions":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_positions(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "positionsByDepartment":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_positionsByDepartment(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "leave":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_leave(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "leaves":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_leaves(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "leavesByEmployee":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_leavesByEmployee(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "leavesByStatus":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_leavesByStatus(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -6830,6 +14111,88 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___schema(ctx, field)
 			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var rejectLeavePayloadImplementors = []string{"RejectLeavePayload"}
+
+func (ec *executionContext) _RejectLeavePayload(ctx context.Context, sel ast.SelectionSet, obj *model.RejectLeavePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, rejectLeavePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RejectLeavePayload")
+		case "leave":
+			out.Values[i] = ec._RejectLeavePayload_leave(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._RejectLeavePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var updateDepartmentPayloadImplementors = []string{"UpdateDepartmentPayload"}
+
+func (ec *executionContext) _UpdateDepartmentPayload(ctx context.Context, sel ast.SelectionSet, obj *model.UpdateDepartmentPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, updateDepartmentPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UpdateDepartmentPayload")
+		case "department":
+			out.Values[i] = ec._UpdateDepartmentPayload_department(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._UpdateDepartmentPayload_errors(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6871,6 +14234,88 @@ func (ec *executionContext) _UpdateEmployeePayload(ctx context.Context, sel ast.
 			}
 		case "errors":
 			out.Values[i] = ec._UpdateEmployeePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var updateLeavePayloadImplementors = []string{"UpdateLeavePayload"}
+
+func (ec *executionContext) _UpdateLeavePayload(ctx context.Context, sel ast.SelectionSet, obj *model.UpdateLeavePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, updateLeavePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UpdateLeavePayload")
+		case "leave":
+			out.Values[i] = ec._UpdateLeavePayload_leave(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._UpdateLeavePayload_errors(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var updatePositionPayloadImplementors = []string{"UpdatePositionPayload"}
+
+func (ec *executionContext) _UpdatePositionPayload(ctx context.Context, sel ast.SelectionSet, obj *model.UpdatePositionPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, updatePositionPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UpdatePositionPayload")
+		case "position":
+			out.Values[i] = ec._UpdatePositionPayload_position(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._UpdatePositionPayload_errors(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7417,6 +14862,25 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNApproveLeaveInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐApproveLeaveInput(ctx context.Context, v any) (model.ApproveLeaveInput, error) {
+	res, err := ec.unmarshalInputApproveLeaveInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNApproveLeavePayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐApproveLeavePayload(ctx context.Context, sel ast.SelectionSet, v model.ApproveLeavePayload) graphql.Marshaler {
+	return ec._ApproveLeavePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNApproveLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐApproveLeavePayload(ctx context.Context, sel ast.SelectionSet, v *model.ApproveLeavePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ApproveLeavePayload(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v any) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -7431,6 +14895,39 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNCancelLeavePayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCancelLeavePayload(ctx context.Context, sel ast.SelectionSet, v model.CancelLeavePayload) graphql.Marshaler {
+	return ec._CancelLeavePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCancelLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCancelLeavePayload(ctx context.Context, sel ast.SelectionSet, v *model.CancelLeavePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CancelLeavePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCreateDepartmentInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateDepartmentInput(ctx context.Context, v any) (model.CreateDepartmentInput, error) {
+	res, err := ec.unmarshalInputCreateDepartmentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCreateDepartmentPayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateDepartmentPayload(ctx context.Context, sel ast.SelectionSet, v model.CreateDepartmentPayload) graphql.Marshaler {
+	return ec._CreateDepartmentPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCreateDepartmentPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateDepartmentPayload(ctx context.Context, sel ast.SelectionSet, v *model.CreateDepartmentPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CreateDepartmentPayload(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNCreateEmployeeInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateEmployeeInput(ctx context.Context, v any) (model.CreateEmployeeInput, error) {
@@ -7452,6 +14949,44 @@ func (ec *executionContext) marshalNCreateEmployeePayload2ᚖgithubᚗcomᚋcapt
 	return ec._CreateEmployeePayload(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNCreateLeaveInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateLeaveInput(ctx context.Context, v any) (model.CreateLeaveInput, error) {
+	res, err := ec.unmarshalInputCreateLeaveInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCreateLeavePayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateLeavePayload(ctx context.Context, sel ast.SelectionSet, v model.CreateLeavePayload) graphql.Marshaler {
+	return ec._CreateLeavePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCreateLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateLeavePayload(ctx context.Context, sel ast.SelectionSet, v *model.CreateLeavePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CreateLeavePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCreatePositionInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreatePositionInput(ctx context.Context, v any) (model.CreatePositionInput, error) {
+	res, err := ec.unmarshalInputCreatePositionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCreatePositionPayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreatePositionPayload(ctx context.Context, sel ast.SelectionSet, v model.CreatePositionPayload) graphql.Marshaler {
+	return ec._CreatePositionPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCreatePositionPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreatePositionPayload(ctx context.Context, sel ast.SelectionSet, v *model.CreatePositionPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CreatePositionPayload(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNCreateUserInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐCreateUserInput(ctx context.Context, v any) (model.CreateUserInput, error) {
 	res, err := ec.unmarshalInputCreateUserInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -7471,6 +15006,20 @@ func (ec *executionContext) marshalNCreateUserPayload2ᚖgithubᚗcomᚋcaptain�
 	return ec._CreateUserPayload(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNDeleteDepartmentPayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteDepartmentPayload(ctx context.Context, sel ast.SelectionSet, v model.DeleteDepartmentPayload) graphql.Marshaler {
+	return ec._DeleteDepartmentPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDeleteDepartmentPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteDepartmentPayload(ctx context.Context, sel ast.SelectionSet, v *model.DeleteDepartmentPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DeleteDepartmentPayload(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNDeleteEmployeePayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteEmployeePayload(ctx context.Context, sel ast.SelectionSet, v model.DeleteEmployeePayload) graphql.Marshaler {
 	return ec._DeleteEmployeePayload(ctx, sel, &v)
 }
@@ -7485,6 +15034,34 @@ func (ec *executionContext) marshalNDeleteEmployeePayload2ᚖgithubᚗcomᚋcapt
 	return ec._DeleteEmployeePayload(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNDeleteLeavePayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteLeavePayload(ctx context.Context, sel ast.SelectionSet, v model.DeleteLeavePayload) graphql.Marshaler {
+	return ec._DeleteLeavePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDeleteLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteLeavePayload(ctx context.Context, sel ast.SelectionSet, v *model.DeleteLeavePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DeleteLeavePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDeletePositionPayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeletePositionPayload(ctx context.Context, sel ast.SelectionSet, v model.DeletePositionPayload) graphql.Marshaler {
+	return ec._DeletePositionPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDeletePositionPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeletePositionPayload(ctx context.Context, sel ast.SelectionSet, v *model.DeletePositionPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DeletePositionPayload(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNDeleteUserPayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDeleteUserPayload(ctx context.Context, sel ast.SelectionSet, v model.DeleteUserPayload) graphql.Marshaler {
 	return ec._DeleteUserPayload(ctx, sel, &v)
 }
@@ -7497,6 +15074,84 @@ func (ec *executionContext) marshalNDeleteUserPayload2ᚖgithubᚗcomᚋcaptain�
 		return graphql.Null
 	}
 	return ec._DeleteUserPayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDepartment2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartment(ctx context.Context, sel ast.SelectionSet, v *model.Department) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Department(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDepartmentConnection2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentConnection(ctx context.Context, sel ast.SelectionSet, v model.DepartmentConnection) graphql.Marshaler {
+	return ec._DepartmentConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDepartmentConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentConnection(ctx context.Context, sel ast.SelectionSet, v *model.DepartmentConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DepartmentConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDepartmentEdge2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.DepartmentEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNDepartmentEdge2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNDepartmentEdge2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartmentEdge(ctx context.Context, sel ast.SelectionSet, v *model.DepartmentEdge) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DepartmentEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNEmployee2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐEmployee(ctx context.Context, sel ast.SelectionSet, v *model.Employee) graphql.Marshaler {
@@ -7619,6 +15274,84 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
+func (ec *executionContext) marshalNLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx context.Context, sel ast.SelectionSet, v *model.Leave) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Leave(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNLeaveConnection2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveConnection(ctx context.Context, sel ast.SelectionSet, v model.LeaveConnection) graphql.Marshaler {
+	return ec._LeaveConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNLeaveConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveConnection(ctx context.Context, sel ast.SelectionSet, v *model.LeaveConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._LeaveConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNLeaveEdge2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.LeaveEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNLeaveEdge2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNLeaveEdge2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeaveEdge(ctx context.Context, sel ast.SelectionSet, v *model.LeaveEdge) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._LeaveEdge(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -7627,6 +15360,98 @@ func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋcaptainᚑcorgi�
 		return graphql.Null
 	}
 	return ec._PageInfo(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPosition2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPosition(ctx context.Context, sel ast.SelectionSet, v *model.Position) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Position(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPositionConnection2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionConnection(ctx context.Context, sel ast.SelectionSet, v model.PositionConnection) graphql.Marshaler {
+	return ec._PositionConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPositionConnection2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionConnection(ctx context.Context, sel ast.SelectionSet, v *model.PositionConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PositionConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPositionEdge2ᚕᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PositionEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNPositionEdge2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNPositionEdge2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPositionEdge(ctx context.Context, sel ast.SelectionSet, v *model.PositionEdge) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PositionEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNRejectLeavePayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐRejectLeavePayload(ctx context.Context, sel ast.SelectionSet, v model.RejectLeavePayload) graphql.Marshaler {
+	return ec._RejectLeavePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRejectLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐRejectLeavePayload(ctx context.Context, sel ast.SelectionSet, v *model.RejectLeavePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RejectLeavePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
@@ -7643,6 +15468,25 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUpdateDepartmentInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateDepartmentInput(ctx context.Context, v any) (model.UpdateDepartmentInput, error) {
+	res, err := ec.unmarshalInputUpdateDepartmentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNUpdateDepartmentPayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateDepartmentPayload(ctx context.Context, sel ast.SelectionSet, v model.UpdateDepartmentPayload) graphql.Marshaler {
+	return ec._UpdateDepartmentPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUpdateDepartmentPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateDepartmentPayload(ctx context.Context, sel ast.SelectionSet, v *model.UpdateDepartmentPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._UpdateDepartmentPayload(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNUpdateEmployeeInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateEmployeeInput(ctx context.Context, v any) (model.UpdateEmployeeInput, error) {
@@ -7662,6 +15506,44 @@ func (ec *executionContext) marshalNUpdateEmployeePayload2ᚖgithubᚗcomᚋcapt
 		return graphql.Null
 	}
 	return ec._UpdateEmployeePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUpdateLeaveInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateLeaveInput(ctx context.Context, v any) (model.UpdateLeaveInput, error) {
+	res, err := ec.unmarshalInputUpdateLeaveInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNUpdateLeavePayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateLeavePayload(ctx context.Context, sel ast.SelectionSet, v model.UpdateLeavePayload) graphql.Marshaler {
+	return ec._UpdateLeavePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUpdateLeavePayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateLeavePayload(ctx context.Context, sel ast.SelectionSet, v *model.UpdateLeavePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._UpdateLeavePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUpdatePositionInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdatePositionInput(ctx context.Context, v any) (model.UpdatePositionInput, error) {
+	res, err := ec.unmarshalInputUpdatePositionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNUpdatePositionPayload2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdatePositionPayload(ctx context.Context, sel ast.SelectionSet, v model.UpdatePositionPayload) graphql.Marshaler {
+	return ec._UpdatePositionPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUpdatePositionPayload2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdatePositionPayload(ctx context.Context, sel ast.SelectionSet, v *model.UpdatePositionPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._UpdatePositionPayload(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNUpdateUserInput2githubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐUpdateUserInput(ctx context.Context, v any) (model.UpdateUserInput, error) {
@@ -8044,6 +15926,13 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) marshalODepartment2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐDepartment(ctx context.Context, sel ast.SelectionSet, v *model.Department) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Department(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOEmployee2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐEmployee(ctx context.Context, sel ast.SelectionSet, v *model.Employee) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -8115,6 +16004,24 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
+func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalID(*v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v any) (*int, error) {
 	if v == nil {
 		return nil, nil
@@ -8131,6 +16038,20 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	_ = ctx
 	res := graphql.MarshalInt(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOLeave2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐLeave(ctx context.Context, sel ast.SelectionSet, v *model.Leave) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Leave(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPosition2ᚖgithubᚗcomᚋcaptainᚑcorgiᚋgoᚑgraphqlᚑexampleᚋinternalᚋinterfacesᚋgraphqlᚋmodelᚐPosition(ctx context.Context, sel ast.SelectionSet, v *model.Position) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Position(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v any) (*string, error) {

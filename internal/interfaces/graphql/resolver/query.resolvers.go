@@ -6,111 +6,94 @@ package resolver
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/captain-corgi/go-graphql-example/internal/application/user"
-	"github.com/captain-corgi/go-graphql-example/internal/domain/errors"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/generated"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/model"
 )
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	// Log operation start
-	r.logOperation(ctx, "User", map[string]interface{}{
-		"id": id,
-	})
-
-	// Validate and sanitize input
-	sanitizedID := sanitizeString(id)
-	if err := r.validateInput(ctx, "User", func() error {
-		return validateUserID(sanitizedID)
-	}); err != nil {
-		return nil, err
-	}
-
-	// Call application service
-	req := user.GetUserRequest{ID: sanitizedID}
-	resp, err := r.userService.GetUser(ctx, req)
-	if err != nil {
-		return nil, r.handleGraphQLError(ctx, err, "User")
-	}
-
-	// Handle application-level errors
-	if len(resp.Errors) > 0 {
-		// Return the first error as GraphQL error
-		firstError := resp.Errors[0]
-		domainErr := errors.DomainError{
-			Code:    firstError.Code,
-			Message: firstError.Message,
-			Field:   firstError.Field,
-		}
-		return nil, r.handleGraphQLError(ctx, domainErr, "User")
-	}
-
-	// Map result to GraphQL model
-	result := mapUserDTOToGraphQL(resp.User)
-	r.logOperationSuccess(ctx, "User", result)
-
-	return result, nil
+	panic(fmt.Errorf("not implemented: User - user"))
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, first *int, after *string) (*model.UserConnection, error) {
-	// Log operation start
-	r.logOperation(ctx, "Users", map[string]interface{}{
-		"first": first,
-		"after": after,
-	})
-
-	// Validate pagination parameters
-	if err := r.validateInput(ctx, "Users", func() error {
-		return validatePaginationParams(first, after)
-	}); err != nil {
-		return nil, err
-	}
-
-	// Sanitize after parameter
-	var sanitizedAfter string
-	if after != nil {
-		sanitizedAfter = sanitizeString(*after)
-	}
-
-	// Set default first value
-	firstValue := 10 // Default page size
-	if first != nil {
-		firstValue = *first
-	}
-
-	// Call application service
-	req := user.ListUsersRequest{
-		First: firstValue,
-		After: sanitizedAfter,
-	}
-	resp, err := r.userService.ListUsers(ctx, req)
-	if err != nil {
-		return nil, r.handleGraphQLError(ctx, err, "Users")
-	}
-
-	// Handle application-level errors
-	if len(resp.Errors) > 0 {
-		// Return the first error as GraphQL error
-		firstError := resp.Errors[0]
-		domainErr := errors.DomainError{
-			Code:    firstError.Code,
-			Message: firstError.Message,
-			Field:   firstError.Field,
-		}
-		return nil, r.handleGraphQLError(ctx, domainErr, "Users")
-	}
-
-	// Map result to GraphQL model
-	result := mapUserConnectionDTOToGraphQL(resp.Users)
-	r.logOperationSuccess(ctx, "Users", result)
-
-	return result, nil
+	panic(fmt.Errorf("not implemented: Users - users"))
 }
 
+// Employee is the resolver for the employee field.
+func (r *queryResolver) Employee(ctx context.Context, id string) (*model.Employee, error) {
+	panic(fmt.Errorf("not implemented: Employee - employee"))
+}
 
+// Employees is the resolver for the employees field.
+func (r *queryResolver) Employees(ctx context.Context, first *int, after *string) (*model.EmployeeConnection, error) {
+	panic(fmt.Errorf("not implemented: Employees - employees"))
+}
+
+// EmployeesByDepartment is the resolver for the employeesByDepartment field.
+func (r *queryResolver) EmployeesByDepartment(ctx context.Context, department string, first *int, after *string) (*model.EmployeeConnection, error) {
+	panic(fmt.Errorf("not implemented: EmployeesByDepartment - employeesByDepartment"))
+}
+
+// EmployeesByStatus is the resolver for the employeesByStatus field.
+func (r *queryResolver) EmployeesByStatus(ctx context.Context, status string, first *int, after *string) (*model.EmployeeConnection, error) {
+	panic(fmt.Errorf("not implemented: EmployeesByStatus - employeesByStatus"))
+}
+
+// Department is the resolver for the department field.
+func (r *queryResolver) Department(ctx context.Context, id string) (*model.Department, error) {
+	// TODO: Implement department resolver
+	panic(fmt.Errorf("not implemented: Department - department"))
+}
+
+// Departments is the resolver for the departments field.
+func (r *queryResolver) Departments(ctx context.Context, first *int, after *string) (*model.DepartmentConnection, error) {
+	// TODO: Implement departments resolver
+	panic(fmt.Errorf("not implemented: Departments - departments"))
+}
+
+// DepartmentsByManager is the resolver for the departmentsByManager field.
+func (r *queryResolver) DepartmentsByManager(ctx context.Context, managerID string, first *int, after *string) (*model.DepartmentConnection, error) {
+	// TODO: Implement departments by manager resolver
+	panic(fmt.Errorf("not implemented: DepartmentsByManager - departmentsByManager"))
+}
+
+// Position is the resolver for the position field.
+func (r *queryResolver) Position(ctx context.Context, id string) (*model.Position, error) {
+	panic(fmt.Errorf("not implemented: Position - position"))
+}
+
+// Positions is the resolver for the positions field.
+func (r *queryResolver) Positions(ctx context.Context, first *int, after *string) (*model.PositionConnection, error) {
+	panic(fmt.Errorf("not implemented: Positions - positions"))
+}
+
+// PositionsByDepartment is the resolver for the positionsByDepartment field.
+func (r *queryResolver) PositionsByDepartment(ctx context.Context, departmentID string, first *int, after *string) (*model.PositionConnection, error) {
+	panic(fmt.Errorf("not implemented: PositionsByDepartment - positionsByDepartment"))
+}
+
+// Leave is the resolver for the leave field.
+func (r *queryResolver) Leave(ctx context.Context, id string) (*model.Leave, error) {
+	panic(fmt.Errorf("not implemented: Leave - leave"))
+}
+
+// Leaves is the resolver for the leaves field.
+func (r *queryResolver) Leaves(ctx context.Context, first *int, after *string) (*model.LeaveConnection, error) {
+	panic(fmt.Errorf("not implemented: Leaves - leaves"))
+}
+
+// LeavesByEmployee is the resolver for the leavesByEmployee field.
+func (r *queryResolver) LeavesByEmployee(ctx context.Context, employeeID string, first *int, after *string) (*model.LeaveConnection, error) {
+	panic(fmt.Errorf("not implemented: LeavesByEmployee - leavesByEmployee"))
+}
+
+// LeavesByStatus is the resolver for the leavesByStatus field.
+func (r *queryResolver) LeavesByStatus(ctx context.Context, status string, first *int, after *string) (*model.LeaveConnection, error) {
+	panic(fmt.Errorf("not implemented: LeavesByStatus - leavesByStatus"))
+}
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }

@@ -1,0 +1,47 @@
+# Department types and inputs
+
+type Department {
+  id: ID!
+  name: String!
+  description: String!
+  managerId: ID
+  createdAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  updatedAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+}
+
+type DepartmentConnection {
+  edges: [DepartmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DepartmentEdge {
+  node: Department!
+  cursor: String!
+}
+
+input CreateDepartmentInput {
+  name: String!
+  description: String!
+  managerId: ID
+}
+
+input UpdateDepartmentInput {
+  name: String
+  description: String
+  managerId: ID
+}
+
+type CreateDepartmentPayload {
+  department: Department!
+  errors: [Error!]
+}
+
+type UpdateDepartmentPayload {
+  department: Department!
+  errors: [Error!]
+}
+
+type DeleteDepartmentPayload {
+  success: Boolean!
+  errors: [Error!]
+}
