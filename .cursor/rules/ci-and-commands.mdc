@@ -1,0 +1,11 @@
+---
+alwaysApply: true
+description: Useful make targets, CI expectations and how to run locally
+---
+# CI and common commands
+
+- **Important make targets**: `make check`, `make test`, `make lint`, `make format`, `make generate`.
+- **Local dev**: `make dev` starts the server with development config. Use Docker compose via `make docker-run`.
+- **GraphQL codegen**: `make generate-graphql` after schema changes; `make generate` to update mocks too.
+- **CI**: PRs must pass `make check` and tests; ensure `go mod tidy` and `go vet` are clean.
+

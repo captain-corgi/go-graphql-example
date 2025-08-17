@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+# Project structure and responsibilities
+
+- **Entry point**: `cmd/server/main.go` — application bootstrap and DI wiring.
+- **GraphQL schema**: `api/graphql/*.graphqls` — schema-first; run `make generate-graphql` after edits.
+- **Interfaces layer**: `internal/interfaces/` — GraphQL resolvers, HTTP server and middleware.
+- **Application layer**: `internal/application/` — use-cases, DTOs, and service orchestration.
+- **Domain layer**: `internal/domain/` — entities, value objects, domain services, and repositories interfaces.
+- **Infrastructure layer**: `internal/infrastructure/` — DB connection, persistence implementations, logging, config.
+
+When making changes, keep modifications within a single layer unless intentionally changing dependencies.
+
+See [tech.md](mdc:.kiro/steering/tech.md) for stack and command references.
+

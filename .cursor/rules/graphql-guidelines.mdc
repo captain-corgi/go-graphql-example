@@ -1,0 +1,14 @@
+---
+description: When working with GraphQL
+alwaysApply: false
+---
+# GraphQL rules
+
+- **Schema-first**: Edit `api/graphql/*.graphqls` and run `make generate-graphql` to update generated types and resolvers.
+- **Resolvers**: Keep resolvers thin; delegate business logic to `internal/application` services.
+- **Validation**: Use the resolver `validation.go` helpers and domain value objects for input validation.
+- **Errors**: Map domain errors to GraphQL friendly error shapes in `interfaces/graphql/resolver/error_handler.go`.
+- **Pagination**: Use cursor-based pagination already implemented; follow existing `users` schema patterns.
+
+Refer to `examples/graphql/` for query/mutation examples.
+

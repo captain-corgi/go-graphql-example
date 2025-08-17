@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+description: How Cursor should work on this repository, how to run commands, and expectations for edits and PRs
+---
+# Cursor workflow for this repo
+
+- **Context**: Prefer small, focused edits. Always mention and keep test commands in mind (`make check`).
+- **When editing code**: Add imports and modify only layer-appropriate files. Run `make generate-graphql` if schema changed.
+- **Tests & CI**: After substantive edits, run `make test` and `make lint` locally; include test updates with code changes.
+- **PRs**: Use conventional commits; include a short description, testing steps, and relevant `make` commands.
+- **References**: Use `.kiro/steering/tech.md` and `README.md` for environment and commands. Use `api/graphql` rules before touching schema.
+
+If the change touches GraphQL schema, update generated code and resolvers in `internal/interfaces/graphql/generated` and add resolver implementations in `internal/interfaces/graphql/resolver`.
+

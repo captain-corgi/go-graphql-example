@@ -1,0 +1,36 @@
+---
+title: Add a new GraphQL query
+---
+
+# Add a new GraphQL query
+
+Follow these concise steps to add a fully working query from schema to resolver and tests.
+
+1. **Edit schema**: Open `api/graphql/query.graphqls` and add your field to `type Query` and any needed types/inputs. Example:
+```graphql
+# add to api/graphql/query.graphqls
+extend type Query {
+  myEntity(id: ID!): MyEntity
+}
+
+type MyEntity {
+  id: ID!
+  name: String!
+}
+```
+
+2. **Generate code**: Run `make generate-graphql` to update generated GraphQL types and resolver signatures.
+
+3. **Implement resolver**: Add the resolver implementation in `internal/interfaces/graphql/resolver` matching the generated signature and delegate business logic to the application layer.
+
+4. **Add application use-case**: Implement or reuse an application service in `internal/application` and add domain/repository interfaces in `internal/domain` as needed.
+
+5. **Update mappers**: Convert domain entities to GraphQL `model` types in `internal/interfaces/graphql/mapper.go` (or equivalent).
+
+6. **Tests**: Add unit tests for the application use-case and resolver under `internal/interfaces/graphql/resolver` (use `gomock` for dependencies). Run `make test`.
+
+7. **Checks**: Run `make generate-graphql`, `make format`, `make lint`, `make test` (or `make check`) and ensure `go mod tidy`/`go vet` pass.
+
+Notes:
+- Use existing `User` query patterns as templates.
+- Keep resolvers thin and validation in `internal/interfaces/graphql/validation.go` when applicable.

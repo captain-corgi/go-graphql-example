@@ -1,0 +1,15 @@
+---
+alwaysApply: true
+description: Go coding conventions, formatting, testing and dependency rules
+globs: *.go
+---
+# Go coding standards
+
+- **Formatting & linting**: Always run `make format` and `make lint` before committing. Follow `gofmt`/`goimports` styles.
+- **Error handling**: Prefer early returns and explicit error wrapping using `fmt.Errorf("...: %w", err)`.
+- **Typing & interfaces**: Keep interfaces small and defined in the consumer package. Avoid leaking implementation details across layers.
+- **Tests & mocks**: Use `gomock` for interface mocks; include `//go:generate` where appropriate. Unit tests must not rely on external services.
+- **Build & CI**: Ensure `make check` passes (lint, vet, test) before opening PRs.
+
+Follow `docs/conventions.md` for additional style choices.
+

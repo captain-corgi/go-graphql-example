@@ -1,0 +1,34 @@
+---
+alwaysApply: false
+---
+# Add a new GraphQL mutation
+
+These concise steps produce a complete mutation implementation (schema → resolver → application → tests).
+
+1. **Edit schema**: Open `api/graphql/mutation.graphqls` and add the mutation field, input and payload types. Example:
+```graphql
+# add to api/graphql/mutation.graphqls
+input CreateThingInput { name: String! }
+
+type CreateThingPayload { thing: Thing }
+
+extend type Mutation { createThing(input: CreateThingInput!): CreateThingPayload! }
+
+type Thing { id: ID! name: String! }
+```
+
+2. **Generate code**: Run `make generate-graphql` to regenerate types and resolver signatures.
+
+3. **Implement resolver**: Implement the resolver in `internal/interfaces/graphql/resolver`. Validate inputs using `validation.go`, delegate to `internal/application` service, map errors via `error_handler.go`, and return GraphQL `model` payload.
+
+4. **Application layer**: Add or update a use-case/service in `internal/application` (e.g., `ThingService.Create`) and domain/repo interfaces in `internal/domain`.
+
+5. **Mapper & errors**: Update mapping logic and ensure domain errors are converted to GraphQL-friendly errors.
+
+6. **Tests**: Write unit tests for the application use-case and resolver; use `gomock` for dependencies and add integration tests if needed.
+
+7. **Checks**: Run `make generate-graphql`, `make format`, `make lint`, `make test` (or `make check`) and ensure `go mod tidy`/`go vet` pass.
+
+Notes:
+- Mirror patterns from existing `createUser`/`updateUser` mutations.
+- Keep mutation resolvers thin; place validation and business rules in application/domain layers.

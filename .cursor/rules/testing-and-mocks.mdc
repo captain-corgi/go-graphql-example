@@ -1,0 +1,12 @@
+---
+description: When write testing, mock generation and test organization
+alwaysApply: false
+---
+# Testing & mocks
+
+- **Unit tests**: Place next to package (`*_test.go`); do not hit external DB or network.
+- **Integration tests**: Use `internal/infrastructure/testutils.go` helpers and `make test-integration`.
+- **Mocks**: Use `gomock` with generated files in `mocks/` directories. Keep generated mocks out of review when possible.
+- **Test commands**: Use `make test` and `make coverage`. For single packages use `go test ./path/...`.
+- **Test data**: Keep fixtures small; prefer table-driven tests for clarity.
+
