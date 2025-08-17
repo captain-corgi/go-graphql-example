@@ -3,6 +3,7 @@ package resolver
 import (
 	"log/slog"
 
+	"github.com/captain-corgi/go-graphql-example/internal/application/employee"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user"
 )
 
@@ -12,14 +13,16 @@ import (
 
 // Resolver holds the dependencies for GraphQL resolvers
 type Resolver struct {
-	userService user.Service
-	logger      *slog.Logger
+	userService     user.Service
+	employeeService employee.Service
+	logger          *slog.Logger
 }
 
 // NewResolver creates a new resolver with the given dependencies
-func NewResolver(userService user.Service, logger *slog.Logger) *Resolver {
+func NewResolver(userService user.Service, employeeService employee.Service, logger *slog.Logger) *Resolver {
 	return &Resolver{
-		userService: userService,
-		logger:      logger,
+		userService:     userService,
+		employeeService: employeeService,
+		logger:          logger,
 	}
 }

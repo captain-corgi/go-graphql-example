@@ -1,7 +1,10 @@
-# User mutations
+# User and Employee mutations
 
 type Mutation {
   createUser(input: CreateUserInput!): CreateUserPayload!
   updateUser(id: ID!, input: UpdateUserInput!): UpdateUserPayload!
   deleteUser(id: ID!): DeleteUserPayload!
+  createEmployee(input: CreateEmployeeInput!): CreateEmployeePayload!
+  updateEmployee(id: ID!, input: UpdateEmployeeInput!): UpdateEmployeePayload!
+  deleteEmployee(id: ID!): DeleteEmployeePayload!
 }

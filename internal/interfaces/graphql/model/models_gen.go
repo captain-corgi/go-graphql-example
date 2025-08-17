@@ -2,6 +2,21 @@
 
 package model
 
+type CreateEmployeeInput struct {
+	UserID       string  `json:"userId"`
+	EmployeeCode string  `json:"employeeCode"`
+	Department   string  `json:"department"`
+	Position     string  `json:"position"`
+	HireDate     string  `json:"hireDate"`
+	Salary       float64 `json:"salary"`
+	Status       string  `json:"status"`
+}
+
+type CreateEmployeePayload struct {
+	Employee *Employee `json:"employee"`
+	Errors   []*Error  `json:"errors,omitempty"`
+}
+
 type CreateUserInput struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
@@ -12,9 +27,37 @@ type CreateUserPayload struct {
 	Errors []*Error `json:"errors,omitempty"`
 }
 
+type DeleteEmployeePayload struct {
+	Success bool     `json:"success"`
+	Errors  []*Error `json:"errors,omitempty"`
+}
+
 type DeleteUserPayload struct {
 	Success bool     `json:"success"`
 	Errors  []*Error `json:"errors,omitempty"`
+}
+
+type Employee struct {
+	ID           string  `json:"id"`
+	User         *User   `json:"user"`
+	EmployeeCode string  `json:"employeeCode"`
+	Department   string  `json:"department"`
+	Position     string  `json:"position"`
+	HireDate     string  `json:"hireDate"`
+	Salary       float64 `json:"salary"`
+	Status       string  `json:"status"`
+	CreatedAt    string  `json:"createdAt"`
+	UpdatedAt    string  `json:"updatedAt"`
+}
+
+type EmployeeConnection struct {
+	Edges    []*EmployeeEdge `json:"edges"`
+	PageInfo *PageInfo       `json:"pageInfo"`
+}
+
+type EmployeeEdge struct {
+	Node   *Employee `json:"node"`
+	Cursor string    `json:"cursor"`
 }
 
 type Error struct {
@@ -34,6 +77,20 @@ type PageInfo struct {
 }
 
 type Query struct {
+}
+
+type UpdateEmployeeInput struct {
+	EmployeeCode *string  `json:"employeeCode,omitempty"`
+	Department   *string  `json:"department,omitempty"`
+	Position     *string  `json:"position,omitempty"`
+	HireDate     *string  `json:"hireDate,omitempty"`
+	Salary       *float64 `json:"salary,omitempty"`
+	Status       *string  `json:"status,omitempty"`
+}
+
+type UpdateEmployeePayload struct {
+	Employee *Employee `json:"employee"`
+	Errors   []*Error  `json:"errors,omitempty"`
 }
 
 type UpdateUserInput struct {

@@ -1,0 +1,58 @@
+# Employee types and inputs
+
+type Employee {
+  id: ID!
+  user: User!
+  employeeCode: String!
+  department: String!
+  position: String!
+  hireDate: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  salary: Float!
+  status: String!
+  createdAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  updatedAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+}
+
+type EmployeeConnection {
+  edges: [EmployeeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type EmployeeEdge {
+  node: Employee!
+  cursor: String!
+}
+
+input CreateEmployeeInput {
+  userId: ID!
+  employeeCode: String!
+  department: String!
+  position: String!
+  hireDate: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  salary: Float!
+  status: String!
+}
+
+input UpdateEmployeeInput {
+  employeeCode: String
+  department: String
+  position: String
+  hireDate: String # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  salary: Float
+  status: String
+}
+
+type CreateEmployeePayload {
+  employee: Employee!
+  errors: [Error!]
+}
+
+type UpdateEmployeePayload {
+  employee: Employee!
+  errors: [Error!]
+}
+
+type DeleteEmployeePayload {
+  success: Boolean!
+  errors: [Error!]
+}
