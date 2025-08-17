@@ -1,6 +1,10 @@
-# User queries
+# User and Employee queries
 
 type Query {
   user(id: ID!): User
   users(first: Int, after: String): UserConnection!
+  employee(id: ID!): Employee
+  employees(first: Int, after: String): EmployeeConnection!
+  employeesByDepartment(department: String!, first: Int, after: String): EmployeeConnection!
+  employeesByStatus(status: String!, first: Int, after: String): EmployeeConnection!
 }

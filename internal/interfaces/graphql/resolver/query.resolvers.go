@@ -110,6 +110,8 @@ func (r *queryResolver) Users(ctx context.Context, first *int, after *string) (*
 	return result, nil
 }
 
+
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 

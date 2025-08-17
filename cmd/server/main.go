@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/captain-corgi/go-graphql-example/internal/application/employee"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user"
 	"github.com/captain-corgi/go-graphql-example/internal/infrastructure/config"
 	"github.com/captain-corgi/go-graphql-example/internal/infrastructure/database"
@@ -63,12 +64,14 @@ func NewApplication() (*Application, error) {
 
 	// Initialize repositories
 	userRepo := sql.NewUserRepository(dbManager.DB, logger)
+	employeeRepo := sql.NewEmployeeRepository(dbManager.DB.DB)
 
 	// Initialize application services
 	userService := user.NewService(userRepo, logger)
+	employeeService := employee.NewService(employeeRepo, userRepo, logger)
 
 	// Initialize resolver with all dependencies
-	resolver := resolver.NewResolver(userService, logger)
+	resolver := resolver.NewResolver(userService, employeeService, logger)
 
 	// Create HTTP server
 	server := httpserver.NewServer(&cfg.Server, resolver, logger)

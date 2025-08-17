@@ -26,6 +26,19 @@ var (
 	ErrUserAlreadyExists = DomainError{Code: "USER_ALREADY_EXISTS", Message: "User already exists"}
 )
 
+// Employee domain errors
+var (
+	ErrEmployeeNotFound      = DomainError{Code: "EMPLOYEE_NOT_FOUND", Message: "Employee not found"}
+	ErrInvalidEmployeeCode   = DomainError{Code: "INVALID_EMPLOYEE_CODE", Message: "Employee code cannot be empty", Field: "employeeCode"}
+	ErrDuplicateEmployeeCode = DomainError{Code: "DUPLICATE_EMPLOYEE_CODE", Message: "Employee code already exists", Field: "employeeCode"}
+	ErrInvalidDepartment     = DomainError{Code: "INVALID_DEPARTMENT", Message: "Department cannot be empty", Field: "department"}
+	ErrInvalidPosition       = DomainError{Code: "INVALID_POSITION", Message: "Position cannot be empty", Field: "position"}
+	ErrInvalidSalary         = DomainError{Code: "INVALID_SALARY", Message: "Salary must be greater than zero", Field: "salary"}
+	ErrInvalidStatus         = DomainError{Code: "INVALID_STATUS", Message: "Status cannot be empty", Field: "status"}
+	ErrInvalidEmployeeID     = DomainError{Code: "INVALID_EMPLOYEE_ID", Message: "Invalid employee ID format", Field: "id"}
+	ErrEmployeeAlreadyExists = DomainError{Code: "EMPLOYEE_ALREADY_EXISTS", Message: "Employee already exists"}
+)
+
 // Repository errors
 var (
 	ErrRepositoryConnection = DomainError{Code: "REPOSITORY_CONNECTION", Message: "Repository connection failed"}
