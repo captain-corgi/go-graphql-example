@@ -1,4 +1,4 @@
-# User and Employee mutations
+# User, Employee, Department, Position, and Leave mutations
 
 type Mutation {
   createUser(input: CreateUserInput!): CreateUserPayload!
@@ -7,4 +7,16 @@ type Mutation {
   createEmployee(input: CreateEmployeeInput!): CreateEmployeePayload!
   updateEmployee(id: ID!, input: UpdateEmployeeInput!): UpdateEmployeePayload!
   deleteEmployee(id: ID!): DeleteEmployeePayload!
+  createDepartment(input: CreateDepartmentInput!): CreateDepartmentPayload!
+  updateDepartment(id: ID!, input: UpdateDepartmentInput!): UpdateDepartmentPayload!
+  deleteDepartment(id: ID!): DeleteDepartmentPayload!
+  createPosition(input: CreatePositionInput!): CreatePositionPayload!
+  updatePosition(id: ID!, input: UpdatePositionInput!): UpdatePositionPayload!
+  deletePosition(id: ID!): DeletePositionPayload!
+  createLeave(input: CreateLeaveInput!): CreateLeavePayload!
+  updateLeave(id: ID!, input: UpdateLeaveInput!): UpdateLeavePayload!
+  approveLeave(id: ID!, input: ApproveLeaveInput!): ApproveLeavePayload!
+  rejectLeave(id: ID!, input: ApproveLeaveInput!): RejectLeavePayload!
+  cancelLeave(id: ID!): CancelLeavePayload!
+  deleteLeave(id: ID!): DeleteLeavePayload!
 }

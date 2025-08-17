@@ -1,0 +1,56 @@
+# Position types and inputs
+
+type Position {
+  id: ID!
+  title: String!
+  description: String!
+  departmentId: ID
+  requirements: String!
+  minSalary: Float!
+  maxSalary: Float!
+  createdAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  updatedAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+}
+
+type PositionConnection {
+  edges: [PositionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PositionEdge {
+  node: Position!
+  cursor: String!
+}
+
+input CreatePositionInput {
+  title: String!
+  description: String!
+  departmentId: ID
+  requirements: String!
+  minSalary: Float!
+  maxSalary: Float!
+}
+
+input UpdatePositionInput {
+  title: String
+  description: String
+  departmentId: ID
+  requirements: String
+  minSalary: Float
+  maxSalary: Float
+}
+
+type CreatePositionPayload {
+  position: Position!
+  errors: [Error!]
+}
+
+type UpdatePositionPayload {
+  position: Position!
+  errors: [Error!]
+}
+
+type DeletePositionPayload {
+  success: Boolean!
+  errors: [Error!]
+}

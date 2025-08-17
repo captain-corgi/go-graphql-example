@@ -2,6 +2,31 @@
 
 package model
 
+type ApproveLeaveInput struct {
+	ApprovedBy string `json:"approvedBy"`
+}
+
+type ApproveLeavePayload struct {
+	Leave  *Leave   `json:"leave"`
+	Errors []*Error `json:"errors,omitempty"`
+}
+
+type CancelLeavePayload struct {
+	Leave  *Leave   `json:"leave"`
+	Errors []*Error `json:"errors,omitempty"`
+}
+
+type CreateDepartmentInput struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	ManagerID   *string `json:"managerId,omitempty"`
+}
+
+type CreateDepartmentPayload struct {
+	Department *Department `json:"department"`
+	Errors     []*Error    `json:"errors,omitempty"`
+}
+
 type CreateEmployeeInput struct {
 	UserID       string  `json:"userId"`
 	EmployeeCode string  `json:"employeeCode"`
@@ -17,6 +42,33 @@ type CreateEmployeePayload struct {
 	Errors   []*Error  `json:"errors,omitempty"`
 }
 
+type CreateLeaveInput struct {
+	EmployeeID string `json:"employeeId"`
+	LeaveType  string `json:"leaveType"`
+	StartDate  string `json:"startDate"`
+	EndDate    string `json:"endDate"`
+	Reason     string `json:"reason"`
+}
+
+type CreateLeavePayload struct {
+	Leave  *Leave   `json:"leave"`
+	Errors []*Error `json:"errors,omitempty"`
+}
+
+type CreatePositionInput struct {
+	Title        string  `json:"title"`
+	Description  string  `json:"description"`
+	DepartmentID *string `json:"departmentId,omitempty"`
+	Requirements string  `json:"requirements"`
+	MinSalary    float64 `json:"minSalary"`
+	MaxSalary    float64 `json:"maxSalary"`
+}
+
+type CreatePositionPayload struct {
+	Position *Position `json:"position"`
+	Errors   []*Error  `json:"errors,omitempty"`
+}
+
 type CreateUserInput struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
@@ -27,7 +79,22 @@ type CreateUserPayload struct {
 	Errors []*Error `json:"errors,omitempty"`
 }
 
+type DeleteDepartmentPayload struct {
+	Success bool     `json:"success"`
+	Errors  []*Error `json:"errors,omitempty"`
+}
+
 type DeleteEmployeePayload struct {
+	Success bool     `json:"success"`
+	Errors  []*Error `json:"errors,omitempty"`
+}
+
+type DeleteLeavePayload struct {
+	Success bool     `json:"success"`
+	Errors  []*Error `json:"errors,omitempty"`
+}
+
+type DeletePositionPayload struct {
 	Success bool     `json:"success"`
 	Errors  []*Error `json:"errors,omitempty"`
 }
@@ -35,6 +102,25 @@ type DeleteEmployeePayload struct {
 type DeleteUserPayload struct {
 	Success bool     `json:"success"`
 	Errors  []*Error `json:"errors,omitempty"`
+}
+
+type Department struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	ManagerID   *string `json:"managerId,omitempty"`
+	CreatedAt   string  `json:"createdAt"`
+	UpdatedAt   string  `json:"updatedAt"`
+}
+
+type DepartmentConnection struct {
+	Edges    []*DepartmentEdge `json:"edges"`
+	PageInfo *PageInfo         `json:"pageInfo"`
+}
+
+type DepartmentEdge struct {
+	Node   *Department `json:"node"`
+	Cursor string      `json:"cursor"`
 }
 
 type Employee struct {
@@ -66,6 +152,30 @@ type Error struct {
 	Code    *string `json:"code,omitempty"`
 }
 
+type Leave struct {
+	ID         string  `json:"id"`
+	EmployeeID string  `json:"employeeId"`
+	LeaveType  string  `json:"leaveType"`
+	StartDate  string  `json:"startDate"`
+	EndDate    string  `json:"endDate"`
+	Reason     string  `json:"reason"`
+	Status     string  `json:"status"`
+	ApprovedBy *string `json:"approvedBy,omitempty"`
+	ApprovedAt *string `json:"approvedAt,omitempty"`
+	CreatedAt  string  `json:"createdAt"`
+	UpdatedAt  string  `json:"updatedAt"`
+}
+
+type LeaveConnection struct {
+	Edges    []*LeaveEdge `json:"edges"`
+	PageInfo *PageInfo    `json:"pageInfo"`
+}
+
+type LeaveEdge struct {
+	Node   *Leave `json:"node"`
+	Cursor string `json:"cursor"`
+}
+
 type Mutation struct {
 }
 
@@ -76,7 +186,45 @@ type PageInfo struct {
 	EndCursor       *string `json:"endCursor,omitempty"`
 }
 
+type Position struct {
+	ID           string  `json:"id"`
+	Title        string  `json:"title"`
+	Description  string  `json:"description"`
+	DepartmentID *string `json:"departmentId,omitempty"`
+	Requirements string  `json:"requirements"`
+	MinSalary    float64 `json:"minSalary"`
+	MaxSalary    float64 `json:"maxSalary"`
+	CreatedAt    string  `json:"createdAt"`
+	UpdatedAt    string  `json:"updatedAt"`
+}
+
+type PositionConnection struct {
+	Edges    []*PositionEdge `json:"edges"`
+	PageInfo *PageInfo       `json:"pageInfo"`
+}
+
+type PositionEdge struct {
+	Node   *Position `json:"node"`
+	Cursor string    `json:"cursor"`
+}
+
 type Query struct {
+}
+
+type RejectLeavePayload struct {
+	Leave  *Leave   `json:"leave"`
+	Errors []*Error `json:"errors,omitempty"`
+}
+
+type UpdateDepartmentInput struct {
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	ManagerID   *string `json:"managerId,omitempty"`
+}
+
+type UpdateDepartmentPayload struct {
+	Department *Department `json:"department"`
+	Errors     []*Error    `json:"errors,omitempty"`
 }
 
 type UpdateEmployeeInput struct {
@@ -90,6 +238,32 @@ type UpdateEmployeeInput struct {
 
 type UpdateEmployeePayload struct {
 	Employee *Employee `json:"employee"`
+	Errors   []*Error  `json:"errors,omitempty"`
+}
+
+type UpdateLeaveInput struct {
+	LeaveType *string `json:"leaveType,omitempty"`
+	StartDate *string `json:"startDate,omitempty"`
+	EndDate   *string `json:"endDate,omitempty"`
+	Reason    *string `json:"reason,omitempty"`
+}
+
+type UpdateLeavePayload struct {
+	Leave  *Leave   `json:"leave"`
+	Errors []*Error `json:"errors,omitempty"`
+}
+
+type UpdatePositionInput struct {
+	Title        *string  `json:"title,omitempty"`
+	Description  *string  `json:"description,omitempty"`
+	DepartmentID *string  `json:"departmentId,omitempty"`
+	Requirements *string  `json:"requirements,omitempty"`
+	MinSalary    *float64 `json:"minSalary,omitempty"`
+	MaxSalary    *float64 `json:"maxSalary,omitempty"`
+}
+
+type UpdatePositionPayload struct {
+	Position *Position `json:"position"`
 	Errors   []*Error  `json:"errors,omitempty"`
 }
 

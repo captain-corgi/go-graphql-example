@@ -1,4 +1,4 @@
-# User and Employee queries
+# User, Employee, Department, Position, and Leave queries
 
 type Query {
   user(id: ID!): User
@@ -7,4 +7,14 @@ type Query {
   employees(first: Int, after: String): EmployeeConnection!
   employeesByDepartment(department: String!, first: Int, after: String): EmployeeConnection!
   employeesByStatus(status: String!, first: Int, after: String): EmployeeConnection!
+  department(id: ID!): Department
+  departments(first: Int, after: String): DepartmentConnection!
+  departmentsByManager(managerId: ID!, first: Int, after: String): DepartmentConnection!
+  position(id: ID!): Position
+  positions(first: Int, after: String): PositionConnection!
+  positionsByDepartment(departmentId: ID!, first: Int, after: String): PositionConnection!
+  leave(id: ID!): Leave
+  leaves(first: Int, after: String): LeaveConnection!
+  leavesByEmployee(employeeId: ID!, first: Int, after: String): LeaveConnection!
+  leavesByStatus(status: String!, first: Int, after: String): LeaveConnection!
 }

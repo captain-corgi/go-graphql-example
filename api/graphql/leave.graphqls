@@ -1,0 +1,74 @@
+# Leave types and inputs
+
+type Leave {
+  id: ID!
+  employeeId: ID!
+  leaveType: String!
+  startDate: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  endDate: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  reason: String!
+  status: String!
+  approvedBy: ID
+  approvedAt: String # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  createdAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+  updatedAt: String! # TODO: Change to Time scalar when custom scalar marshaling is implemented
+}
+
+type LeaveConnection {
+  edges: [LeaveEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LeaveEdge {
+  node: Leave!
+  cursor: String!
+}
+
+input CreateLeaveInput {
+  employeeId: ID!
+  leaveType: String!
+  startDate: String!
+  endDate: String!
+  reason: String!
+}
+
+input UpdateLeaveInput {
+  leaveType: String
+  startDate: String
+  endDate: String
+  reason: String
+}
+
+input ApproveLeaveInput {
+  approvedBy: ID!
+}
+
+type CreateLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type UpdateLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type ApproveLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type RejectLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type CancelLeavePayload {
+  leave: Leave!
+  errors: [Error!]
+}
+
+type DeleteLeavePayload {
+  success: Boolean!
+  errors: [Error!]
+}
