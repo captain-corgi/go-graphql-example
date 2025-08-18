@@ -19,6 +19,7 @@ func TestConfig_Validate(t *testing.T) {
 			name: "valid config",
 			config: Config{
 				Server: ServerConfig{
+					Name:         "test-server",
 					Port:         "8080",
 					ReadTimeout:  30 * time.Second,
 					WriteTimeout: 30 * time.Second,
@@ -35,6 +36,11 @@ func TestConfig_Validate(t *testing.T) {
 					Level:  "info",
 					Format: "json",
 				},
+				Auth: AuthConfig{
+					JWTSecret:       "test-secret-key-32-chars-minimum-length",
+					AccessTokenTTL:  15 * time.Minute,
+					RefreshTokenTTL: 24 * time.Hour,
+				},
 			},
 			wantErr: false,
 		},
@@ -42,6 +48,7 @@ func TestConfig_Validate(t *testing.T) {
 			name: "invalid server config - empty port",
 			config: Config{
 				Server: ServerConfig{
+					Name:         "test-server",
 					Port:         "",
 					ReadTimeout:  30 * time.Second,
 					WriteTimeout: 30 * time.Second,
@@ -58,6 +65,11 @@ func TestConfig_Validate(t *testing.T) {
 					Level:  "info",
 					Format: "json",
 				},
+				Auth: AuthConfig{
+					JWTSecret:       "test-secret-key-32-chars-minimum-length",
+					AccessTokenTTL:  15 * time.Minute,
+					RefreshTokenTTL: 24 * time.Hour,
+				},
 			},
 			wantErr: true,
 			errMsg:  "server config validation failed",
@@ -66,6 +78,7 @@ func TestConfig_Validate(t *testing.T) {
 			name: "invalid database config - empty URL",
 			config: Config{
 				Server: ServerConfig{
+					Name:         "test-server",
 					Port:         "8080",
 					ReadTimeout:  30 * time.Second,
 					WriteTimeout: 30 * time.Second,
@@ -82,6 +95,11 @@ func TestConfig_Validate(t *testing.T) {
 					Level:  "info",
 					Format: "json",
 				},
+				Auth: AuthConfig{
+					JWTSecret:       "test-secret-key-32-chars-minimum-length",
+					AccessTokenTTL:  15 * time.Minute,
+					RefreshTokenTTL: 24 * time.Hour,
+				},
 			},
 			wantErr: true,
 			errMsg:  "database config validation failed",
@@ -90,6 +108,7 @@ func TestConfig_Validate(t *testing.T) {
 			name: "invalid logging config - invalid level",
 			config: Config{
 				Server: ServerConfig{
+					Name:         "test-server",
 					Port:         "8080",
 					ReadTimeout:  30 * time.Second,
 					WriteTimeout: 30 * time.Second,
@@ -105,6 +124,11 @@ func TestConfig_Validate(t *testing.T) {
 				Logging: LoggingConfig{
 					Level:  "invalid",
 					Format: "json",
+				},
+				Auth: AuthConfig{
+					JWTSecret:       "test-secret-key-32-chars-minimum-length",
+					AccessTokenTTL:  15 * time.Minute,
+					RefreshTokenTTL: 24 * time.Hour,
 				},
 			},
 			wantErr: true,
@@ -135,6 +159,7 @@ func TestServerConfig_Validate(t *testing.T) {
 		{
 			name: "valid server config",
 			config: ServerConfig{
+				Name:         "test-server",
 				Port:         "8080",
 				ReadTimeout:  30 * time.Second,
 				WriteTimeout: 30 * time.Second,
@@ -145,6 +170,7 @@ func TestServerConfig_Validate(t *testing.T) {
 		{
 			name: "empty port",
 			config: ServerConfig{
+				Name:         "test-server",
 				Port:         "",
 				ReadTimeout:  30 * time.Second,
 				WriteTimeout: 30 * time.Second,
@@ -156,6 +182,7 @@ func TestServerConfig_Validate(t *testing.T) {
 		{
 			name: "zero read timeout",
 			config: ServerConfig{
+				Name:         "test-server",
 				Port:         "8080",
 				ReadTimeout:  0,
 				WriteTimeout: 30 * time.Second,
@@ -167,6 +194,7 @@ func TestServerConfig_Validate(t *testing.T) {
 		{
 			name: "zero write timeout",
 			config: ServerConfig{
+				Name:         "test-server",
 				Port:         "8080",
 				ReadTimeout:  30 * time.Second,
 				WriteTimeout: 0,
@@ -178,6 +206,7 @@ func TestServerConfig_Validate(t *testing.T) {
 		{
 			name: "zero idle timeout",
 			config: ServerConfig{
+				Name:         "test-server",
 				Port:         "8080",
 				ReadTimeout:  30 * time.Second,
 				WriteTimeout: 30 * time.Second,

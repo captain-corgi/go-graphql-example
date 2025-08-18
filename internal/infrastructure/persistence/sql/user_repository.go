@@ -32,15 +32,17 @@ func (r *userRepository) FindByID(ctx context.Context, id user.UserID) (*user.Us
 	r.logger.DebugContext(ctx, "Finding user by ID", "user_id", id.String())
 
 	query := `
-		SELECT id, email, name, created_at, updated_at 
+		SELECT id, email, name, password_hash, is_active, last_login_at, created_at, updated_at 
 		FROM users 
 		WHERE id = $1`
 
-	var userID, email, name string
+	var userID, email, name, passwordHash string
+	var isActive bool
+	var lastLoginAt sql.NullTime
 	var createdAt, updatedAt time.Time
 
 	err := r.db.QueryRowContext(ctx, query, id.String()).Scan(
-		&userID, &email, &name, &createdAt, &updatedAt,
+		&userID, &email, &name, &passwordHash, &isActive, &lastLoginAt, &createdAt, &updatedAt,
 	)
 
 	if err != nil {
@@ -52,7 +54,12 @@ func (r *userRepository) FindByID(ctx context.Context, id user.UserID) (*user.Us
 		return nil, fmt.Errorf("failed to find user by ID: %w", err)
 	}
 
-	domainUser, err := user.NewUserWithID(userID, email, name, createdAt, updatedAt)
+	var lastLoginAtPtr *time.Time
+	if lastLoginAt.Valid {
+		lastLoginAtPtr = &lastLoginAt.Time
+	}
+
+	domainUser, err := user.NewUserWithFullDetails(userID, email, name, passwordHash, isActive, lastLoginAtPtr, createdAt, updatedAt)
 	if err != nil {
 		r.logger.ErrorContext(ctx, "Failed to create domain user from database record", "error", err)
 		return nil, fmt.Errorf("failed to create domain user: %w", err)
@@ -67,15 +74,17 @@ func (r *userRepository) FindByEmail(ctx context.Context, email user.Email) (*us
 	r.logger.DebugContext(ctx, "Finding user by email", "email", email.String())
 
 	query := `
-		SELECT id, email, name, created_at, updated_at 
+		SELECT id, email, name, password_hash, is_active, last_login_at, created_at, updated_at 
 		FROM users 
 		WHERE email = $1`
 
-	var userID, userEmail, name string
+	var userID, userEmail, name, passwordHash string
+	var isActive bool
+	var lastLoginAt sql.NullTime
 	var createdAt, updatedAt time.Time
 
 	err := r.db.QueryRowContext(ctx, query, email.String()).Scan(
-		&userID, &userEmail, &name, &createdAt, &updatedAt,
+		&userID, &userEmail, &name, &passwordHash, &isActive, &lastLoginAt, &createdAt, &updatedAt,
 	)
 
 	if err != nil {
@@ -87,7 +96,12 @@ func (r *userRepository) FindByEmail(ctx context.Context, email user.Email) (*us
 		return nil, fmt.Errorf("failed to find user by email: %w", err)
 	}
 
-	domainUser, err := user.NewUserWithID(userID, userEmail, name, createdAt, updatedAt)
+	var lastLoginAtPtr *time.Time
+	if lastLoginAt.Valid {
+		lastLoginAtPtr = &lastLoginAt.Time
+	}
+
+	domainUser, err := user.NewUserWithFullDetails(userID, userEmail, name, passwordHash, isActive, lastLoginAtPtr, createdAt, updatedAt)
 	if err != nil {
 		r.logger.ErrorContext(ctx, "Failed to create domain user from database record", "error", err)
 		return nil, fmt.Errorf("failed to create domain user: %w", err)
@@ -107,7 +121,7 @@ func (r *userRepository) FindAll(ctx context.Context, limit int, cursor string) 
 	if cursor == "" {
 		// First page
 		query = `
-			SELECT id, email, name, created_at, updated_at 
+			SELECT id, email, name, password_hash, is_active, last_login_at, created_at, updated_at 
 			FROM users 
 			ORDER BY created_at DESC, id DESC 
 			LIMIT $1`
@@ -115,7 +129,7 @@ func (r *userRepository) FindAll(ctx context.Context, limit int, cursor string) 
 	} else {
 		// Subsequent pages - cursor-based pagination using created_at and id
 		query = `
-			SELECT id, email, name, created_at, updated_at 
+			SELECT id, email, name, password_hash, is_active, last_login_at, created_at, updated_at 
 			FROM users 
 			WHERE (created_at, id) < (
 				SELECT created_at, id FROM users WHERE id = $1
@@ -136,15 +150,22 @@ func (r *userRepository) FindAll(ctx context.Context, limit int, cursor string) 
 	var nextCursor string
 
 	for rows.Next() {
-		var userID, email, name string
+		var userID, email, name, passwordHash string
+		var isActive bool
+		var lastLoginAt sql.NullTime
 		var createdAt, updatedAt time.Time
 
-		if err := rows.Scan(&userID, &email, &name, &createdAt, &updatedAt); err != nil {
+		if err := rows.Scan(&userID, &email, &name, &passwordHash, &isActive, &lastLoginAt, &createdAt, &updatedAt); err != nil {
 			r.logger.ErrorContext(ctx, "Failed to scan user row", "error", err)
 			return nil, "", fmt.Errorf("failed to scan user row: %w", err)
 		}
 
-		domainUser, err := user.NewUserWithID(userID, email, name, createdAt, updatedAt)
+		var lastLoginAtPtr *time.Time
+		if lastLoginAt.Valid {
+			lastLoginAtPtr = &lastLoginAt.Time
+		}
+
+		domainUser, err := user.NewUserWithFullDetails(userID, email, name, passwordHash, isActive, lastLoginAtPtr, createdAt, updatedAt)
 		if err != nil {
 			r.logger.ErrorContext(ctx, "Failed to create domain user from database record", "error", err)
 			return nil, "", fmt.Errorf("failed to create domain user: %w", err)
@@ -168,13 +189,16 @@ func (r *userRepository) Create(ctx context.Context, u *user.User) error {
 	r.logger.DebugContext(ctx, "Creating user", "user_id", u.ID().String(), "email", u.Email().String())
 
 	query := `
-		INSERT INTO users (id, email, name, created_at, updated_at) 
-		VALUES ($1, $2, $3, $4, $5)`
+		INSERT INTO users (id, email, name, password_hash, is_active, last_login_at, created_at, updated_at) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
 
 	_, err := r.db.ExecContext(ctx, query,
 		u.ID().String(),
 		u.Email().String(),
 		u.Name().String(),
+		u.PasswordHash().String(),
+		u.IsActive(),
+		u.LastLoginAt(),
 		u.CreatedAt(),
 		u.UpdatedAt(),
 	)
@@ -201,13 +225,16 @@ func (r *userRepository) Update(ctx context.Context, u *user.User) error {
 
 	query := `
 		UPDATE users 
-		SET email = $2, name = $3, updated_at = $4 
+		SET email = $2, name = $3, password_hash = $4, is_active = $5, last_login_at = $6, updated_at = $7 
 		WHERE id = $1`
 
 	result, err := r.db.ExecContext(ctx, query,
 		u.ID().String(),
 		u.Email().String(),
 		u.Name().String(),
+		u.PasswordHash().String(),
+		u.IsActive(),
+		u.LastLoginAt(),
 		u.UpdatedAt(),
 	)
 

@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	authMocks "github.com/captain-corgi/go-graphql-example/internal/application/auth/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/resolver"
 )
@@ -27,8 +28,9 @@ func TestGraphQLServerSetup(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := resolver.NewResolver(mockUserService, logger)
+	resolver := resolver.NewResolver(mockUserService, mockAuthService, logger)
 
 	testServer := createTestServer(resolver)
 	defer testServer.Close()
@@ -124,8 +126,9 @@ func TestGraphQLConcurrency(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := resolver.NewResolver(mockUserService, logger)
+	resolver := resolver.NewResolver(mockUserService, mockAuthService, logger)
 
 	testServer := createTestServer(resolver)
 	defer testServer.Close()
@@ -216,8 +219,9 @@ func TestGraphQLPerformance(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := resolver.NewResolver(mockUserService, logger)
+	resolver := resolver.NewResolver(mockUserService, mockAuthService, logger)
 
 	testServer := createTestServer(resolver)
 	defer testServer.Close()

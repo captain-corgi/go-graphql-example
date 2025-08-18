@@ -4,4 +4,10 @@ type Mutation {
   createUser(input: CreateUserInput!): CreateUserPayload!
   updateUser(id: ID!, input: UpdateUserInput!): UpdateUserPayload!
   deleteUser(id: ID!): DeleteUserPayload!
+  
+  # Authentication mutations
+  register(input: RegisterInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+  refreshToken(input: RefreshTokenInput!): AuthPayload!
+  logout(input: LogoutInput!): LogoutPayload!
 }

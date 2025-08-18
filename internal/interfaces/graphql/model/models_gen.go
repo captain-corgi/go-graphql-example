@@ -2,6 +2,14 @@
 
 package model
 
+type AuthPayload struct {
+	User         *User    `json:"user"`
+	AccessToken  string   `json:"accessToken"`
+	RefreshToken string   `json:"refreshToken"`
+	ExpiresAt    string   `json:"expiresAt"`
+	Errors       []*Error `json:"errors,omitempty"`
+}
+
 type CreateUserInput struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
@@ -23,6 +31,20 @@ type Error struct {
 	Code    *string `json:"code,omitempty"`
 }
 
+type LoginInput struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type LogoutInput struct {
+	RefreshToken string `json:"refreshToken"`
+}
+
+type LogoutPayload struct {
+	Success bool     `json:"success"`
+	Errors  []*Error `json:"errors,omitempty"`
+}
+
 type Mutation struct {
 }
 
@@ -34,6 +56,16 @@ type PageInfo struct {
 }
 
 type Query struct {
+}
+
+type RefreshTokenInput struct {
+	RefreshToken string `json:"refreshToken"`
+}
+
+type RegisterInput struct {
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
 }
 
 type UpdateUserInput struct {

@@ -52,6 +52,7 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigFromFile() {
 	// Create test config file
 	configContent := `
 server:
+  name: "test-server"
   port: "9000"
   read_timeout: "45s"
   write_timeout: "45s"
@@ -67,6 +68,11 @@ database:
 logging:
   level: "debug"
   format: "text"
+
+auth:
+  jwt_secret: "test-secret-key-32-chars-minimum-length"
+  access_token_ttl: "15m"
+  refresh_token_ttl: "24h"
 `
 
 	err := os.WriteFile(suite.configPath, []byte(configContent), 0644)
@@ -110,6 +116,7 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigWithEnvironmentOverrides(
 	// Create base config file
 	configContent := `
 server:
+  name: "test-server"
   port: "8080"
   read_timeout: "30s"
 
@@ -120,6 +127,11 @@ database:
 logging:
   level: "info"
   format: "json"
+
+auth:
+  jwt_secret: "test-secret-key-32-chars-minimum-length"
+  access_token_ttl: "15m"
+  refresh_token_ttl: "24h"
 `
 
 	err := os.WriteFile(suite.configPath, []byte(configContent), 0644)
@@ -168,8 +180,14 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigWithPartialFile() {
 	// Create partial config file (only server section)
 	configContent := `
 server:
+  name: "test-server"
   port: "7000"
   read_timeout: "60s"
+
+auth:
+  jwt_secret: "test-secret-key-32-chars-minimum-length"
+  access_token_ttl: "15m"
+  refresh_token_ttl: "24h"
 `
 
 	err := os.WriteFile(suite.configPath, []byte(configContent), 0644)
@@ -205,6 +223,7 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigWithInvalidFile() {
 	// Create invalid YAML file
 	configContent := `
 server:
+  name: "test-server"
   port: "8080"
   invalid_yaml: [unclosed array
 `
@@ -236,6 +255,7 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigWithValidationErrors() {
 	// Create config file with invalid values
 	configContent := `
 server:
+  name: "test-server"
   port: ""  # invalid: empty port
   read_timeout: "30s"
   write_timeout: "30s"
@@ -251,6 +271,11 @@ database:
 logging:
   level: "invalid_level"  # invalid: unsupported level
   format: "json"
+
+auth:
+  jwt_secret: "test-secret-key-32-chars-minimum-length"
+  access_token_ttl: "15m"
+  refresh_token_ttl: "24h"
 `
 
 	err := os.WriteFile(suite.configPath, []byte(configContent), 0644)
@@ -294,6 +319,12 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigNoFile() {
 	err = os.Chdir(emptyTempDir)
 	require.NoError(suite.T(), err)
 
+	// Set required environment variables for validation
+	suite.T().Setenv("GRAPHQL_SERVICE_SERVER_NAME", "test-server")
+	suite.T().Setenv("GRAPHQL_SERVICE_AUTH_JWT_SECRET", "test-secret-key-32-chars-minimum-length")
+	suite.T().Setenv("GRAPHQL_SERVICE_AUTH_ACCESS_TOKEN_TTL", "15m")
+	suite.T().Setenv("GRAPHQL_SERVICE_AUTH_REFRESH_TOKEN_TTL", "24h")
+
 	// Reset viper to ensure clean state
 	viper.Reset()
 
@@ -302,7 +333,8 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigNoFile() {
 	require.NoError(suite.T(), err)
 	require.NotNil(suite.T(), cfg)
 
-	// Verify all defaults are used
+	// Verify all defaults are used (server name is overridden by env var)
+	assert.Equal(suite.T(), "test-server", cfg.Server.Name)
 	assert.Equal(suite.T(), "8080", cfg.Server.Port)
 	assert.Equal(suite.T(), 30*time.Second, cfg.Server.ReadTimeout)
 	assert.Equal(suite.T(), 30*time.Second, cfg.Server.WriteTimeout)
@@ -322,6 +354,7 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigNoFile() {
 func (suite *ConfigIntegrationTestSuite) TestLoadConfigComplexEnvironmentVariables() {
 	// Set all possible environment variables
 	envVars := map[string]string{
+		"GRAPHQL_SERVICE_SERVER_NAME":                 "test-server",
 		"GRAPHQL_SERVICE_SERVER_PORT":                 "3000",
 		"GRAPHQL_SERVICE_SERVER_READ_TIMEOUT":         "120s",
 		"GRAPHQL_SERVICE_SERVER_WRITE_TIMEOUT":        "90s",
@@ -333,6 +366,9 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigComplexEnvironmentVariabl
 		"GRAPHQL_SERVICE_DATABASE_CONN_MAX_IDLE_TIME": "15m",
 		"GRAPHQL_SERVICE_LOGGING_LEVEL":               "warn",
 		"GRAPHQL_SERVICE_LOGGING_FORMAT":              "text",
+		"GRAPHQL_SERVICE_AUTH_JWT_SECRET":             "test-secret-key-32-chars-minimum-length",
+		"GRAPHQL_SERVICE_AUTH_ACCESS_TOKEN_TTL":       "15m",
+		"GRAPHQL_SERVICE_AUTH_REFRESH_TOKEN_TTL":      "24h",
 	}
 
 	for key, value := range envVars {
@@ -345,6 +381,7 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigComplexEnvironmentVariabl
 	require.NotNil(suite.T(), cfg)
 
 	// Verify all environment variables were applied
+	assert.Equal(suite.T(), "test-server", cfg.Server.Name)
 	assert.Equal(suite.T(), "3000", cfg.Server.Port)
 	assert.Equal(suite.T(), 120*time.Second, cfg.Server.ReadTimeout)
 	assert.Equal(suite.T(), 90*time.Second, cfg.Server.WriteTimeout)
@@ -363,6 +400,7 @@ func (suite *ConfigIntegrationTestSuite) TestLoadConfigComplexEnvironmentVariabl
 // clearEnvVars clears all GRAPHQL_SERVICE environment variables
 func (suite *ConfigIntegrationTestSuite) clearEnvVars() {
 	envVars := []string{
+		"GRAPHQL_SERVICE_SERVER_NAME",
 		"GRAPHQL_SERVICE_SERVER_PORT",
 		"GRAPHQL_SERVICE_SERVER_READ_TIMEOUT",
 		"GRAPHQL_SERVICE_SERVER_WRITE_TIMEOUT",
@@ -374,6 +412,9 @@ func (suite *ConfigIntegrationTestSuite) clearEnvVars() {
 		"GRAPHQL_SERVICE_DATABASE_CONN_MAX_IDLE_TIME",
 		"GRAPHQL_SERVICE_LOGGING_LEVEL",
 		"GRAPHQL_SERVICE_LOGGING_FORMAT",
+		"GRAPHQL_SERVICE_AUTH_JWT_SECRET",
+		"GRAPHQL_SERVICE_AUTH_ACCESS_TOKEN_TTL",
+		"GRAPHQL_SERVICE_AUTH_REFRESH_TOKEN_TTL",
 	}
 
 	for _, envVar := range envVars {

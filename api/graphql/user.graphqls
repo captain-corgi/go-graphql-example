@@ -55,3 +55,37 @@ type Error {
   field: String
   code: String
 }
+
+# Authentication types and inputs
+
+input RegisterInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+input LogoutInput {
+  refreshToken: String!
+}
+
+type AuthPayload {
+  user: User!
+  accessToken: String!
+  refreshToken: String!
+  expiresAt: String!
+  errors: [Error!]
+}
+
+type LogoutPayload {
+  success: Boolean!
+  errors: [Error!]
+}

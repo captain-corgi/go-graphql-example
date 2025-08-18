@@ -11,6 +11,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
+	authMocks "github.com/captain-corgi/go-graphql-example/internal/application/auth/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/resolver"
@@ -24,8 +25,9 @@ func TestGraphQLPaginationEdgeCases(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := resolver.NewResolver(mockUserService, logger)
+	resolver := resolver.NewResolver(mockUserService, mockAuthService, logger)
 
 	testServer := createTestServer(resolver)
 	defer testServer.Close()
@@ -315,8 +317,9 @@ func TestGraphQLInputSanitization(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := resolver.NewResolver(mockUserService, logger)
+	resolver := resolver.NewResolver(mockUserService, mockAuthService, logger)
 
 	testServer := createTestServer(resolver)
 	defer testServer.Close()

@@ -49,6 +49,7 @@ func Load() (*Config, error) {
 // setDefaults sets default configuration values
 func setDefaults() {
 	// Server defaults
+	viper.SetDefault("server.name", "graphql-service")
 	viper.SetDefault("server.port", "8080")
 	viper.SetDefault("server.read_timeout", "30s")
 	viper.SetDefault("server.write_timeout", "30s")
@@ -64,6 +65,11 @@ func setDefaults() {
 	// Logging defaults
 	viper.SetDefault("logging.level", "info")
 	viper.SetDefault("logging.format", "json")
+
+	// Auth defaults
+	viper.SetDefault("auth.jwt_secret", "default-secret-key-32-chars-minimum-length")
+	viper.SetDefault("auth.access_token_ttl", "15m")
+	viper.SetDefault("auth.refresh_token_ttl", "24h")
 }
 
 // MustLoad loads configuration and panics if it fails

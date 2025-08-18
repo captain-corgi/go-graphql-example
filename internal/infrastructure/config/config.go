@@ -10,10 +10,12 @@ type Config struct {
 	Server   ServerConfig   `mapstructure:"server"`
 	Database DatabaseConfig `mapstructure:"database"`
 	Logging  LoggingConfig  `mapstructure:"logging"`
+	Auth     AuthConfig     `mapstructure:"auth"`
 }
 
 // ServerConfig holds HTTP server configuration
 type ServerConfig struct {
+	Name         string        `mapstructure:"name"`
 	Port         string        `mapstructure:"port"`
 	ReadTimeout  time.Duration `mapstructure:"read_timeout"`
 	WriteTimeout time.Duration `mapstructure:"write_timeout"`
@@ -35,6 +37,13 @@ type LoggingConfig struct {
 	Format string `mapstructure:"format"`
 }
 
+// AuthConfig holds authentication configuration
+type AuthConfig struct {
+	JWTSecret       string        `mapstructure:"jwt_secret"`
+	AccessTokenTTL  time.Duration `mapstructure:"access_token_ttl"`
+	RefreshTokenTTL time.Duration `mapstructure:"refresh_token_ttl"`
+}
+
 // Validate validates the configuration and returns an error if invalid
 func (c *Config) Validate() error {
 	if err := c.Server.Validate(); err != nil {
@@ -49,11 +58,19 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("logging config validation failed: %w", err)
 	}
 
+	if err := c.Auth.Validate(); err != nil {
+		return fmt.Errorf("auth config validation failed: %w", err)
+	}
+
 	return nil
 }
 
 // Validate validates server configuration
 func (s *ServerConfig) Validate() error {
+	if s.Name == "" {
+		return fmt.Errorf("server name is required")
+	}
+
 	if s.Port == "" {
 		return fmt.Errorf("server port is required")
 	}
@@ -122,6 +139,31 @@ func (l *LoggingConfig) Validate() error {
 
 	if !validFormats[l.Format] {
 		return fmt.Errorf("invalid log format: %s (must be one of: json, text)", l.Format)
+	}
+
+	return nil
+}
+
+// Validate validates authentication configuration
+func (a *AuthConfig) Validate() error {
+	if a.JWTSecret == "" {
+		return fmt.Errorf("JWT secret cannot be empty")
+	}
+
+	if len(a.JWTSecret) < 32 {
+		return fmt.Errorf("JWT secret must be at least 32 characters long")
+	}
+
+	if a.AccessTokenTTL <= 0 {
+		return fmt.Errorf("access token TTL must be positive")
+	}
+
+	if a.RefreshTokenTTL <= 0 {
+		return fmt.Errorf("refresh token TTL must be positive")
+	}
+
+	if a.RefreshTokenTTL <= a.AccessTokenTTL {
+		return fmt.Errorf("refresh token TTL must be greater than access token TTL")
 	}
 
 	return nil

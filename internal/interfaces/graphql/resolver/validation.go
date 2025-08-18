@@ -107,3 +107,26 @@ func sanitizeStringPointer(s *string) *string {
 	sanitized := sanitizeString(*s)
 	return &sanitized
 }
+
+// validateEmail validates an email string
+func validateEmail(email string) error {
+	if strings.TrimSpace(email) == "" {
+		return errors.ErrInvalidEmail
+	}
+
+	// Basic email format validation (more comprehensive validation is done in domain layer)
+	if !strings.Contains(email, "@") {
+		return errors.ErrInvalidEmail
+	}
+
+	return nil
+}
+
+// validateName validates a name string
+func validateName(name string) error {
+	if strings.TrimSpace(name) == "" {
+		return errors.ErrInvalidName
+	}
+
+	return nil
+}

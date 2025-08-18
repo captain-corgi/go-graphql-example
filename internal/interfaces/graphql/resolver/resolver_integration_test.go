@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	authMocks "github.com/captain-corgi/go-graphql-example/internal/application/auth/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/model"
@@ -20,7 +21,8 @@ func TestResolverIntegration(t *testing.T) {
 
 	mockUserService := mocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := NewResolver(mockUserService, logger)
+	mockAuthService := authMocks.NewMockService(ctrl)
+	resolver := NewResolver(mockUserService, mockAuthService, logger)
 
 	ctx := context.Background()
 

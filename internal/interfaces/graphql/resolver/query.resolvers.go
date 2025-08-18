@@ -8,7 +8,7 @@ import (
 	"context"
 
 	"github.com/captain-corgi/go-graphql-example/internal/application/user"
-	"github.com/captain-corgi/go-graphql-example/internal/domain/errors"
+	domainErrors "github.com/captain-corgi/go-graphql-example/internal/domain/errors"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/generated"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/model"
 )
@@ -39,7 +39,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 	if len(resp.Errors) > 0 {
 		// Return the first error as GraphQL error
 		firstError := resp.Errors[0]
-		domainErr := errors.DomainError{
+		domainErr := domainErrors.DomainError{
 			Code:    firstError.Code,
 			Message: firstError.Message,
 			Field:   firstError.Field,
@@ -95,7 +95,7 @@ func (r *queryResolver) Users(ctx context.Context, first *int, after *string) (*
 	if len(resp.Errors) > 0 {
 		// Return the first error as GraphQL error
 		firstError := resp.Errors[0]
-		domainErr := errors.DomainError{
+		domainErr := domainErrors.DomainError{
 			Code:    firstError.Code,
 			Message: firstError.Message,
 			Field:   firstError.Field,

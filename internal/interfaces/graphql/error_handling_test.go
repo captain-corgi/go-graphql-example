@@ -17,6 +17,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	authMocks "github.com/captain-corgi/go-graphql-example/internal/application/auth/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/generated"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/resolver"
@@ -30,8 +31,9 @@ func TestGraphQLErrorHandling(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := resolver.NewResolver(mockUserService, logger)
+	resolver := resolver.NewResolver(mockUserService, mockAuthService, logger)
 
 	testServer := createTestServer(resolver)
 	defer testServer.Close()
@@ -158,8 +160,9 @@ func TestGraphQLIntrospection(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	resolver := resolver.NewResolver(mockUserService, logger)
+	resolver := resolver.NewResolver(mockUserService, mockAuthService, logger)
 
 	// Create a direct GraphQL handler for introspection testing
 	schema := generated.NewExecutableSchema(generated.Config{

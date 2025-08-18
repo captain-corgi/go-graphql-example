@@ -8,11 +8,14 @@ import (
 
 // User represents the user domain entity
 type User struct {
-	id        UserID
-	email     Email
-	name      Name
-	createdAt time.Time
-	updatedAt time.Time
+	id           UserID
+	email        Email
+	name         Name
+	passwordHash HashedPassword
+	isActive     bool
+	lastLoginAt  *time.Time
+	createdAt    time.Time
+	updatedAt    time.Time
 }
 
 // NewUser creates a new User entity with validation
@@ -33,8 +36,39 @@ func NewUser(email, name string) (*User, error) {
 		id:        GenerateUserID(),
 		email:     emailVO,
 		name:      nameVO,
+		isActive:  true,
 		createdAt: now,
 		updatedAt: now,
+	}, nil
+}
+
+// NewUserWithPassword creates a new User entity with password
+func NewUserWithPassword(email, name, passwordHash string) (*User, error) {
+	emailVO, err := NewEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	nameVO, err := NewName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	passwordHashVO, err := NewHashedPassword(passwordHash)
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+
+	return &User{
+		id:           GenerateUserID(),
+		email:        emailVO,
+		name:         nameVO,
+		passwordHash: passwordHashVO,
+		isActive:     true,
+		createdAt:    now,
+		updatedAt:    now,
 	}, nil
 }
 
@@ -59,8 +93,43 @@ func NewUserWithID(id, email, name string, createdAt, updatedAt time.Time) (*Use
 		id:        userID,
 		email:     emailVO,
 		name:      nameVO,
+		isActive:  true,
 		createdAt: createdAt,
 		updatedAt: updatedAt,
+	}, nil
+}
+
+// NewUserWithFullDetails creates a User entity with all details (for reconstruction from persistence)
+func NewUserWithFullDetails(id, email, name, passwordHash string, isActive bool, lastLoginAt *time.Time, createdAt, updatedAt time.Time) (*User, error) {
+	userID, err := NewUserID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	emailVO, err := NewEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	nameVO, err := NewName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	passwordHashVO, err := NewHashedPassword(passwordHash)
+	if err != nil {
+		return nil, err
+	}
+
+	return &User{
+		id:           userID,
+		email:        emailVO,
+		name:         nameVO,
+		passwordHash: passwordHashVO,
+		isActive:     isActive,
+		lastLoginAt:  lastLoginAt,
+		createdAt:    createdAt,
+		updatedAt:    updatedAt,
 	}, nil
 }
 
@@ -89,6 +158,21 @@ func (u *User) UpdatedAt() time.Time {
 	return u.updatedAt
 }
 
+// PasswordHash returns the user's password hash
+func (u *User) PasswordHash() HashedPassword {
+	return u.passwordHash
+}
+
+// IsActive returns whether the user is active
+func (u *User) IsActive() bool {
+	return u.isActive
+}
+
+// LastLoginAt returns when the user last logged in
+func (u *User) LastLoginAt() *time.Time {
+	return u.lastLoginAt
+}
+
 // UpdateEmail updates the user's email with validation
 func (u *User) UpdateEmail(email string) error {
 	emailVO, err := NewEmail(email)
@@ -111,6 +195,37 @@ func (u *User) UpdateName(name string) error {
 	u.name = nameVO
 	u.updatedAt = time.Now()
 	return nil
+}
+
+// UpdatePassword updates the user's password hash
+func (u *User) UpdatePassword(passwordHash string) error {
+	passwordHashVO, err := NewHashedPassword(passwordHash)
+	if err != nil {
+		return err
+	}
+
+	u.passwordHash = passwordHashVO
+	u.updatedAt = time.Now()
+	return nil
+}
+
+// RecordLogin records a successful login
+func (u *User) RecordLogin() {
+	now := time.Now()
+	u.lastLoginAt = &now
+	u.updatedAt = now
+}
+
+// Deactivate deactivates the user account
+func (u *User) Deactivate() {
+	u.isActive = false
+	u.updatedAt = time.Now()
+}
+
+// Activate activates the user account
+func (u *User) Activate() {
+	u.isActive = true
+	u.updatedAt = time.Now()
 }
 
 // Validate performs comprehensive validation of the user entity

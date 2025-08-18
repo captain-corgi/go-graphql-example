@@ -6,8 +6,11 @@ package resolver
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/captain-corgi/go-graphql-example/internal/application/auth"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user"
+	domainErrors "github.com/captain-corgi/go-graphql-example/internal/domain/errors"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/generated"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/model"
 )
@@ -181,6 +184,227 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.De
 	}
 
 	r.logOperationSuccess(ctx, "DeleteUser", result)
+	return result, nil
+}
+
+// Register is the resolver for the register field.
+func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInput) (*model.AuthPayload, error) {
+	// Log operation start
+	r.logOperation(ctx, "Register", map[string]interface{}{
+		"email": input.Email,
+		"name":  input.Name,
+	})
+
+	// Validate and sanitize input
+	sanitizedInput := model.RegisterInput{
+		Email:    sanitizeString(input.Email),
+		Name:     sanitizeString(input.Name),
+		Password: input.Password, // Don't log password
+	}
+
+	if err := r.validateInput(ctx, "Register", func() error {
+		if err := validateEmail(sanitizedInput.Email); err != nil {
+			return err
+		}
+		if err := validateName(sanitizedInput.Name); err != nil {
+			return err
+		}
+		if sanitizedInput.Password == "" {
+			return fmt.Errorf("password is required")
+		}
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	// Get client info
+	deviceInfo, ipAddress := r.getClientInfo(ctx)
+
+	// Call application service
+	req := auth.RegisterRequest{
+		Email:      sanitizedInput.Email,
+		Name:       sanitizedInput.Name,
+		Password:   sanitizedInput.Password,
+		DeviceInfo: deviceInfo,
+		IPAddress:  ipAddress,
+	}
+	resp, err := r.authService.Register(ctx, req)
+	if err != nil {
+		return nil, r.handleGraphQLError(ctx, err, "Register")
+	}
+
+	// Handle application-level errors
+	if len(resp.Errors) > 0 {
+		// Return the first error as GraphQL error
+		firstError := resp.Errors[0]
+		domainErr := domainErrors.DomainError{
+			Code:    *firstError.Code,
+			Message: firstError.Message,
+			Field:   *firstError.Field,
+		}
+		return nil, r.handleGraphQLError(ctx, domainErr, "Register")
+	}
+
+	// Map result to GraphQL model
+	result := mapAuthResponseToGraphQL(resp)
+	r.logOperationSuccess(ctx, "Register", result)
+
+	return result, nil
+}
+
+// Login is the resolver for the login field.
+func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*model.AuthPayload, error) {
+	// Log operation start
+	r.logOperation(ctx, "Login", map[string]interface{}{
+		"email": input.Email,
+	})
+
+	// Validate and sanitize input
+	sanitizedInput := model.LoginInput{
+		Email:    sanitizeString(input.Email),
+		Password: input.Password, // Don't log password
+	}
+
+	if err := r.validateInput(ctx, "Login", func() error {
+		if err := validateEmail(sanitizedInput.Email); err != nil {
+			return err
+		}
+		if sanitizedInput.Password == "" {
+			return fmt.Errorf("password is required")
+		}
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	// Get client info
+	deviceInfo, ipAddress := r.getClientInfo(ctx)
+
+	// Call application service
+	req := auth.LoginRequest{
+		Email:      sanitizedInput.Email,
+		Password:   sanitizedInput.Password,
+		DeviceInfo: deviceInfo,
+		IPAddress:  ipAddress,
+	}
+	resp, err := r.authService.Login(ctx, req)
+	if err != nil {
+		return nil, r.handleGraphQLError(ctx, err, "Login")
+	}
+
+	// Handle application-level errors
+	if len(resp.Errors) > 0 {
+		// Return the first error as GraphQL error
+		firstError := resp.Errors[0]
+		domainErr := domainErrors.DomainError{
+			Code:    *firstError.Code,
+			Message: firstError.Message,
+			Field:   *firstError.Field,
+		}
+		return nil, r.handleGraphQLError(ctx, domainErr, "Login")
+	}
+
+	// Map result to GraphQL model
+	result := mapAuthResponseToGraphQL(resp)
+	r.logOperationSuccess(ctx, "Login", result)
+
+	return result, nil
+}
+
+// RefreshToken is the resolver for the refreshToken field.
+func (r *mutationResolver) RefreshToken(ctx context.Context, input model.RefreshTokenInput) (*model.AuthPayload, error) {
+	// Log operation start (don't log the token)
+	r.logOperation(ctx, "RefreshToken", map[string]interface{}{
+		"hasToken": input.RefreshToken != "",
+	})
+
+	// Validate input
+	if err := r.validateInput(ctx, "RefreshToken", func() error {
+		if input.RefreshToken == "" {
+			return fmt.Errorf("refresh token is required")
+		}
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	// Get client info
+	deviceInfo, ipAddress := r.getClientInfo(ctx)
+
+	// Call application service
+	req := auth.RefreshTokenRequest{
+		RefreshToken: input.RefreshToken,
+		DeviceInfo:   deviceInfo,
+		IPAddress:    ipAddress,
+	}
+	resp, err := r.authService.RefreshToken(ctx, req)
+	if err != nil {
+		return nil, r.handleGraphQLError(ctx, err, "RefreshToken")
+	}
+
+	// Handle application-level errors
+	if len(resp.Errors) > 0 {
+		// Return the first error as GraphQL error
+		firstError := resp.Errors[0]
+		domainErr := domainErrors.DomainError{
+			Code:    *firstError.Code,
+			Message: firstError.Message,
+			Field:   *firstError.Field,
+		}
+		return nil, r.handleGraphQLError(ctx, domainErr, "RefreshToken")
+	}
+
+	// Map result to GraphQL model
+	result := mapAuthResponseToGraphQL(resp)
+	r.logOperationSuccess(ctx, "RefreshToken", result)
+
+	return result, nil
+}
+
+// Logout is the resolver for the logout field.
+func (r *mutationResolver) Logout(ctx context.Context, input model.LogoutInput) (*model.LogoutPayload, error) {
+	// Log operation start (don't log the token)
+	r.logOperation(ctx, "Logout", map[string]interface{}{
+		"hasToken": input.RefreshToken != "",
+	})
+
+	// Validate input
+	if err := r.validateInput(ctx, "Logout", func() error {
+		if input.RefreshToken == "" {
+			return fmt.Errorf("refresh token is required")
+		}
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	// Call application service
+	req := auth.LogoutRequest{
+		RefreshToken: input.RefreshToken,
+	}
+	resp, err := r.authService.Logout(ctx, req)
+	if err != nil {
+		return nil, r.handleGraphQLError(ctx, err, "Logout")
+	}
+
+	// Handle application-level errors
+	if len(resp.Errors) > 0 {
+		// Return the first error as GraphQL error
+		firstError := resp.Errors[0]
+		domainErr := domainErrors.DomainError{
+			Code:    *firstError.Code,
+			Message: firstError.Message,
+			Field:   *firstError.Field,
+		}
+		return nil, r.handleGraphQLError(ctx, domainErr, "Logout")
+	}
+
+	// Map result to GraphQL model
+	result := &model.LogoutPayload{
+		Success: resp.Success,
+	}
+	r.logOperationSuccess(ctx, "Logout", result)
+
 	return result, nil
 }
 

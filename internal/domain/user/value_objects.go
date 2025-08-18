@@ -109,3 +109,31 @@ func (n Name) String() string {
 func (n Name) Equals(other Name) bool {
 	return n.value == other.value
 }
+
+// HashedPassword represents a hashed password
+type HashedPassword struct {
+	value string
+}
+
+// NewHashedPassword creates a new HashedPassword value object
+func NewHashedPassword(hash string) (HashedPassword, error) {
+	if hash == "" {
+		return HashedPassword{}, errors.DomainError{
+			Code:    "INVALID_PASSWORD_HASH",
+			Message: "Password hash cannot be empty",
+			Field:   "passwordHash",
+		}
+	}
+
+	return HashedPassword{value: hash}, nil
+}
+
+// String returns the string representation of the HashedPassword
+func (p HashedPassword) String() string {
+	return p.value
+}
+
+// Equals checks if two HashedPasswords are equal
+func (p HashedPassword) Equals(other HashedPassword) bool {
+	return p.value == other.value
+}

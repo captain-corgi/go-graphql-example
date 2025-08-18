@@ -14,6 +14,12 @@ func TestLoad_WithDefaults(t *testing.T) {
 	// Clear any existing environment variables
 	clearEnvVars(t)
 
+	// Set required environment variables for validation
+	t.Setenv("GRAPHQL_SERVICE_SERVER_NAME", "test-server")
+	t.Setenv("GRAPHQL_SERVICE_AUTH_JWT_SECRET", "test-secret-key-32-chars-minimum-length")
+	t.Setenv("GRAPHQL_SERVICE_AUTH_ACCESS_TOKEN_TTL", "15m")
+	t.Setenv("GRAPHQL_SERVICE_AUTH_REFRESH_TOKEN_TTL", "24h")
+
 	// Reset viper to clean state
 	viper.Reset()
 
@@ -35,7 +41,8 @@ func TestLoad_WithDefaults(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, cfg)
 
-	// Check defaults
+	// Check defaults (server name is overridden by env var)
+	assert.Equal(t, "test-server", cfg.Server.Name)
 	assert.Equal(t, "8080", cfg.Server.Port)
 	assert.Equal(t, 30*time.Second, cfg.Server.ReadTimeout)
 	assert.Equal(t, 30*time.Second, cfg.Server.WriteTimeout)
@@ -49,6 +56,10 @@ func TestLoad_WithDefaults(t *testing.T) {
 
 	assert.Equal(t, "info", cfg.Logging.Level)
 	assert.Equal(t, "json", cfg.Logging.Format)
+
+	assert.Equal(t, "test-secret-key-32-chars-minimum-length", cfg.Auth.JWTSecret)
+	assert.Equal(t, 15*time.Minute, cfg.Auth.AccessTokenTTL)
+	assert.Equal(t, 24*time.Hour, cfg.Auth.RefreshTokenTTL)
 }
 
 func TestLoad_WithEnvironmentVariables(t *testing.T) {
@@ -57,6 +68,7 @@ func TestLoad_WithEnvironmentVariables(t *testing.T) {
 
 	// Set environment variables
 	envVars := map[string]string{
+		"GRAPHQL_SERVICE_SERVER_NAME":             "test-server",
 		"GRAPHQL_SERVICE_SERVER_PORT":             "9090",
 		"GRAPHQL_SERVICE_SERVER_READ_TIMEOUT":     "60s",
 		"GRAPHQL_SERVICE_DATABASE_URL":            "postgres://test:test@localhost:5432/test_db",
@@ -64,6 +76,9 @@ func TestLoad_WithEnvironmentVariables(t *testing.T) {
 		"GRAPHQL_SERVICE_DATABASE_MAX_IDLE_CONNS": "10",
 		"GRAPHQL_SERVICE_LOGGING_LEVEL":           "debug",
 		"GRAPHQL_SERVICE_LOGGING_FORMAT":          "text",
+		"GRAPHQL_SERVICE_AUTH_JWT_SECRET":         "test-secret-key-32-chars-minimum-length",
+		"GRAPHQL_SERVICE_AUTH_ACCESS_TOKEN_TTL":   "15m",
+		"GRAPHQL_SERVICE_AUTH_REFRESH_TOKEN_TTL":  "24h",
 	}
 
 	for key, value := range envVars {
@@ -75,6 +90,7 @@ func TestLoad_WithEnvironmentVariables(t *testing.T) {
 	require.NotNil(t, cfg)
 
 	// Check environment variable overrides
+	assert.Equal(t, "test-server", cfg.Server.Name)
 	assert.Equal(t, "9090", cfg.Server.Port)
 	assert.Equal(t, 60*time.Second, cfg.Server.ReadTimeout)
 	assert.Equal(t, "postgres://test:test@localhost:5432/test_db", cfg.Database.URL)
@@ -82,6 +98,9 @@ func TestLoad_WithEnvironmentVariables(t *testing.T) {
 	assert.Equal(t, 10, cfg.Database.MaxIdleConns)
 	assert.Equal(t, "debug", cfg.Logging.Level)
 	assert.Equal(t, "text", cfg.Logging.Format)
+	assert.Equal(t, "test-secret-key-32-chars-minimum-length", cfg.Auth.JWTSecret)
+	assert.Equal(t, 15*time.Minute, cfg.Auth.AccessTokenTTL)
+	assert.Equal(t, 24*time.Hour, cfg.Auth.RefreshTokenTTL)
 }
 
 func TestLoad_ValidationFailure(t *testing.T) {
@@ -102,6 +121,12 @@ func TestMustLoad_Success(t *testing.T) {
 	// Clear any existing environment variables
 	clearEnvVars(t)
 
+	// Set required environment variables for validation
+	t.Setenv("GRAPHQL_SERVICE_SERVER_NAME", "test-server")
+	t.Setenv("GRAPHQL_SERVICE_AUTH_JWT_SECRET", "test-secret-key-32-chars-minimum-length")
+	t.Setenv("GRAPHQL_SERVICE_AUTH_ACCESS_TOKEN_TTL", "15m")
+	t.Setenv("GRAPHQL_SERVICE_AUTH_REFRESH_TOKEN_TTL", "24h")
+
 	// Reset viper to clean state
 	viper.Reset()
 
@@ -121,6 +146,7 @@ func TestMustLoad_Success(t *testing.T) {
 
 	cfg := MustLoad()
 	require.NotNil(t, cfg)
+	assert.Equal(t, "test-server", cfg.Server.Name)
 	assert.Equal(t, "8080", cfg.Server.Port)
 }
 
@@ -140,6 +166,7 @@ func TestMustLoad_Panic(t *testing.T) {
 // clearEnvVars clears all GRAPHQL_SERVICE environment variables
 func clearEnvVars(t *testing.T) {
 	envVars := []string{
+		"GRAPHQL_SERVICE_SERVER_NAME",
 		"GRAPHQL_SERVICE_SERVER_PORT",
 		"GRAPHQL_SERVICE_SERVER_READ_TIMEOUT",
 		"GRAPHQL_SERVICE_SERVER_WRITE_TIMEOUT",
@@ -151,6 +178,9 @@ func clearEnvVars(t *testing.T) {
 		"GRAPHQL_SERVICE_DATABASE_CONN_MAX_IDLE_TIME",
 		"GRAPHQL_SERVICE_LOGGING_LEVEL",
 		"GRAPHQL_SERVICE_LOGGING_FORMAT",
+		"GRAPHQL_SERVICE_AUTH_JWT_SECRET",
+		"GRAPHQL_SERVICE_AUTH_ACCESS_TOKEN_TTL",
+		"GRAPHQL_SERVICE_AUTH_REFRESH_TOKEN_TTL",
 	}
 
 	for _, envVar := range envVars {

@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	authMocks "github.com/captain-corgi/go-graphql-example/internal/application/auth/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user/mocks"
 	"github.com/captain-corgi/go-graphql-example/internal/infrastructure/config"
 	"github.com/captain-corgi/go-graphql-example/internal/interfaces/graphql/resolver"
@@ -21,8 +22,9 @@ import (
 func createTestResolver(t *testing.T) *resolver.Resolver {
 	ctrl := gomock.NewController(t)
 	mockUserService := mocks.NewMockService(ctrl)
+	mockAuthService := authMocks.NewMockService(ctrl)
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	return resolver.NewResolver(mockUserService, logger)
+	return resolver.NewResolver(mockUserService, mockAuthService, logger)
 }
 
 func TestNewServer(t *testing.T) {

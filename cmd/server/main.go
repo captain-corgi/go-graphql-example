@@ -10,7 +10,9 @@ import (
 	"syscall"
 	"time"
 
+	authApp "github.com/captain-corgi/go-graphql-example/internal/application/auth"
 	"github.com/captain-corgi/go-graphql-example/internal/application/user"
+	authInfra "github.com/captain-corgi/go-graphql-example/internal/infrastructure/auth"
 	"github.com/captain-corgi/go-graphql-example/internal/infrastructure/config"
 	"github.com/captain-corgi/go-graphql-example/internal/infrastructure/database"
 	"github.com/captain-corgi/go-graphql-example/internal/infrastructure/persistence/sql"
@@ -63,12 +65,23 @@ func NewApplication() (*Application, error) {
 
 	// Initialize repositories
 	userRepo := sql.NewUserRepository(dbManager.DB, logger)
+	sessionRepo := sql.NewSessionRepository(dbManager.DB.DB) // Access the embedded sql.DB
+
+	// Initialize infrastructure services
+	jwtService := authInfra.NewJWTService(
+		cfg.Auth.JWTSecret,
+		cfg.Auth.AccessTokenTTL,
+		cfg.Auth.RefreshTokenTTL,
+		cfg.Server.Name,
+	)
+	passwordService := authInfra.NewPasswordService()
 
 	// Initialize application services
 	userService := user.NewService(userRepo, logger)
+	authService := authApp.NewService(userRepo, sessionRepo, jwtService, passwordService, logger)
 
 	// Initialize resolver with all dependencies
-	resolver := resolver.NewResolver(userService, logger)
+	resolver := resolver.NewResolver(userService, authService, logger)
 
 	// Create HTTP server
 	server := httpserver.NewServer(&cfg.Server, resolver, logger)
