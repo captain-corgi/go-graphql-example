@@ -22,6 +22,69 @@ commands:
           name: Run linting
           command: make lint
 
+  # Setup GitHub CLI
+  setup-github-cli:
+    steps:
+      - run:
+          name: Install GitHub CLI and tools
+          command: |
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh jq -y
+
+  # Get PR information and check for cursor-review label
+  check-pr-labels:
+    steps:
+      - run:
+          name: Get PR information and check labels
+          command: |
+            # Set repository info
+            echo "export REPO_NAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" >> $BASH_ENV
+            echo "Repository: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+
+            # Try to find PR number from CircleCI environment first
+            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+              PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed 's/.*\/pull\///')
+              echo "export PR_NUMBER=$PR_NUMBER" >> $BASH_ENV
+              echo "PR Number from CIRCLE_PULL_REQUEST: $PR_NUMBER"
+            else
+              # If no CIRCLE_PULL_REQUEST, try to find PR by branch name
+              echo "No CIRCLE_PULL_REQUEST found, searching for PR by branch..."
+              BRANCH_NAME="$CIRCLE_BRANCH"
+              echo "Current branch: $BRANCH_NAME"
+
+              # Use GitHub CLI to find PR for this branch
+              PR_NUMBER=$(gh pr list --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME --head $BRANCH_NAME --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+              if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
+                echo "export PR_NUMBER=$PR_NUMBER" >> $BASH_ENV
+                echo "Found PR Number by branch search: $PR_NUMBER"
+              else
+                echo "No pull request found for branch $BRANCH_NAME"
+                echo "export PR_NUMBER=" >> $BASH_ENV
+                exit 0
+              fi
+            fi
+
+            # Check if PR has cursor-review label
+            if [ -n "$PR_NUMBER" ]; then
+              echo "Checking PR labels for #$PR_NUMBER..."
+              PR_LABELS=$(gh pr view $PR_NUMBER --repo $REPO_NAME --json labels --jq '.labels[].name' 2>/dev/null || echo "")
+              echo "PR labels: $PR_LABELS"
+              
+              if echo "$PR_LABELS" | grep -q "cursor-review"; then
+                echo "✅ PR has cursor-review label - will run enhanced workflow"
+                echo "export HAS_CURSOR_REVIEW_LABEL=true" >> $BASH_ENV
+              else
+                echo "ℹ️ PR does not have cursor-review label - running standard workflow"
+                echo "export HAS_CURSOR_REVIEW_LABEL=false" >> $BASH_ENV
+              fi
+            else
+              echo "ℹ️ Not a pull request - running standard workflow"
+              echo "export HAS_CURSOR_REVIEW_LABEL=false" >> $BASH_ENV
+            fi
+
 # Define reusable jobs
 jobs:
   # Lint job
@@ -31,6 +94,15 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
+      - setup-github-cli
+      - check-pr-labels
+      - run:
+          name: Authenticate with GitHub
+          command: |
+            # Set GitHub token for gh CLI
+            export GH_TOKEN="$GITHUB_TOKEN"
+            gh auth status
+            echo "✅ GitHub authentication successful"
       - install-deps
       - run-lint
       - slack/notify:
@@ -42,7 +114,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "✅ *Go GraphQL Example - Linting Passed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
+                    "text": "✅ *Go GraphQL Example - Linting Passed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME\n*PR:* ${PR_NUMBER:+<https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pull/$PR_NUMBER|#$PR_NUMBER>}\n*Cursor Review:* ${HAS_CURSOR_REVIEW_LABEL:+✅ Enabled}"
                   }
                 },
                 {
@@ -60,33 +132,6 @@ jobs:
                 }
               ]
             }
-      - slack/notify:
-          event: fail
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "❌ *Go GraphQL Example - Linting Failed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Logs"
-                      },
-                      "url": "$CIRCLE_BUILD_URL"
-                    }
-                  ]
-                }
-              ]
-            }
 
   # Test job (optional - can be added later)
   test:
@@ -95,6 +140,15 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
+      - setup-github-cli
+      - check-pr-labels
+      - run:
+          name: Authenticate with GitHub
+          command: |
+            # Set GitHub token for gh CLI
+            export GH_TOKEN="$GITHUB_TOKEN"
+            gh auth status
+            echo "✅ GitHub authentication successful"
       - install-deps
       - run:
           name: Run tests
@@ -116,7 +170,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "✅ *Go GraphQL Example - Tests Passed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
+                    "text": "✅ *Go GraphQL Example - Tests Passed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME\n*PR:* ${PR_NUMBER:+<https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pull/$PR_NUMBER|#$PR_NUMBER>}\n*Cursor Review:* ${HAS_CURSOR_REVIEW_LABEL:+✅ Enabled}"
                   }
                 },
                 {
@@ -134,80 +188,21 @@ jobs:
                 }
               ]
             }
-      - slack/notify:
-          event: fail
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "❌ *Go GraphQL Example - Tests Failed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Logs"
-                      },
-                      "url": "$CIRCLE_BUILD_URL"
-                    }
-                  ]
-                }
-              ]
-            }
 
 # Define workflows
 workflows:
-  # Main workflow for PRs to main branch
-  pr-to-main:
+  # Main workflow for all branches and PRs
+  # This workflow will automatically detect if a PR has the "cursor-review" label
+  # and show that information in the Slack notifications
+  main-workflow:
     jobs:
       - lint:
-          context: slack-context
-          filters:
-            branches:
-              only: main
+          context: 
+            - slack-context
+            - github-context
       - test:
-          context: slack-context
+          context: 
+            - slack-context
+            - github-context
           requires:
             - lint
-          filters:
-            branches:
-              only: main
-
-  # Workflow for cursor-review tag
-  cursor-review:
-    jobs:
-      - lint:
-          context: slack-context
-          filters:
-            tags:
-              only: /^cursor-review$/
-      - test:
-          context: slack-context
-          requires:
-            - lint
-          filters:
-            tags:
-              only: /^cursor-review$/
-
-  # Workflow for any PR (with cursor-review tag)
-  pr-with-cursor-review:
-    jobs:
-      - lint:
-          context: slack-context
-          filters:
-            branches:
-              ignore: main
-      - test:
-          context: slack-context
-          requires:
-            - lint
-          filters:
-            branches:
-              ignore: main
