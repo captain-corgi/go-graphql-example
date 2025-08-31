@@ -209,24 +209,6 @@ workflows:
         - equal: [pull_request, << pipeline.trigger_source >>]
         - equal: [master, << pipeline.git.branch >>]
 
-  # Workflow for commits tagged with cursor-review
-  cursor-review-tag:
-    jobs:
-      - lint:
-          context: 
-            - slack-context
-            - github-context
-      - test:
-          context: 
-            - slack-context
-            - github-context
-          requires:
-            - lint
-    when:
-      and:
-        - equal: [tag, << pipeline.trigger_source >>]
-        - equal: [cursor-review, << pipeline.git.tag >>]
-
   # Workflow for PRs with cursor-review label
   # Note: This will be detected at runtime in the check-pr-labels command
   pr-with-cursor-review:
