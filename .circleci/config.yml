@@ -1,0 +1,155 @@
+version: 2.1
+
+# Define reusable commands
+commands:
+  # Install Go dependencies
+  install-deps:
+    steps:
+      - run:
+          name: Install Go dependencies
+          command: |
+            go mod download
+            go mod verify
+
+  # Run linting
+  run-lint:
+    steps:
+      - run:
+          name: Run linting
+          command: make lint
+
+  # Send Slack notification
+  notify-slack:
+    parameters:
+      status:
+        type: string
+        default: "success"
+      message:
+        type: string
+        default: "Build completed"
+    steps:
+      - run:
+          name: Send Slack notification
+          command: |
+            if [ "<< parameters.status >>" = "success" ]; then
+              color="good"
+              emoji=":white_check_mark:"
+            else
+              color="danger"
+              emoji=":x:"
+            fi
+            
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{
+                \"attachments\": [{
+                  \"color\": \"$color\",
+                  \"title\": \"$emoji Go GraphQL Example - << parameters.message >>\",
+                  \"fields\": [
+                    {
+                      \"title\": \"Project\",
+                      \"value\": \"$CIRCLE_PROJECT_REPONAME\",
+                      \"short\": true
+                    },
+                    {
+                      \"title\": \"Branch\",
+                      \"value\": \"$CIRCLE_BRANCH\",
+                      \"short\": true
+                    },
+                    {
+                      \"title\": \"Commit\",
+                      \"value\": \"<https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\",
+                      \"short\": true
+                    },
+                    {
+                      \"title\": \"Author\",
+                      \"value\": \"$CIRCLE_USERNAME\",
+                      \"short\": true
+                    }
+                  ],
+                  \"footer\": \"CircleCI\",
+                  \"ts\": $(date +%s)
+                }]
+              }" \
+              $SLACK_WEBHOOK_URL
+
+# Define reusable jobs
+jobs:
+  # Lint job
+  lint:
+    docker:
+      - image: cimg/go:1.24.3
+    working_directory: ~/project
+    steps:
+      - checkout
+      - install-deps
+      - run-lint
+      - notify-slack:
+          status: "success"
+          message: "Linting passed successfully"
+
+  # Test job (optional - can be added later)
+  test:
+    docker:
+      - image: cimg/go:1.24.3
+    working_directory: ~/project
+    steps:
+      - checkout
+      - install-deps
+      - run:
+          name: Run tests
+          command: make test
+      - run:
+          name: Generate coverage report
+          command: make coverage
+      - store_test_results:
+          path: coverage.out
+      - store_artifacts:
+          path: coverage.html
+          destination: coverage-report
+      - notify-slack:
+          status: "success"
+          message: "Tests passed successfully"
+
+# Define workflows
+workflows:
+  # Main workflow for PRs to main branch
+  pr-to-main:
+    jobs:
+      - lint:
+          filters:
+            branches:
+              only: main
+      - test:
+          requires:
+            - lint
+          filters:
+            branches:
+              only: main
+
+  # Workflow for cursor-review tag
+  cursor-review:
+    jobs:
+      - lint:
+          filters:
+            tags:
+              only: /^cursor-review$/
+      - test:
+          requires:
+            - lint
+          filters:
+            tags:
+              only: /^cursor-review$/
+
+  # Workflow for any PR (with cursor-review tag)
+  pr-with-cursor-review:
+    jobs:
+      - lint:
+          filters:
+            branches:
+              ignore: main
+      - test:
+          requires:
+            - lint
+          filters:
+            branches:
+              ignore: main
