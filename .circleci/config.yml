@@ -1,5 +1,9 @@
 version: 2.1
 
+# Define orbs for easy integrations
+orbs:
+  slack: circleci/slack@4.12.5
+
 # Define reusable commands
 commands:
   # Install Go dependencies
@@ -18,60 +22,6 @@ commands:
           name: Run linting
           command: make lint
 
-  # Send Slack notification
-  notify-slack:
-    parameters:
-      status:
-        type: string
-        default: "success"
-      message:
-        type: string
-        default: "Build completed"
-    steps:
-      - run:
-          name: Send Slack notification
-          command: |
-            if [ "<< parameters.status >>" = "success" ]; then
-              color="good"
-              emoji=":white_check_mark:"
-            else
-              color="danger"
-              emoji=":x:"
-            fi
-            
-            curl -X POST -H 'Content-type: application/json' \
-              --data "{
-                \"attachments\": [{
-                  \"color\": \"$color\",
-                  \"title\": \"$emoji Go GraphQL Example - << parameters.message >>\",
-                  \"fields\": [
-                    {
-                      \"title\": \"Project\",
-                      \"value\": \"$CIRCLE_PROJECT_REPONAME\",
-                      \"short\": true
-                    },
-                    {
-                      \"title\": \"Branch\",
-                      \"value\": \"$CIRCLE_BRANCH\",
-                      \"short\": true
-                    },
-                    {
-                      \"title\": \"Commit\",
-                      \"value\": \"<https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\",
-                      \"short\": true
-                    },
-                    {
-                      \"title\": \"Author\",
-                      \"value\": \"$CIRCLE_USERNAME\",
-                      \"short\": true
-                    }
-                  ],
-                  \"footer\": \"CircleCI\",
-                  \"ts\": $(date +%s)
-                }]
-              }" \
-              $SLACK_WEBHOOK_URL
-
 # Define reusable jobs
 jobs:
   # Lint job
@@ -83,9 +33,60 @@ jobs:
       - checkout
       - install-deps
       - run-lint
-      - notify-slack:
-          status: "success"
-          message: "Linting passed successfully"
+      - slack/notify:
+          event: pass
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "✅ *Go GraphQL Example - Linting Passed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Pipeline"
+                      },
+                      "url": "$CIRCLE_BUILD_URL"
+                    }
+                  ]
+                }
+              ]
+            }
+      - slack/notify:
+          event: fail
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "❌ *Go GraphQL Example - Linting Failed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Logs"
+                      },
+                      "url": "$CIRCLE_BUILD_URL"
+                    }
+                  ]
+                }
+              ]
+            }
 
   # Test job (optional - can be added later)
   test:
@@ -106,9 +107,60 @@ jobs:
       - store_artifacts:
           path: coverage.html
           destination: coverage-report
-      - notify-slack:
-          status: "success"
-          message: "Tests passed successfully"
+      - slack/notify:
+          event: pass
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "✅ *Go GraphQL Example - Tests Passed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Pipeline"
+                      },
+                      "url": "$CIRCLE_BUILD_URL"
+                    }
+                  ]
+                }
+              ]
+            }
+      - slack/notify:
+          event: fail
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "❌ *Go GraphQL Example - Tests Failed!*\n\n*Project:* $CIRCLE_PROJECT_REPONAME\n*Branch:* $CIRCLE_BRANCH\n*Commit:* <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:7}>\n*Author:* $CIRCLE_USERNAME"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Logs"
+                      },
+                      "url": "$CIRCLE_BUILD_URL"
+                    }
+                  ]
+                }
+              ]
+            }
 
 # Define workflows
 workflows:
@@ -116,10 +168,12 @@ workflows:
   pr-to-main:
     jobs:
       - lint:
+          context: slack-context
           filters:
             branches:
               only: main
       - test:
+          context: slack-context
           requires:
             - lint
           filters:
@@ -130,10 +184,12 @@ workflows:
   cursor-review:
     jobs:
       - lint:
+          context: slack-context
           filters:
             tags:
               only: /^cursor-review$/
       - test:
+          context: slack-context
           requires:
             - lint
           filters:
@@ -144,10 +200,12 @@ workflows:
   pr-with-cursor-review:
     jobs:
       - lint:
+          context: slack-context
           filters:
             branches:
               ignore: main
       - test:
+          context: slack-context
           requires:
             - lint
           filters:

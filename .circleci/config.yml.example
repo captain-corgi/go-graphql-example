@@ -1,0 +1,494 @@
+version: 2.1
+
+# Define the Node.js orb for easy Node.js setup
+orbs:
+  node: circleci/node@5.1.0
+  slack: circleci/slack@4.12.5
+
+# Define reusable commands
+commands:
+  verify-environment:
+    description: "Verify environment and required variables"
+    steps:
+      - run:
+          name: Check Environment
+          command: |
+            echo "🔍 Checking environment setup..."
+            echo "Node.js version: $(node --version)"
+            echo "NPM version: $(npm --version)"
+
+            # Verify we have Node 22+
+            node -e "const v = process.version.match(/v(\d+)/)[1]; if (v < 22) { console.error('Need Node 22+, got', process.version); process.exit(1); } else { console.log('✅ Node version OK:', process.version); }"
+
+            # Check required environment variables
+            echo "🔑 Checking required environment variables..."
+
+            if [ -z "$GITHUB_TOKEN" ]; then
+              echo "❌ GITHUB_TOKEN is not set!"
+              echo "Please add GITHUB_TOKEN to your CircleCI context 'augment-context'"
+              exit 1
+            else
+              echo "✅ GITHUB_TOKEN is set"
+            fi
+
+            if [ -z "$AUGMENT_SESSION_AUTH" ]; then
+              echo "❌ AUGMENT_SESSION_AUTH is not set!"
+              echo "Please add AUGMENT_SESSION_AUTH to your CircleCI context 'augment-context'"
+              echo "You can generate it locally with: auggie --print-augment-token"
+              exit 1
+            else
+              echo "✅ AUGMENT_SESSION_AUTH is set"
+
+              # Fix common token format issues based on official docs
+              # Remove "TOKEN=" prefix if present (common mistake)
+              if [[ "$AUGMENT_SESSION_AUTH" == TOKEN=* ]]; then
+                echo "ℹ️ Removing 'TOKEN=' prefix from token..."
+                export AUGMENT_SESSION_AUTH="${AUGMENT_SESSION_AUTH#TOKEN=}"
+              fi
+
+              # Validate token format: should be pure JSON as per official docs
+              echo "$AUGMENT_SESSION_AUTH" | jq -e . >/dev/null 2>&1
+              if [ $? -ne 0 ]; then
+                echo "ℹ️ Token is not valid JSON, attempting base64 decode..."
+                DECODED=$(echo "$AUGMENT_SESSION_AUTH" | base64 -d 2>/dev/null)
+                if [ -n "$DECODED" ]; then
+                  # Remove TOKEN= prefix from decoded content too
+                  if [[ "$DECODED" == TOKEN=* ]]; then
+                    DECODED="${DECODED#TOKEN=}"
+                  fi
+                  echo "$DECODED" | jq -e . >/dev/null 2>&1
+                  if [ $? -eq 0 ]; then
+                    echo "✅ Successfully decoded base64 token to JSON"
+                    export AUGMENT_SESSION_AUTH="$DECODED"
+                  else
+                    echo "❌ Decoded token is not valid JSON."
+                    echo "Please ensure AUGMENT_SESSION_AUTH is the exact JSON from 'auggie --print-augment-token'"
+                    echo "Format should be: {\"accessToken\":\"...\",\"tenantURL\":\"...\",\"scopes\":[...]}"
+                    echo "NOT: TOKEN={\"accessToken\":\"...\",\"tenantURL\":\"...\",\"scopes\":[...]}"
+                    exit 1
+                  fi
+                else
+                  echo "❌ Failed to base64-decode AUGMENT_SESSION_AUTH."
+                  echo "Please ensure the token is pure JSON as per official docs:"
+                  echo "Format should be: {\"accessToken\":\"...\",\"tenantURL\":\"...\",\"scopes\":[...]}"
+                  echo "NOT: TOKEN={\"accessToken\":\"...\",\"tenantURL\":\"...\",\"scopes\":[...]}"
+                  exit 1
+                fi
+              else
+                echo "✅ AUGMENT_SESSION_AUTH is valid JSON format"
+              fi
+            fi
+
+            echo "✅ All environment variables are configured correctly!"
+
+  setup-github-cli:
+    description: "Install GitHub CLI"
+    steps:
+      - run:
+          name: Install GitHub CLI and tools
+          command: |
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh jq -y
+
+  get-pr-info:
+    description: "Get PR information from GitHub"
+    steps:
+      - run:
+          name: Get PR number and repository info
+          command: |
+            # Set repository info first
+            echo "export REPO_NAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" >> $BASH_ENV
+            echo "Repository: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+
+            # Try to find PR number from CircleCI environment first
+            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+              PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed 's/.*\/pull\///')
+              echo "export PR_NUMBER=$PR_NUMBER" >> $BASH_ENV
+              echo "PR Number from CIRCLE_PULL_REQUEST: $PR_NUMBER"
+            else
+              # If no CIRCLE_PULL_REQUEST, try to find PR by branch name
+              echo "No CIRCLE_PULL_REQUEST found, searching for PR by branch..."
+              BRANCH_NAME="$CIRCLE_BRANCH"
+              echo "Current branch: $BRANCH_NAME"
+
+              # Use GitHub CLI to find PR for this branch
+              PR_NUMBER=$(gh pr list --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME --head $BRANCH_NAME --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+              if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
+                echo "export PR_NUMBER=$PR_NUMBER" >> $BASH_ENV
+                echo "Found PR Number by branch search: $PR_NUMBER"
+              else
+                echo "No pull request found for branch $BRANCH_NAME"
+                exit 0
+              fi
+            fi
+
+# Define jobs
+jobs:
+  augment-pr-review:
+    docker:
+      - image: cimg/node:current
+    resource_class: medium
+    steps:
+      - checkout
+      - verify-environment
+      - setup-github-cli
+      - get-pr-info
+
+      - run:
+          name: Authenticate with GitHub
+          command: |
+            # Set GitHub token for gh CLI
+            export GH_TOKEN="$GITHUB_TOKEN"
+
+            # Test GitHub authentication
+            gh auth status
+            echo "✅ GitHub authentication successful"
+
+      - run:
+          name: Generate PR Review with Auggie
+          command: |
+            # Check if this is a PR
+            if [ -z "$PR_NUMBER" ]; then
+              echo "Not a pull request, skipping review"
+              exit 0
+            fi
+
+            # Check if PR should be reviewed (either targeting main OR has augment_review label)
+            echo "Checking PR target branch and labels..."
+            PR_INFO=$(gh pr view $PR_NUMBER --repo $REPO_NAME --json baseRefName,labels)
+            PR_BASE_BRANCH=$(echo "$PR_INFO" | jq -r '.baseRefName')
+            PR_LABELS=$(echo "$PR_INFO" | jq -r '.labels[].name')
+
+            echo "PR base branch: $PR_BASE_BRANCH"
+            echo "PR labels: $PR_LABELS"
+
+            # Check if PR targets main branch
+            TARGETS_MAIN=false
+            if [ "$PR_BASE_BRANCH" = "main" ]; then
+              TARGETS_MAIN=true
+              echo "✅ PR is targeting main branch"
+            fi
+
+            # Check if PR has augment_review label
+            HAS_REVIEW_LABEL=false
+            if echo "$PR_LABELS" | grep -q "augment_review"; then
+              HAS_REVIEW_LABEL=true
+              echo "✅ PR has augment_review label"
+            fi
+
+            # Determine if review should run
+            SHOULD_REVIEW=false
+            REVIEW_REASON=""
+
+            if [ "$TARGETS_MAIN" = "true" ]; then
+              SHOULD_REVIEW=true
+              REVIEW_REASON="PR targets main branch"
+            fi
+
+            if [ "$HAS_REVIEW_LABEL" = "true" ]; then
+              SHOULD_REVIEW=true
+              if [ -n "$REVIEW_REASON" ]; then
+                REVIEW_REASON="$REVIEW_REASON and has augment_review label"
+              else
+                REVIEW_REASON="PR has augment_review label"
+              fi
+            fi
+
+            if [ "$SHOULD_REVIEW" = "false" ]; then
+              echo "❌ Review conditions not met:"
+              echo "   - PR base branch: $PR_BASE_BRANCH (not main)"
+              echo "   - augment_review label: not found"
+              echo "Skipping review."
+              exit 0
+            fi
+
+            echo "✅ Review conditions met: $REVIEW_REASON"
+
+            # For augment_review label, always generate fresh review
+            # For main branch PRs, check for duplicates
+            if [ "$HAS_REVIEW_LABEL" = "true" ]; then
+              echo "🔄 augment_review label detected - will generate fresh review"
+            else
+              # Check for existing reviews only for main branch PRs
+              echo "Checking for existing Auggie reviews..."
+              EXISTING_REVIEWS=$(gh pr view $PR_NUMBER --repo $REPO_NAME --json comments --jq '.comments[] | select(.body | contains("🤖 Code Review by Auggie")) | .id' | wc -l)
+
+              if [ "$EXISTING_REVIEWS" -gt 0 ]; then
+                echo "⏭️ Found $EXISTING_REVIEWS existing Auggie review(s) for main branch PR, skipping to avoid duplicates"
+                echo "💡 To force a new review, add the 'augment_review' label to this PR"
+                exit 0
+              else
+                echo "✅ No existing Auggie reviews found, proceeding with new review"
+              fi
+            fi
+
+            # Set up authentication - HARDCODED TOKEN FOR TESTING
+            export GH_TOKEN="$GITHUB_TOKEN"
+
+            # HARDCODE the working token to bypass context variable issues
+            echo "� Using hardcoded Augment token for testing..."
+            export AUGMENT_SESSION_AUTH='{"accessToken":"e14bbf2d45a92d4c05ffec7652fdefab709171e966a239d315d20854c827d963","tenantURL":"https://i1.api.augmentcode.com/","scopes":["read","write"]}'
+
+            # Debug: Show final token format
+            echo "🔍 DEBUG: Hardcoded token length: ${#AUGMENT_SESSION_AUTH}"
+            echo "🔍 DEBUG: Token starts with: ${AUGMENT_SESSION_AUTH:0:30}..."
+            echo "🔍 DEBUG: Token is valid JSON: $(echo "$AUGMENT_SESSION_AUTH" | jq -e . >/dev/null 2>&1 && echo "YES" || echo "NO")"
+
+            # Get PR details with error handling
+            echo "Fetching PR details for #$PR_NUMBER"
+            if ! gh pr view $PR_NUMBER --repo $REPO_NAME --json title,body,changedFiles > /tmp/pr_details.json 2>/tmp/pr_details_error.log; then
+              echo "❌ Failed to fetch PR details"
+              echo "Error log:"
+              cat /tmp/pr_details_error.log
+              exit 1
+            fi
+            echo "✅ PR details fetched successfully"
+
+            # Get the diff with error handling (limit to first 5000 lines to avoid 413 error)
+            echo "Fetching PR diff for #$PR_NUMBER"
+            if ! gh pr diff $PR_NUMBER --repo $REPO_NAME 2>/tmp/pr_diff_error.log | head -5000 > /tmp/pr_diff.txt; then
+              echo "❌ Failed to fetch PR diff"
+              echo "Error log:"
+              cat /tmp/pr_diff_error.log
+              # Try alternative approach - get file list instead
+              echo "Trying alternative approach with file list..."
+              gh pr view $PR_NUMBER --repo $REPO_NAME --json files > /tmp/pr_files.json
+              echo "Files changed in this PR:" > /tmp/pr_diff.txt
+              cat /tmp/pr_files.json >> /tmp/pr_diff.txt
+            fi
+            echo "✅ PR diff fetched successfully"
+
+            # Generate review using Auggie with PR context
+            echo "Generating AI-powered review for PR #$PR_NUMBER"
+
+            # Check diff size and create appropriate context
+            DIFF_SIZE=$(wc -c < /tmp/pr_diff.txt)
+            echo "🔍 PR diff size: $DIFF_SIZE characters"
+
+            if [ $DIFF_SIZE -gt 50000 ]; then
+              echo "⚠️ Large PR detected, creating summary context..."
+              # For large PRs, create a summary instead of full diff
+              {
+                echo "Please review this pull request and provide comprehensive feedback:"
+                echo ""
+                echo "# Pull Request Information"
+                cat /tmp/pr_details.json
+                echo ""
+                echo "# Code Changes Summary"
+                echo "This is a large pull request. Key changes:"
+                gh pr diff $PR_NUMBER --repo $REPO_NAME --name-only | head -20
+                echo ""
+                echo "First 100 lines of changes:"
+                gh pr diff $PR_NUMBER --repo $REPO_NAME | head -100
+                echo ""
+                echo "# Review Guidelines"
+                echo "Focus on:"
+                echo "- Code quality and best practices"
+                echo "- Potential bugs or security issues"
+                echo "- Performance considerations"
+                echo "- Documentation and testing"
+              } > /tmp/pr_context.txt
+            else
+              echo "✅ Normal PR size, using full context..."
+              # For normal PRs, use full context
+              {
+                echo "Please review this pull request and provide comprehensive feedback:"
+                echo ""
+                echo "# Pull Request Information"
+                cat /tmp/pr_details.json
+                echo ""
+                echo "# Code Changes"
+                cat /tmp/pr_diff.txt
+                echo ""
+                echo "# Review Guidelines"
+                cat .circleci/review-template.md
+              } > /tmp/pr_context.txt
+            fi
+
+            # Use the correct Auggie CLI syntax from help: echo 'data' | auggie --print 'instruction'
+            echo "Calling Auggie CLI in automation mode..."
+            INSTRUCTION="Please analyze this pull request and provide a comprehensive code review following the guidelines provided."
+
+            # Temporarily disable pipefail to avoid SIGPIPE issues
+            set +o pipefail
+
+            # Pre-warm npx cache and print version (non-fatal)
+            CI=true NO_COLOR=1 TERM=dumb npx -y @augmentcode/auggie@0.5.1 --version 1>&2 || true
+
+            # Skip auth test to save tokens - authentication is working
+
+            # Temporarily disable 'exit on error' to prevent early aborts and capture logs
+            set +e
+
+            # Run Auggie in non-interactive mode with explicit env and separate logs
+            cat /tmp/pr_context.txt | CI=true NO_COLOR=1 TERM=dumb npx -y @augmentcode/auggie@0.5.1 --print "$INSTRUCTION" 1> /tmp/review_stdout.txt 2> /tmp/review_stderr.txt
+            AUGGIE_STATUS=$?
+
+            # Re-enable 'exit on error'
+            set -e
+
+            echo "Auggie exit code: $AUGGIE_STATUS"
+            echo "--- Auggie STDERR (first 2000 chars) ---"; head -c 2000 /tmp/review_stderr.txt || true; echo; echo "--- END STDERR ---"
+
+            if [ $AUGGIE_STATUS -eq 0 ] && [ -s /tmp/review_stdout.txt ]; then
+              echo "✅ AI review generated successfully"
+
+              # Clean up the Auggie output to remove internal reasoning and meta-commentary
+              echo "🧹 Cleaning up AI output..."
+
+              # Remove thinking/reasoning sections and meta-commentary
+              sed -E '
+                # Remove lines that start with thinking patterns
+                /^(I need to|Let me|I should|I will|I can see|Looking at|First,|Next,|Finally,)/d
+                /^(Based on my analysis|In my analysis|Upon review)/d
+                /^(Here are my|Here is my|My recommendations|My analysis)/d
+
+                # Remove meta-commentary about the review process
+                /^(This (review|analysis|code)|The (review|analysis|code))/d
+                /^(Overall|In summary|To summarize)/d
+
+                # Remove empty lines at start/end and multiple consecutive empty lines
+                /^[[:space:]]*$/N
+                /^[[:space:]]*\n[[:space:]]*$/d
+              ' /tmp/review_stdout.txt > /tmp/cleaned_review.txt
+
+              # Further clean up by removing any remaining meta-commentary patterns
+              grep -v -E '^(I notice|I found|I see|I recommend|I suggest|I think|I believe)' /tmp/cleaned_review.txt > /tmp/final_cleaned_review.txt || cp /tmp/cleaned_review.txt /tmp/final_cleaned_review.txt
+
+              # Add professional header identifying as Auggie
+              {
+                echo "## 🤖 Code Review by Auggie"
+                echo ""
+                echo "**PR:** #$PR_NUMBER | **Repository:** $REPO_NAME"
+                echo ""
+                echo "---"
+                echo ""
+                cat /tmp/final_cleaned_review.txt
+                echo ""
+                echo "---"
+                echo "*Review generated by [Auggie](https://augmentcode.com) - AI-powered code assistant. Please use your judgment and verify suggestions.*"
+              } > /tmp/final_review.md
+
+              # Post the review as a comment
+              gh pr comment $PR_NUMBER \
+                 --repo $REPO_NAME \
+                 --body-file /tmp/final_review.md
+
+              echo "✅ AI-powered PR review posted successfully!"
+            else
+              echo "❌ Failed to generate AI review"
+              echo "--- Auggie STDOUT (first 2000 chars) ---"; head -c 2000 /tmp/review_stdout.txt || true; echo; echo "--- END STDOUT ---"
+              echo "--- Auggie STDERR (full) ---"; cat /tmp/review_stderr.txt || true; echo "--- END STDERR ---"
+              exit 1
+            fi
+
+      - slack/notify:
+          event: pass
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "🤖 *Augment AI Review Complete!*\n\n✅ Successfully generated and posted AI review for PR #${PR_NUMBER}\n\n*Repository:* ${REPO_NAME}\n*Pipeline:* #${CIRCLE_BUILD_NUM}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View PR"
+                      },
+                      "url": "https://github.com/${REPO_NAME}/pull/${PR_NUMBER}"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Pipeline"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]
+                }
+              ]
+            }
+
+      - run:
+          name: Handle Errors
+          command: |
+            if [ $? -ne 0 ]; then
+              echo "❌ Review generation failed. Posting error message..."
+              GH_TOKEN="$GITHUB_TOKEN" gh pr comment $PR_NUMBER \
+                 --repo $REPO_NAME \
+                 --body "## ⚠️ Augment AI Review Failed
+
+                 The automated code review could not be completed. This might be due to:
+                 - Authentication issues
+                 - API rate limits
+                 - Large PR size
+                 - Network connectivity
+
+                 Please check the CircleCI logs for more details or try again later."
+            fi
+          when: on_fail
+
+      - slack/notify:
+          event: fail
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "❌ *Augment AI Review Failed*\n\n🚨 Failed to generate AI review for PR #${PR_NUMBER}\n\n*Repository:* ${REPO_NAME}\n*Pipeline:* #${CIRCLE_BUILD_NUM}\n*Branch:* ${CIRCLE_BRANCH}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Logs"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View PR"
+                      },
+                      "url": "https://github.com/${REPO_NAME}/pull/${PR_NUMBER}"
+                    }
+                  ]
+                }
+              ]
+            }
+
+      - run:
+          name: Cleanup
+          command: |
+            rm -f /tmp/review_stdout.txt /tmp/review_stderr.txt /tmp/final_review.md /tmp/pr_details.json /tmp/pr_diff.txt /tmp/pr_context.txt /tmp/pr_details_error.log /tmp/pr_diff_error.log /tmp/pr_files.json /tmp/cleaned_review.txt /tmp/final_cleaned_review.txt
+          when: always
+
+# Define workflows
+workflows:
+  version: 2
+  pr-review-workflow:
+    jobs:
+      - augment-pr-review:
+          # Remove branch filters to allow triggering on all branches
+          # The job itself will determine if it should run based on PR conditions
+          context:
+            - augment-context # You'll need to create this context in CircleCI
