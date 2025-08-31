@@ -191,10 +191,8 @@ jobs:
 
 # Define workflows
 workflows:
-  # Main workflow for all branches and PRs
-  # This workflow will automatically detect if a PR has the "cursor-review" label
-  # and show that information in the Slack notifications
-  main-workflow:
+  # Workflow for PRs targeting main branch
+  pr-to-main:
     jobs:
       - lint:
           context: 
@@ -206,3 +204,45 @@ workflows:
             - github-context
           requires:
             - lint
+    when:
+      and:
+        - equal: [pull_request, << pipeline.trigger_source >>]
+        - equal: [main, << pipeline.git.branch >>]
+
+  # Workflow for commits tagged with cursor-review
+  cursor-review-tag:
+    jobs:
+      - lint:
+          context: 
+            - slack-context
+            - github-context
+      - test:
+          context: 
+            - slack-context
+            - github-context
+          requires:
+            - lint
+    when:
+      and:
+        - equal: [tag, << pipeline.trigger_source >>]
+        - equal: [cursor-review, << pipeline.git.tag >>]
+
+  # Workflow for PRs with cursor-review label
+  # Note: This will be detected at runtime in the check-pr-labels command
+  pr-with-cursor-review:
+    jobs:
+      - lint:
+          context: 
+            - slack-context
+            - github-context
+      - test:
+          context: 
+            - slack-context
+            - github-context
+          requires:
+            - lint
+    when:
+      and:
+        - equal: [pull_request, << pipeline.trigger_source >>]
+        # The actual label check happens in the check-pr-labels command
+        # This workflow will run for all PRs, but the jobs will show cursor-review status
